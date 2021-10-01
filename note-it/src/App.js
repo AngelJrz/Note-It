@@ -4,9 +4,11 @@ import './App.css';
 function App() { 
 
   function probarAPI() {
-    fetch('http://localhost:4200/estudiante/pobarConexion')
+    fetch('http://localhost:4200/estudiante/estudiantes')
     .then(response => response.json())
-    .then(respuesta => alert(respuesta.respuesta) );
+    .then(respuesta => {
+      alert(respuesta[0].nombres)
+    });
   }
 
   return (
