@@ -1,12 +1,29 @@
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
+import mongoose from 'mongoose';
 import estudianteRouter from './routers/estudiante.js';
 
 const app = express();
 const PORT = 4200;
+const DATABASE_URL = process.env.MONGODB_URL;
+const USER = process.env.USER;
+const PASSWORD = process.env.PASSWORD;
+
+mongoose.connect(DATABASE_URL,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    user: USER,
+    pass: PASSWORD
+}).then(() => {
+    console.log('successfully connected to the database');
+}).catch(err => {
+    console.log(err);
+    process.exit();
+});
 
 const allowedOrigins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'http://localhost:4201'
 ]
 
 var corsOptionsDelegate = function (req, callback) {
