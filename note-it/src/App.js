@@ -1,26 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { Link } from 'react-router-dom';
+import loginScreen from './Screens/login.js';
+import HomeScreen from './Screens/homescreen.js';
+import { BrowserRouter, Route } from 'react-router-dom';
+import logouv from './images/logouv.jpg';
 
 function App() { 
 
-  function probarAPI() {
-    fetch('http://localhost:4200/estudiante/estudiantes')
-    .then(response => response.json())
-    .then(respuesta => {
-      alert(respuesta[0].nombres)
-    });
-  }
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Inicio de aplicación con ReactJs
-        </p>
-        <button onClick={probarAPI}>Pobar comunicación con el backend</button>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="grid-container">
+        <header className="row">
+          <div>
+            <Link to="/" className="brand"><img src={logouv} alt="Logo" /></Link>
+          </div>
+          <div>
+            <Link to="/login">Inicia sesión</Link>
+          </div>
+        </header>
+
+        <main>
+          <Route path='/' component={ HomeScreen } exact></Route>
+          <Route path='/login' component={ loginScreen }></Route>
+          {/* <Route path='/registro' component={ registroScreen }></Route> */}
+        </main>
+      
+      </div>
+    </BrowserRouter>
   );
 }
 
