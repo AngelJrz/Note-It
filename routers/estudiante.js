@@ -3,20 +3,12 @@ const router = express.Router();
 import Estudiante from "../models/Estudiante.js";
 import { existeUsuario } from "../controllers/estudiante.js";
 
-//METODO DE PRUEBA PARA PROBAR CONEXIÓN
-router.get("/pobarConexion", async (req, res) => {
-    let resultado = {
-        respuesta: "Respuesta del servidor completa"
-    }
-    res.send(resultado)
-});
-
 router.get('/login', async (req, res) => {
     await Estudiante.findOne({ usuario: req.body.usuario })
       .then((estudiante) => {
         if (estudiante == null) {
           res
-            .status(500)
+            .status(203)
             .send({
               resultado: false,
               mensaje: "El usuario no existe",
