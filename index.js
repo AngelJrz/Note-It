@@ -1,4 +1,5 @@
 import cors from 'cors';
+import 'dotenv/config.js';
 import express from 'express';
 import mongoose from 'mongoose';
 import estudianteRouter from './routers/estudiante.js';
@@ -42,7 +43,7 @@ app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-app.use("/estudiante", cors(corsOptionsDelegate), estudianteRouter);
+app.use("/estudiantes", cors(corsOptionsDelegate), estudianteRouter);
 
 app.all("*", cors(corsOptionsDelegate), (req, res) => res.status(404).send(
     {success: false, 
