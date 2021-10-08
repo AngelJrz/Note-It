@@ -11,7 +11,7 @@ function App() {
       <div className="grid-container">
         <header className="row">
           <div>
-            <Link to="/" className="brand"><img src={logouv} alt="Logo" /></Link>
+            <Link to="/" ><img src={logouv} alt="Logo" /></Link>
           </div>
           <div>
             <Link to="/login">Inicia sesión</Link>
