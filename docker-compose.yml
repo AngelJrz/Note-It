@@ -30,6 +30,9 @@ services:
       MONGODB_URL: mongodb://noteit_db:27017/noteitdb?authSource=admin
       USER: noteitdb_user
       PASSWORD: pa55word123
+      EMAIL_USER: sammygch.1@gmail.com
+      EMAIL_PASSWORD: bivpgcathcdgvndw
+      SALT_ROUNDS: 10
     container_name: apirest
 
 
