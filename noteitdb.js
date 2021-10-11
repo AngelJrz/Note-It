@@ -114,6 +114,7 @@ db.estudiantes.insertMany([
     contrasenia: "mipassword",
     biografia: "Hola, soy estudiante de Lic. en Ingeniería de Software.",
     carrera: "2ae97db8-5daa-43ac-8460-c5ebbde3dead",
+    activo: true
   },
 ]);
 
