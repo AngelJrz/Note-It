@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import Estudiante from "../models/Estudiante.js";
-import { existeUsuario } from "../controllers/estudiante.js";
+import { existeUsuario, registrarEstudiante } from "../controllers/estudiante.js";
 
 router.get('/login', async (req, res) => {
     await Estudiante.findOne({ usuario: req.body.usuario })
@@ -40,19 +40,7 @@ router.get('/login', async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const {
-    nombres,
-    apellidos,
-    usuario,
-    correo,
-    contrasenia,
-    biografia,
-    carrera,
-  } = req.body;
-
-  //vaidar información
-  //Guardar en la BD
-  //Mandar un correo
+  const estudianteRecibido = req.body;
 
   var resultado = {
     exitoso: true,
@@ -60,23 +48,39 @@ router.post("/", async (req, res) => {
     data: null,
   };
 
-  if (existeUsuario(usuario)) {
-    resultado.exitoso = false;
-    resultado.mensaje = `El usuario ${usuario} ya pertenece a una cuenta activa.`;
-    res.send(resultado);
-  }
+  existeUsuario(estudianteRecibido.usuario)
+    .then((existe) => {
+      if (existe) {
+        resultado.exitoso = false
+        resultado.mensaje = `El usuario ${estudianteRecibido.usuario} ya pertenece a una cuenta activa.`
+        res.status(400).send(resultado)
+      } else {
+        registrarEstudiante(estudianteRecibido)
+          .then(registrado => {
+            if(registrado){
+              resultado.mensaje = "El usuario fue registrado exitosamente."
 
-  const nuevoEstudiante = new Estudiante({
-    nombres: nombres,
-    apellidos: apellidos,
-    usuario: usuario,
-    correo: correo,
-    contrasenia: contrasenia,
-    biografia: biografia,
-    carrera: carrera,
-  });
+              res.status(200).send(resultado);
+            }
+            else {
+              resultado.exitoso = false
+              resultado.mensaje = "Ocurrió un error al registrar el usuario."
 
-  nuevoEstudiante.save().then().catch();
+              res.status(400).send(resultado);
+            }
+          })
+        
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+
+      resultado.exitoso = false
+      resultado.mensaje = "Ocurrió un error al registrar el usuario."
+      resultado.data = error
+
+      res.status(500).send(resultado)
+    });
 });
 
 export default router;
