@@ -4,6 +4,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import estudianteRouter from './routers/estudiante.js';
 import verificacionRouter from './routers/verificacion.js';
+import carreraRouter from './routers/carrera.js';
 
 const app = express();
 const PORT = 4200;
@@ -46,6 +47,7 @@ app.use(express.json());
 
 app.use("/estudiantes", cors(corsOptionsDelegate), estudianteRouter);
 app.use("/api/verificacion", cors(corsOptionsDelegate), verificacionRouter);
+app.use("/api/carreras", cors(corsOptionsDelegate), carreraRouter);
 
 app.all("*", cors(corsOptionsDelegate), (req, res) => res.status(404).send(
     {success: false, 
