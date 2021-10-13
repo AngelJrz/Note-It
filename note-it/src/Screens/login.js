@@ -62,7 +62,7 @@ export default function LoginScreen() {
                 <div>
                     <label/>
                     <div>
-                        ¿No cuentas con un usuario? <Link to='/register'>Registrate</Link>
+                        ¿No cuentas con un usuario? <Link to='/registro'>Registrate</Link>
                     </div>
                 </div>
             </form>
