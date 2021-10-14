@@ -26,7 +26,7 @@ function App() {
           <Route path="/" component={HomeScreen} exact></Route>
           <Route path="/login" component={loginScreen}></Route>
           <Route path="/registro" component={RegistroScreen}></Route>
-          <Route path="/validar-codigo/:usuario" component={ValidarCodigo}></Route>
+          <Route path="/validar-codigo" component={ValidarCodigo}></Route>
         </main>
       </div>
     </BrowserRouter>

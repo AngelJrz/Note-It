@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router'
 
 import { registrarEstudiante } from '../services/registrar';
 import { useCarreras } from '../hooks/useCarreras';
 
-export default function RegistroScreen() {
+export default function RegistroScreen({ history }) {
     const [nuevoEstudiante, setNuevoEstudiante] = useState({
       nombres: '',
       apellidos: '',
@@ -18,13 +17,19 @@ export default function RegistroScreen() {
 
     const { carreras } = useCarreras();
 
-    const history = useHistory();
+    const [errorRegistro, setErrorRegistro] = useState("")
 
     const actualizarInfo = (e) => {
       setNuevoEstudiante({
         ...nuevoEstudiante,
         [e.target.name]: e.target.value
       })
+
+      setErrorRegistro("")
+    }
+
+    const cancelarRegistro = () => {
+      history.push('/');
     }
 
     const validarConfirmacionContrasenia = (e) => {
@@ -42,29 +47,23 @@ export default function RegistroScreen() {
 
     const registrarNuevoEstudiante = (e) => {
       e.preventDefault()
-      console.log(nuevoEstudiante)
-      history.push(`/validar-codigo/${nuevoEstudiante.usuario}`);
-      /*
-      if (errorConfirmacionContrasenia) {
-        console.log(
-          "La confirmación de la contraseña no coincide con la ingresada."
-        );
+      
+      if (!errorConfirmacionContrasenia) {
+        registrarEstudiante(nuevoEstudiante)
+        .then(respuesta => {
+          if (respuesta.exitoso) {
+            history.push({
+              pathname: "validar-codigo",
+              state: { usuario: nuevoEstudiante.usuario },
+            });
+          } else {
+            setErrorRegistro(respuesta.mensaje)
+          }
+        }).catch(error => {
+          console.error(error);
+        })
       }
-      else {
-        console.log("Sí coinciden");
-        // registrarEstudiante(nuevoEstudiante)
-        // .then(respuesta => {
-        //   console.log(respuesta)
-        //   if (respuesta.exitoso) {
-        //     history.push('/validar-codigo')
-        //   } else {
-
-        //   }
-        // }).catch(error => {
-        //   console.error(error);
-        // })
-      }
-      */
+      
     }
 
     return (
@@ -162,10 +161,17 @@ export default function RegistroScreen() {
               ))}
             </select>
           </div>
+
+          {errorRegistro && <span>{errorRegistro}</span>}
+
           <div>
             <button type="submit">Registrar cuenta</button>
           </div>
         </form>
+
+        <div>
+          <button onClick={cancelarRegistro}>Cancelar</button>
+        </div>
       </div>
     );
 }

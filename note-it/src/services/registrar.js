@@ -15,12 +15,17 @@ export async function registrarEstudiante(nuevoEstudiante) {
 }
 
 export async function validarCodigo(usuario, codigoVerificacion) {
+  const verificacion = {
+    usuario: usuario,
+    codigoVerificacion: parseInt(codigoVerificacion),
+  };
+
   return fetch(`${API_ENDPOINT}/api/verificacion`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
     },
-    body: JSON.stringify({ usuario, codigoVerificacion }),
+    body: JSON.stringify(verificacion),
   })
     .then((response) => {
       return response.json();

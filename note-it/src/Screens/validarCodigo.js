@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { validarCodigo } from '../services/registrar';
 
-export default function ValidarCodigo({ match }) {
-  const { usuario } = match.params;
+export default function ValidarCodigo({ location, history }) {
+  const { usuario } = location.state;
 
   const [codigoVerificacion, setCodigoVerificacion] = useState("")
   const [errorValidacion, setErrorValidacion] = useState({
@@ -16,7 +16,7 @@ export default function ValidarCodigo({ match }) {
 
   const validarCodigoVerificacion = (e) => {
     e.preventDefault();
-
+    
     validarCodigo(usuario, codigoVerificacion)
     .then(resultado => {
       console.log(resultado);
@@ -25,6 +25,8 @@ export default function ValidarCodigo({ match }) {
           error: false,
           mensaje: "",
         });
+
+        history.push("/login");
       }
       else {
         setErrorValidacion({
@@ -47,11 +49,11 @@ export default function ValidarCodigo({ match }) {
           <div>
             <label htmlFor="codigoVerificacion">Código de verificación</label>
             <input
-              type="number"
               id="codigoVerificacion"
               name="codigoVerificacion"
-              minLength="5"
+              pattern="[0-9]{5,5}"
               maxLength="5"
+              minLength="5"
               value={codigoVerificacion}
               onChange={actualizarCodigo}
               required
