@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "dev": "nodemon index.js",
     "start": "nodemon index.js",
-    "test": "test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -29,12 +30,32 @@
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "express-validator": "^6.13.0",
     "js-guid": "^1.0.0",
     "mongoose": "^5.13.0",
     "nodemailer": "^6.6.5"
   },
   "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/plugin-transform-runtime": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
     "dotenv": "^10.0.0",
-    "nodemon": "^2.0.13"
+    "jest": "^27.2.5",
+    "nodemon": "^2.0.13",
+    "supertest": "^6.1.6"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true,
+    "collectCoverage": true,
+    "silent": false,
+    "detectOpenHandles": true,
+    "moduleFileExtensions": [
+      "js",
+      "mjs"
+    ],
+    "testRegex": "((\\.|/*.)(test))\\.js?$"
   }
 }

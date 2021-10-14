@@ -5,7 +5,7 @@ import { activarEstudiante } from "../controllers/estudiante.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   const { usuario, codigoVerificacion } = req.body;
 
   var respuesta = {
@@ -53,5 +53,11 @@ router.post("/", async (req, res) => {
       res.status(500).send(respuesta);
     });
 });
+
+router.post("/reenviar", async (req, res) => {
+  const { usuario } = req.body;
+
+  res.status(200).send({ exitoso: true})
+})
 
 export default router;

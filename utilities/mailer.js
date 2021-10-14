@@ -16,7 +16,7 @@ const transporter = createTransport({
 const EMAIL_FROM = '"Note It" <verificacion@noteit.com>'
 
 
-export default function enviarCorreoCodigoVerificacion(email, usuario, codigoVerificacion) {
+export default async function enviarCorreoCodigoVerificacion(email, usuario, codigoVerificacion) {
   const correo = {
     from: EMAIL_FROM,
     to: email,
@@ -25,7 +25,7 @@ export default function enviarCorreoCodigoVerificacion(email, usuario, codigoVer
     <p>Tu código de verificación es <strong>${codigoVerificacion}</strong>.</p>`,
   };
 
-  transporter.sendMail(correo)
+  await transporter.sendMail(correo)
   .then(respuesta => console.log(respuesta))
   .catch(error => console.error(error))
 }

@@ -7,7 +7,7 @@ import { crearVerificacion } from "../controllers/verificacion.js";
 import { encriptar } from "../utilities/hashManager.js";
 
 export function existeUsuario(usuario) {
-  return Estudiante.findOne({ usuario: usuario })
+  return Estudiante.findOne({ usuario: usuario, activo: true })
     .then((estudiante) => {
       if (estudiante) return true;
 

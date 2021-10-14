@@ -2,9 +2,12 @@ import cors from 'cors';
 import 'dotenv/config.js';
 import express from 'express';
 import mongoose from 'mongoose';
+import fileUpload from 'express-fileupload';
+
 import estudianteRouter from './routers/estudiante.js';
 import verificacionRouter from './routers/verificacion.js';
 import carreraRouter from './routers/carrera.js';
+import notaRouter from './routers/nota.js';
 
 const app = express();
 const PORT = 4200;
@@ -43,14 +46,18 @@ var corsOptionsDelegate = function (req, callback) {
 
 app.use(cors());
 app.use(express.urlencoded({extended: true}));
+app.use(fileUpload());
 app.use(express.json());
 
 app.use("/estudiantes", cors(corsOptionsDelegate), estudianteRouter);
 app.use("/api/verificacion", cors(corsOptionsDelegate), verificacionRouter);
 app.use("/api/carreras", cors(corsOptionsDelegate), carreraRouter);
+app.use("/api/notas", cors(corsOptionsDelegate), notaRouter);
 
 app.all("*", cors(corsOptionsDelegate), (req, res) => res.status(404).send(
     {success: false, 
     msg: "This route does not exist"}));
 
-app.listen(PORT, () => console.log(`Server running in port ${PORT}`));
+const server = app.listen(PORT, () => console.log(`Server running in port ${PORT}`));
+
+export { app, server };
