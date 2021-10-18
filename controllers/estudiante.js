@@ -1,4 +1,5 @@
 import { Guid } from "js-guid";
+import jwt from 'jsonwebtoken';
 
 import Estudiante from "../models/Estudiante.js";
 import enviarCorreoCodigoVerificacion from "../utilities/mailer.js";
@@ -71,4 +72,38 @@ export async function activarEstudiante(usuario) {
           console.error(error);
           return false;
         })
+}
+
+export function loginEstudiante(datosUsuario) {
+  return Estudiante.findOne({ usuario: datosUsuario.usuario })
+  .then((estudiante) => {
+    if (estudiante == null) {
+      return {
+              resultado: false,
+              mensaje: "El usuario no existe",
+              data: null
+            }
+    } else {
+      if (datosUsuario.contrasenia === estudiante.contrasenia) {
+        return {
+              resultado: true,
+              mensaje: "Login exitoso",
+              data: jwt.sign({usuario: estudiante}, 'secretKey')
+            }
+      } else {
+        return {
+            resultado: false,
+            mensaje: "Contraseña incorrecta",
+            data: null
+          }
+      }
+    }
+  })
+  .catch(() => {
+    return {
+      resultado: false,
+      mensaje: "Error en servicio en controlador de estudiante",
+      data: null
+    }
+  });
 }
