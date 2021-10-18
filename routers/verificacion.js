@@ -25,13 +25,13 @@ router.post("/", async (req, res, next) => {
               eliminarVerificacion(usuario, codigoVerificacion)
                 .then((eliminado) => console.log("Verificación eliminada: ", eliminado))
                 .catch((error) => console.error(error));
-              res.status(200).send(respuesta);
+              return res.status(200).send(respuesta);
             } else {
               respuesta.exitoso = false;
               respuesta.mensaje =
                 "Ocurrió un error al intentar activar la cuenta. Intente más tarde.";
 
-              res.status(500).send(respuesta);
+              return res.status(500).send(respuesta);
             }
           })
           .catch((error) => console.erro(error));
@@ -39,7 +39,7 @@ router.post("/", async (req, res, next) => {
         respuesta.exitoso = resultado.correcto;
         respuesta.mensaje = resultado.mensaje;
 
-        res.status(400).send(respuesta);
+        return res.status(400).send(respuesta);
       }
     })
     .catch((error) => {
@@ -50,7 +50,7 @@ router.post("/", async (req, res, next) => {
         "Ocurrió un error al intentar validar el código. Intenté más tarde.";
       respuesta.data = error;
 
-      res.status(500).send(respuesta);
+      return res.status(500).send(respuesta);
     });
 });
 

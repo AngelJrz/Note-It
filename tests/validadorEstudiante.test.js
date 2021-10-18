@@ -1,7 +1,7 @@
 import { esEmailCorrecto } from "../utilities/validadorEstudiante";
 
 test("Email es correcto", () => {
-    const esCorrecto = esEmailCorrecto("zs18012174@estudiantes.uv.mx");
+    const esCorrecto = esEmailCorrecto("zs16013168@estudiantes.uv.mx");
 
     expect(esCorrecto).toBe(true);
 })

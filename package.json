@@ -51,7 +51,7 @@
     "verbose": true,
     "collectCoverage": true,
     "silent": false,
-    "detectOpenHandles": true,
+    "detectOpenHandles": false,
     "moduleFileExtensions": [
       "js",
       "mjs"

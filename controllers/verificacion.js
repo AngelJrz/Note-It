@@ -26,7 +26,7 @@ export async function verificarCodigo(usuario, codigoVerificacion) {
               correcto: true,
               mensaje: "Código de verificación correcto.",
             };
-
+            
             if (!verificacion) {
                 resultado.correcto = false
                 resultado.mensaje = "No se encontró un usuario para la verificación o el código de verificación ha expirado."

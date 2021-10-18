@@ -1,11 +1,17 @@
 function esEmailCorrecto(email) {
   const patter = /zs([0-9]{8})+@estudiantes\.uv\.mx/;
 
-  if (!patter.test(email)) {
+  const esValido = patter.test(email);
+
+  if (!esValido) {
     throw new Error(
       "El correo recibido no se encuentra en el formato esperado."
     );
   }
+  else {
+    return true;
+  }
+
 }
 
 const checkSchemaEstudiante = {
@@ -25,9 +31,9 @@ const checkSchemaEstudiante = {
   correo: {
     custom: {
       options: (value) => {
-        esEmailCorrecto(value);
+        return esEmailCorrecto(value)
       },
-    },
+    }
   },
   contrasenia: {
     isLength: {
