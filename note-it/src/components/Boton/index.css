@@ -1,0 +1,48 @@
+.boton {
+    padding: 19px 39px 18px 39px;
+    
+    font-size: 18px;
+    font-style: normal;
+    border-radius: 5px;
+    width: 100%;
+    
+    box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.principal {
+    color: #FFF;
+    background-color: #2196f3;
+    border: 1px solid #2196f3;
+}
+
+.principal:hover {
+  background-color: #1864a3;
+  border: 1px solid #1864a3;
+}
+
+.secundario {
+    color: #2196f3;
+    background-color: #fff;
+    border: 1px solid #2196f3;
+}
+
+.secundario:hover {
+  background-color: #dcefff;
+  border: 1px solid #2196f3;
+}
+
+.w-10 {
+    width: 10%;
+    font-size: 15px;
+    text-align: center;
+}
+
+.w-40 {
+    width: 40%;
+}
+
+.w-50 {
+    width: 50%;
+}

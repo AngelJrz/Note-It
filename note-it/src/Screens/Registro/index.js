@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+import Boton from "../../components/Boton/index.js";
+import TextField from "@mui/material/TextField";
+
 import { registrarEstudiante } from "../../services/registrar";
 import { useCarreras } from "../../hooks/useCarreras";
 
@@ -71,9 +74,11 @@ export default function RegistroScreen({ history }) {
   return (
     <form onSubmit={registrarNuevoEstudiante} className="form">
       <h1>Registrar cuenta</h1>
-      
+
       <fieldset>
-        <label htmlFor="nombres">Nombres</label>
+        <label htmlFor="nombres">
+          Nombres (<span>*</span>)
+        </label>
         <input
           id="nombres"
           type="text"
@@ -83,89 +88,86 @@ export default function RegistroScreen({ history }) {
           required
           onChange={actualizarInfo}
         ></input>
-        
-        
-          <label htmlFor="apellidos">Apellidos</label>
-          <input
-            id="apellidos"
-            type="text"
-            minLength="2"
-            placeholder="Ingresa tu(s) apellidos(s)"
-            name="apellidos"
-            required
-            onChange={actualizarInfo}
-          ></input>
-        
-        
-          <label htmlFor="correo">Correo electrónico</label>
-          <input
-            id="correo"
-            type="email"
-            placeholder="zsXXXXXXXX@estudiantes.uv.mx"
-            name="correo"
-            pattern="zs([0-9]{8})+@estudiantes\.uv\.mx"
-            title="Por favor ingresa un correo en el formato zsXXXXXXXX@estudiantes.uv.mx"
-            required
-            onChange={actualizarInfo}
-          ></input>
-        
-        
-          <label htmlFor="usuario">Usuario</label>
-          <input
-            id="usuario"
-            type="text"
-            placeholder="Ingresa tu usuario"
-            name="usuario"
-            minLength="5"
-            required
-            onChange={actualizarInfo}
-          ></input>
-        
-          <label htmlFor="contrasenia">Contraseña</label>
-          <input
-            type="password"
-            id="contrasenia"
-            name="contrasenia"
-            required
-            minLength="8"
-            onChange={actualizarInfo}
-          ></input>
-        
-          <label htmlFor="confirmaContrasenia">Confirmar contraseña</label>
-          <input
-            type="password"
-            id="confirmaContrasenia"
-            name="confirmaContrasenia"
-            required
-            minLength="8"
-            onChange={validarConfirmacionContrasenia}
-          ></input>
-        
-          <span>{errorConfirmacionContrasenia}</span>
-        
-          <label htmlFor="carreras">Carrera en la que estudias</label>
-          <select
-            id="carreras"
-            required
-            name="carrera"
-            onChange={actualizarInfo}
-          >
-            <option value="" selected disabled>
-              Selecciona una carrera
+        <TextField id="outlined-basic" label="Nombres" variant="outlined" helperText="Tus nombres"/>
+
+        <label htmlFor="apellidos">Apellidos</label>
+        <input
+          id="apellidos"
+          type="text"
+          minLength="2"
+          placeholder="Ingresa tu(s) apellidos(s)"
+          name="apellidos"
+          required
+          onChange={actualizarInfo}
+        ></input>
+
+        <label htmlFor="correo">Correo electrónico</label>
+        <input
+          id="correo"
+          type="email"
+          placeholder="zsXXXXXXXX@estudiantes.uv.mx"
+          name="correo"
+          pattern="zs([0-9]{8})+@estudiantes\.uv\.mx"
+          title="Por favor ingresa un correo en el formato zsXXXXXXXX@estudiantes.uv.mx"
+          required
+          onChange={actualizarInfo}
+        ></input>
+
+        <label htmlFor="usuario">Usuario</label>
+        <input
+          id="usuario"
+          type="text"
+          placeholder="Ingresa tu usuario"
+          name="usuario"
+          minLength="5"
+          required
+          onChange={actualizarInfo}
+        ></input>
+
+        <label htmlFor="contrasenia">Contraseña</label>
+        <input
+          type="password"
+          id="contrasenia"
+          name="contrasenia"
+          required
+          minLength="8"
+          onChange={actualizarInfo}
+        ></input>
+
+        <label htmlFor="confirmaContrasenia">Confirmar contraseña</label>
+        <input
+          type="password"
+          id="confirmaContrasenia"
+          name="confirmaContrasenia"
+          required
+          minLength="8"
+          onChange={validarConfirmacionContrasenia}
+        ></input>
+
+        <span>{errorConfirmacionContrasenia}</span>
+
+        <label htmlFor="carreras">Carrera en la que estudias</label>
+        <select id="carreras" required name="carrera" onChange={actualizarInfo}>
+          <option value="" selected disabled>
+            Selecciona una carrera
+          </option>
+          {carreras.map((carrera) => (
+            <option key={carrera.id} value={carrera.id}>
+              {carrera.nombre}
             </option>
-            {carreras.map((carrera) => (
-              <option key={carrera.id} value={carrera.id}>
-                {carrera.nombre}
-              </option>
-            ))}
-          </select>
-        
+          ))}
+        </select>
       </fieldset>
       {errorRegistro && <span>{errorRegistro}</span>}
-  
-        <button type="submit" className="registrar">Registrar cuenta</button>
 
-      <button onClick={cancelarRegistro} className="cancelar">Cancelar</button>
+      <span>* Campos obligatorios</span>
+
+      <Boton texto="Registrar cuenta" tipo="boton principal" />
+      <Boton
+        texto="Cancelar"
+        tipo="boton secundario"
+        onClick={cancelarRegistro}
+      />
     </form>
   );
 }
