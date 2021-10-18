@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import loginScreen from './Screens/login.js';
 import HomeScreen from './Screens/homescreen.js';
-import RegistroScreen from './Screens/registro.js';
-import ValidarCodigo from './Screens/validarCodigo.js';
+import RegistroScreen from './Screens/Registro/index.js';
+import ValidarCodigo from './Screens/ValidarCodigo/index.js';
 import { BrowserRouter, Route } from 'react-router-dom';
 import logouv from './images/logouv.jpg';
 
