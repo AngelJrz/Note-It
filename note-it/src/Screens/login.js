@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
+import {servicioLogin} from '../services/login';
+import { useHistory } from "react-router-dom";
 
 export default function LoginScreen() {
+    const history = useHistory();
     const [datos, setDatos] = useState({
         usuario: '',
         contrasenia: ''
-    })
+    });
 
     const CambioDeDatos = (e) => {
         setDatos({
@@ -16,22 +19,15 @@ export default function LoginScreen() {
 
     function login(e) {
         e.preventDefault();
-        fetch("http://localhost:4200/estudiante/login", {
-            method: "post",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                usuario: datos.usuario,
-                contrasenia: datos.contrasenia
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.mensaje)
-        }).catch(error => {
-            console.log(error)
-        })
+        servicioLogin(datos)
+        .then(datosLogin => {
+            if (datosLogin.resultado) {
+                sessionStorage.setItem('token', datosLogin.data);
+                history.push("/");
+            }else{
+                alert(datosLogin.mensaje);
+            }
+        })   
     }
 
     return (

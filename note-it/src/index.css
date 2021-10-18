@@ -188,3 +188,29 @@ button.block{
 	margin: 1rem 0;
 	display: block;
 } */
+
+/* estilos de notas de homescreen */
+.nota{
+	min-height: 300px;
+	max-width: 250px;
+	border: 0.1rem gray solid;
+	padding: 10px;
+	background-color: #f8f8f8;
+	border-radius: .5rem;
+	margin: 1rem;
+}
+
+.row{
+	display: flex;
+	flex-wrap:wrap;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.row.center{
+	justify-content: center;
+}
+
+.row.top{
+	align-items: flex-start;
+}
