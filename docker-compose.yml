@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  noteit_db:
+    image: mongo:4.4.4
+    ports:
+      - "4201:27017"
+    hostname: noteit_db
+    restart: unless-stopped
+    container_name: noteit_db
+    environment:
+      MONGO_INITDB_DATABASE: noteitdb
+      MONGO_INITDB_ROOT_USERNAME: noteitdb_user
+      MONGO_INITDB_ROOT_PASSWORD: pa55word123
+    volumes:
+      - noteit_db_volume:/data/db
+      - ../db/noteitdb.js:/docker-entrypoint-initdb.d/noteitdb.js:ro
+    command: mongod --auth
+
+  apirest:
+    image: apirest
+    depends_on: 
+      - "noteit_db"
+    ports: 
+      - "4200:4200"
+    build: 
+      context: ../apiRest/
+      dockerfile: Dockerfile
+    environment:
+      MONGODB_URL: mongodb://noteit_db:27017/noteitdb?authSource=admin
+      USER: noteitdb_user
+      PASSWORD: pa55word123
+      EMAIL_USER: sammygch.1@gmail.com
+      EMAIL_PASSWORD: bivpgcathcdgvndw
+      SALT_ROUNDS: 10
+    container_name: apirest
+
+
+volumes:
+  noteit_db_volume:
