@@ -104,6 +104,17 @@ db.materias.insertMany([
     },
 ])
 
+db.temas.insertMany([
+  //Habilidades de comunicación
+  {
+    id: "6e12d56b-eb40-4fb5-9465-350342cc4855",
+    nombre: "El ensayo",
+    descripcion:
+      "Que el estudiante conozca los conceptos básicos sobre un ensayo.",
+    materia: "47135244-8d68-4702-b827-b375f2b89ced",
+  },
+]);
+
 db.estudiantes.insertMany([
   {
     id: "3ab8d1f7-10f5-4060-b757-096d7d868491",
@@ -152,4 +163,17 @@ de9df629-0f77-4c2b-ac32-ecf9ae95e85b
 dfd1113f-e1e6-4ca0-bb87-d4265a8d70d6
 4558d660-56ff-42c3-8005-f7a441f53d83
 82aa5387-be6f-4edc-a275-702e75b8e4c3
+ */
+
+/**
+ 6e12d56b-eb40-4fb5-9465-350342cc4855
+59d18af9-ae1b-466d-9647-d7d3b3ec55e8
+daacfb36-8fec-4fa6-994b-c1a55b5e9fee
+28f556db-6626-4850-a6ed-fb51fcf7235f
+7bbaaad5-b96a-45a2-88b3-c619fb3e6728
+a5876527-866c-4aae-aa15-cbb4eafa443a
+6c4ce41e-4ca9-4684-ad10-24d12859f84a
+c90a4a80-1444-49fe-bff2-1bbefd72b8d1
+116b98e8-c1b3-4f79-a418-7c5db9ee3ce5
+c913d272-419d-464d-b25a-8e00781af2d8
  */
