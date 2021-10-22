@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
-import {servicioLogin} from '../services/login';
 import { useHistory } from "react-router-dom";
+import {servicioLogin} from '../../services/login';
+import './login.css'
+import Boton from "../../components/Boton/index.js";
 
 export default function LoginScreen() {
     const history = useHistory();
@@ -27,6 +29,8 @@ export default function LoginScreen() {
             }else{
                 alert(datosLogin.mensaje);
             }
+        }).catch(err => {
+            alert("Ocurrió un error");
         })   
     }
 
@@ -38,28 +42,22 @@ export default function LoginScreen() {
                 </div>
                 <div>
                     <label htmlFor='usuario'>Usuario</label>
-                    <input id='usuario' placeholder='Ingresa tu usuario' onChange={CambioDeDatos} name="usuario" required>
+                    <input type='text' id='usuario' placeholder='Ingresa tu usuario' onChange={CambioDeDatos} name="usuario" required>
                     </input>
                 </div>
 
-                <div>
+                <div className="areaPassword">
                     <label htmlFor='password'>Contraseña</label>
                     <input type='password' id='password' placeholder='Ingresa tu contraseña' onChange={CambioDeDatos} name="contrasenia" required>
                     </input>
                 </div>
 
-                <div>
-                    <label/>
-                    <button className='primary' type='submit'>
-                        Iniciar Sesión
-                    </button>
+                <div className="areaBoton">
+                    <Boton texto="Inicia sesión" tipo="boton principal "/>
                 </div>
 
-                <div>
-                    <label/>
-                    <div>
-                        ¿No cuentas con un usuario? <Link to='/registro'>Registrate</Link>
-                    </div>
+                <div className="areaRegistro">
+                    ¿No cuentas con un usuario? <Link to='/registro'>Registrate</Link>
                 </div>
             </form>
         </div>

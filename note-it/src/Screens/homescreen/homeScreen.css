@@ -1,0 +1,14 @@
+.row{
+	display: flex;
+	flex-wrap:wrap;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.row.center{
+	justify-content: center;
+}
+
+.row.top{
+	align-items: flex-start;
+}

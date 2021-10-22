@@ -1,4 +1,5 @@
 import React from 'react'
+import './Nota.css'
 
 export default function Nota(props){
     const { nota } = props;
