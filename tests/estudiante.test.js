@@ -193,7 +193,8 @@ test("confirmar correo con codigo incorrecto y usuario existente", async () => {
 });
 
 test("confirmar correo con codigo expirado", async () => {
-
+  await Verificacion.deleteMany({});
+  
   const verificacion = {
     usuario: "abizair",
     codigoVerificacion: 123456,

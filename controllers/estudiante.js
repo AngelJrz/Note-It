@@ -107,3 +107,15 @@ export function loginEstudiante(datosUsuario) {
     }
   });
 }
+
+
+export async function existeEstudiante(id) {
+  return Estudiante.exists({ id: id, activo: true })
+    .then((existe) => {
+      return existe;
+    })
+    .catch((error) => {
+      console.error(error);
+      return false;
+    });
+}

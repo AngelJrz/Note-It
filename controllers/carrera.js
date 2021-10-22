@@ -16,3 +16,14 @@ export function obtenerCarreras(idCarrera) {
             return error;
         })
 }
+
+export async function existeCarrera(idCarrera) {
+    return Carrera.exists({ id: idCarrera })
+    .then(existe => {
+        return existe;
+    })
+    .catch(err => {
+        console.error(err);
+        return false;
+    })
+}
