@@ -33,6 +33,7 @@ services:
       EMAIL_USER: sammygch.1@gmail.com
       EMAIL_PASSWORD: bivpgcathcdgvndw
       SALT_ROUNDS: 10
+      VERSION_GUID: 4
     container_name: apirest
 
 
