@@ -4,13 +4,17 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import RegistroScreen from './Screens/Registro/index.js';
 import ValidarCodigo from './Screens/ValidarCodigo/index.js';
 import Header from './components/header/header.js';
+import { Link } from 'react-router-dom';
+import MenuLateral from './components/menuLateral/menulateral.js';
 
 function App() { 
 
   return (
     <BrowserRouter>
+      <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'/>
       <div className="grid-container">
         <Header/>
+        <MenuLateral/>
         <main>
           <Route path="/" component={HomeScreen} exact></Route>
           <Route path="/login" component={LoginScreen}></Route>
