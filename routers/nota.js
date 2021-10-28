@@ -3,7 +3,7 @@ const router = express.Router();
 
 import { validationResult, checkSchema } from "express-validator";
 
-import { crearNuevaNota } from '../controllers/nota.js';
+import { crearNuevaNota, obtenerNotas } from '../controllers/nota.js';
 
 import checkSchemaNota from "../utilities/validadorNota.js";
 
@@ -58,6 +58,38 @@ async (req, res) => {
 
         return res.status(500).send(resultado);
     })
+})
+
+
+router.get("/", async (req, res) => {
+    const busqueda = req.query;
+
+    var respuesta = {
+      exitoso: true,
+      mensaje: "Nota(s) encontrada(s)",
+      data: null,
+    };
+
+    obtenerNotas(busqueda)
+      .then((notas) => {
+        if (notas && notas.length > 0) {
+          respuesta.data = notas;
+
+          return res.status(200).send(respuesta);
+        } else {
+          respuesta.exitoso = false;
+          respuesta.mensaje = "No fue(ron) encontrada(s) la(s) nota(s)";
+          return res.status(200).send(respuesta);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        respuesta.exitoso = false;
+        respuesta.mensaje = error.message;
+        respuesta.data = error;
+
+        return res.status(500).send(respuesta);
+      });
 })
 
 export default router;

@@ -13,5 +13,15 @@ const carreraSchema = new Schema(
   }
 )
 
-const Carrera = model("carrera", carreraSchema)
+carreraSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id;
+    delete returnedObject._id;
+    delete returnedObject.__v;
+    delete returnedObject.createdAt;
+    delete returnedObject.updatedAt;
+  },
+});
+
+const Carrera = model("Carrera", carreraSchema)
 export default Carrera

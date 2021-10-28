@@ -4,15 +4,24 @@ const { model, Schema } = mongoose;
 
 const materiaSchema = new Schema(
   {
-    id: { type: String, required: true, unique: true },
     nombre: { type: String, required: true },
     descripcion: { type: String, required: true },
-    carrera: { type: String, required: true }
+    carrera: { type: Schema.Types.ObjectId, ref: "Carrera" },
   },
   {
     timestamps: true,
   }
 );
 
-const Materia = model("materia", materiaSchema);
+materiaSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id;
+    delete returnedObject._id;
+    delete returnedObject.__v;
+    delete returnedObject.createdAt;
+    delete returnedObject.updatedAt;
+  },
+});
+
+const Materia = model("Materia", materiaSchema);
 export default Materia;

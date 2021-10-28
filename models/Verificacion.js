@@ -10,5 +10,5 @@ const verificacionSchema = new Schema(
   }
 );
 
-const Verificacion = model("verificaciones", verificacionSchema);
+const Verificacion = model("Verificacion", verificacionSchema);
 export default Verificacion;

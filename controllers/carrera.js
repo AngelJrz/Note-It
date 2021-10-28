@@ -4,7 +4,7 @@ export function obtenerCarreras(idCarrera) {
     var filtro = {}
     
     if(idCarrera){
-        filtro = {id: idCarrera}
+        filtro = {_id: idCarrera}
     }
 
     return Carrera.find(filtro)
@@ -18,7 +18,7 @@ export function obtenerCarreras(idCarrera) {
 }
 
 export async function existeCarrera(idCarrera) {
-    return Carrera.exists({ id: idCarrera })
+    return Carrera.exists({ _id: idCarrera })
     .then(existe => {
         return existe;
     })

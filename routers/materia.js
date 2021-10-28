@@ -4,12 +4,10 @@ const router = express.Router();
 import { param, validationResult } from "express-validator";
 import { obtenerTemas } from "../controllers/tema.js";
 
-const VERSION_GUID = process.env.VERSION_GUID;
-
 router.get(
   "/:id/temas",
   param("id")
-    .isUUID(VERSION_GUID)
+    .isMongoId()
     .withMessage("El id de la carrera tiene un formato incorrecto."),
   async (req, res) => {
     var resultado = {

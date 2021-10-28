@@ -1,7 +1,7 @@
 import Tema from "../models/Tema.js";
 
 export async function existeTema(idMateria, idTema) {
-    return Tema.exists({ id: idTema, materia: idMateria })
+    return Tema.exists({ _id: idTema, materia: idMateria })
       .then((existe) => {
         return existe;
       })

@@ -6,8 +6,6 @@ import { param, validationResult } from "express-validator";
 import { obtenerCarreras }  from '../controllers/carrera.js';
 import { obtenerMaterias } from "../controllers/materia.js";
 
-const VERSION_GUID = process.env.VERSION_GUID;
-
 router.get("/", async (req, res) => {
   const { idCarrera } = req.query || "";
 
@@ -23,11 +21,11 @@ router.get("/", async (req, res) => {
         respuesta.mensaje = "Carrera(s) encontrada(s)";
         respuesta.data = carreras;
 
-        res.status(200).send(respuesta);
+        return res.status(200).send(respuesta);
       } else {
         respuesta.exitoso = false;
         respuesta.mensaje = "No fue(ron) encontrada(s) la(s) carrera(s)";
-        res.status(404).send(respuesta);
+        return res.status(404).send(respuesta);
       }
     })
     .catch((error) => {
@@ -36,13 +34,13 @@ router.get("/", async (req, res) => {
       respuesta.mensaje = error.message;
       respuesta.data = error;
 
-      res.status(500).send(respuesta);
+      return res.status(500).send(respuesta);
     });
 });
 
 router.get("/:id/materias", 
 param('id')
-  .isUUID(VERSION_GUID)
+  .isMongoId()
   .withMessage("El id de la carrera tiene un formato incorrecto."), 
 async (req, res) => {
   

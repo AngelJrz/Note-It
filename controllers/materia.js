@@ -1,7 +1,7 @@
 import Materia from "../models/Materia.js";
 
 export async function existeMateria(idCarrera, idMateria) {
-    return Materia.exists({ id: idMateria, carrera: idCarrera })
+    return Materia.exists({ _id: idMateria, carrera: idCarrera })
       .then((existe) => {
         return existe;
       })
