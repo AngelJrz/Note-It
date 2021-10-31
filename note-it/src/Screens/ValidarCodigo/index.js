@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Boton from "../../components/Boton";
 import { validarCodigo } from "../../services/registrar";
 import './index.css'
 
@@ -62,17 +63,16 @@ export default function ValidarCodigo({ location, history }) {
           onChange={actualizarCodigo}
           required
           title="Ingresa la clave de verificación."
+          autoFocus
         ></input>
       </fieldset>
 
       <span>{errorValidacion.error && errorValidacion.mensaje}</span>
 
-      <button type="submit" className="validar">Validar</button>
+      <Boton texto="Validar" tipo="boton principal" />
 
-      <p>
-        ¿No te ha llegado el código de verificación?{" "}
-        <button className="reenviar">Enviar de nuevo</button>{" "}
-      </p>
+      <p>¿No te ha llegado el código de verificación?</p>
+      <Boton tipo="boton secundario" texto="Enviar de nuevo" />
     </form>
   );
 }

@@ -21,3 +21,16 @@ export async function obtenerCarrera(idCarrera) {
         return carreras;
       });
 }
+
+export async function obtenerMaterias(idCarrera) {
+  return fetch(`${ENDPOINT}/${idCarrera}/materias`, {
+    method: "GET"
+  })
+  .then((response) => {
+    return response.json()
+  })
+  .then(resultado => {
+    const { data } = resultado;
+    return data;
+  })
+}

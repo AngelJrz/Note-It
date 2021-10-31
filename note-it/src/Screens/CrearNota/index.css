@@ -1,0 +1,17 @@
+.contenido-textarea {
+    display: none;
+    color: black;
+}
+
+.editor {
+    background-color: rgb(240, 240, 240);
+    min-height: 200px;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    color: black;
+}
+
+.editor-toolbar {
+    background-color: #2196f3;
+    border: 1px solid #ccc;
+}

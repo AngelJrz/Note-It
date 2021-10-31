@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
 import Boton from "../../components/Boton/index.js";
-import TextField from "@mui/material/TextField";
-
 import { registrarEstudiante } from "../../services/registrar";
 import { useCarreras } from "../../hooks/useCarreras";
 
@@ -88,9 +86,10 @@ export default function RegistroScreen({ history }) {
           required
           onChange={actualizarInfo}
         ></input>
-        <TextField id="outlined-basic" label="Nombres" variant="outlined" helperText="Tus nombres"/>
 
-        <label htmlFor="apellidos">Apellidos</label>
+        <label htmlFor="apellidos">
+          Apellidos (<span>*</span>)
+        </label>
         <input
           id="apellidos"
           type="text"
@@ -101,7 +100,9 @@ export default function RegistroScreen({ history }) {
           onChange={actualizarInfo}
         ></input>
 
-        <label htmlFor="correo">Correo electrónico</label>
+        <label htmlFor="correo">
+          Correo electrónico (<span>*</span>)
+        </label>
         <input
           id="correo"
           type="email"
@@ -113,7 +114,9 @@ export default function RegistroScreen({ history }) {
           onChange={actualizarInfo}
         ></input>
 
-        <label htmlFor="usuario">Usuario</label>
+        <label htmlFor="usuario">
+          Usuario (<span>*</span>)
+        </label>
         <input
           id="usuario"
           type="text"
@@ -124,7 +127,9 @@ export default function RegistroScreen({ history }) {
           onChange={actualizarInfo}
         ></input>
 
-        <label htmlFor="contrasenia">Contraseña</label>
+        <label htmlFor="contrasenia">
+          Contraseña (<span>*</span>)
+        </label>
         <input
           type="password"
           id="contrasenia"
@@ -134,7 +139,9 @@ export default function RegistroScreen({ history }) {
           onChange={actualizarInfo}
         ></input>
 
-        <label htmlFor="confirmaContrasenia">Confirmar contraseña</label>
+        <label htmlFor="confirmaContrasenia">
+          Confirmar contraseña (<span>*</span>)
+        </label>
         <input
           type="password"
           id="confirmaContrasenia"
@@ -146,7 +153,9 @@ export default function RegistroScreen({ history }) {
 
         <span>{errorConfirmacionContrasenia}</span>
 
-        <label htmlFor="carreras">Carrera en la que estudias</label>
+        <label htmlFor="carreras">
+          Carrera en la que estudias (<span>*</span>)
+        </label>
         <select id="carreras" required name="carrera" onChange={actualizarInfo}>
           <option value="" selected disabled>
             Selecciona una carrera

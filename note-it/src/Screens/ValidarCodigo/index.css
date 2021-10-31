@@ -1,12 +1,8 @@
 .form-validar {
-    background: #f4f7f8;
-    padding: 10px 20px;
+    padding: 30px 20px;
     margin: 10px auto;
     max-width: 400px;
     border-radius: 10px;
-}
-
-.form-validar:hover{
     box-shadow: 2px 2px 15px rgb(156, 156, 156);
 }
 
