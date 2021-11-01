@@ -15,8 +15,8 @@ const checkSchemaNota = {
   cuerpo: {
     isLength: {
       errorMessage:
-        "El cuerpo de la nota debe tener al menos 10 caracteres y máximo 1000",
-      options: { min: 10, max: 1000 },
+        "El cuerpo de la nota debe tener al menos 20 caracteres y máximo 3000.",
+      options: { min: 20, max: 3000 },
     },
   },
   carrera: {
