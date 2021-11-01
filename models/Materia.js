@@ -1,19 +1,19 @@
 import mongoose from "mongoose";
 
-const { model, Schema} = mongoose
+const { model, Schema } = mongoose;
 
-const carreraSchema = new Schema(
+const materiaSchema = new Schema(
   {
-    id: { type: String, required: true, unique: true },
     nombre: { type: String, required: true },
     descripcion: { type: String, required: true },
+    carrera: { type: Schema.Types.ObjectId, ref: "Carrera" },
   },
   {
     timestamps: true,
   }
-)
+);
 
-carreraSchema.set("toJSON", {
+materiaSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id;
     delete returnedObject._id;
@@ -23,5 +23,5 @@ carreraSchema.set("toJSON", {
   },
 });
 
-const Carrera = model("Carrera", carreraSchema)
-export default Carrera
+const Materia = model("Materia", materiaSchema);
+export default Materia;

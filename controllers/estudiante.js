@@ -1,4 +1,3 @@
-import { Guid } from "js-guid";
 import jwt from 'jsonwebtoken';
 
 import Estudiante from "../models/Estudiante.js";
@@ -21,8 +20,6 @@ export function existeUsuario(usuario) {
 }
 
 export async function registrarEstudiante(estudiante) {
-  const id = Guid.newGuid();
-  estudiante.id = id;
   const contraniaEncriptada = encriptar(estudiante.contrasenia)
   estudiante.contrasenia = contraniaEncriptada
   const nuevoEstudiante = new Estudiante(estudiante);
@@ -106,4 +103,16 @@ export function loginEstudiante(datosUsuario) {
       data: null
     }
   });
+}
+
+
+export async function existeEstudiante(id) {
+  return Estudiante.exists({ _id: id, activo: true })
+    .then((existe) => {
+      return existe;
+    })
+    .catch((error) => {
+      console.error(error);
+      return false;
+    });
 }

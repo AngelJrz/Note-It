@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
+const { model, Schema } = mongoose;
 
-const estudianteSchema = new mongoose.Schema(
+const estudianteSchema = new Schema(
   {
-    id: { type: String, required: true, unique: true },
     nombres: { type: String, required: true },
     apellidos: { type: String, required: true },
     usuario: { type: String, required: true },
     correo: { type: String, required: true },
     contrasenia: { type: String, required: true },
     biografia: { type: String, required: false },
-    carrera: { type: String, required: true },
+    carrera: { type: Schema.Types.ObjectId, ref: "Carrera" },
     activo: { type: Boolean, default: false },
   },
   {
@@ -17,5 +17,16 @@ const estudianteSchema = new mongoose.Schema(
   }
 );
 
-const Estudiante = mongoose.model("estudiante", estudianteSchema);
+estudianteSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id
+    delete returnedObject._id
+    delete returnedObject.__v
+    delete returnedObject.createdAt
+    delete returnedObject.updatedAt
+    delete returnedObject.contrasenia
+  }
+})
+
+const Estudiante = model("Estudiante", estudianteSchema);
 export default Estudiante;

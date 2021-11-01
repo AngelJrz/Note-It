@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { Guid } from "js-guid";
 
 const carpeta = process.cwd() + "/images/";
 
@@ -25,14 +26,25 @@ const guardarArchivo = (path, data) => {
 
 export async function guardarImagen(imagen) {
     const { name, data } = imagen;
+    const id = Guid.newGuid();
 
-    const path = `${carpeta}/notas/${name}`;
+    const path = `${carpeta}/notas/${id}${name}`;
 
-    guardarArchivo(path, data).then(seGuardo => {
-      return seGuardo;
+    var respuesta = {
+      seGuardo: false,
+      path: ""
+    }
+
+    return guardarArchivo(path, data).then(seGuardo => {
+      if (seGuardo) {
+        respuesta.seGuardo = seGuardo;
+        respuesta.path = path;
+      }
+
+      return respuesta;
     }).catch(err => {
       console.log(err);
-
-      return err;
+    
+      return respuesta;
     });
 }
