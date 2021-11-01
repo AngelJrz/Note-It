@@ -7,6 +7,7 @@ import Header from './components/header/header.js';
 import { Link } from 'react-router-dom';
 import MenuLateral from './components/menuLateral/menulateral.js';
 import CrearNota from './Screens/CrearNota/index.js';
+import DetallesNota from './Screens/DetallesNota/DetallesNota.js';
 
 function App() { 
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" component={HomeScreen} exact></Route>
           <Route path="/login" component={LoginScreen}></Route>
           <Route path="/registro" component={RegistroScreen}></Route>
+          <Route path="/Nota/:id" component={DetallesNota} exact></Route>
           <Route path="/validar-codigo" component={ValidarCodigo}></Route>
           <Route path="/crear-nota" component={CrearNota}></Route>
         </main>
