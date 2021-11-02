@@ -4,19 +4,24 @@ import Boton from "../../components/Boton/index.js";
 import './index.css';
 
 export default function ImageUpload(props) {
-    const { imagen, setImagen, onChange, imagenPreview, setImagenPreview } = props
+    const { imagen, onChange, imagenPreview, setImagenPreview } = props
 
     const eliminarImagen = (e) => {
       e.preventDefault();
-      setImagen(null);
+      imagen.current.value = "";
       setImagenPreview(null);
     }
 
     return (
       <div className="contenedor">
-        <input type="file" onChange={onChange} />
         <label>Imagen seleccionada: </label>
-        {imagen && (
+        <input
+          type="file"
+          onChange={onChange}
+          accept="image/png, image/jpeg"
+          ref={imagen}
+        />
+        {imagenPreview && (
           <div className="imagenPreview">
             <img src={imagenPreview} alt="" />
             <Boton onClick={eliminarImagen} texto="Eliminar" tipo="principal" />

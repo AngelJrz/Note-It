@@ -46,7 +46,7 @@ ul{
 	list-style: none;
 }
 
-span[classname="danger"] {
+span[class="danger"] {
     color: rgb(194, 2, 2);
     padding-bottom: 10px;
 }

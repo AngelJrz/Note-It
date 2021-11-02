@@ -24,7 +24,7 @@ export async function crearNuevaNota(nota) {
     form.append("tema", nota.tema);
     form.append("autor", "6178e0f1f6e1c4551f2fee59");
 
-    if (nota.imagen) {
+    if (nota.imagen && nota.imagen.files.length > 0) {
         form.append("imagen", nota.imagen.files[0], nota.imagen.value);
     }
 

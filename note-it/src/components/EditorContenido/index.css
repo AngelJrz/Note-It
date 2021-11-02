@@ -1,14 +1,17 @@
 .contenido-textarea {
     display: none;
     color: black;
+    height: 100%;
 }
 
 .editor {
     background-color: rgb(240, 240, 240);
     min-height: 200px;
+    max-height: 800px;
     padding: 1rem;
     border: 1px solid #ccc;
     color: black;
+    overflow-y: auto;
 }
 
 .editor-toolbar {
