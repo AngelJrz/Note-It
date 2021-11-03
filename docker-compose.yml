@@ -34,6 +34,9 @@ services:
       EMAIL_PASSWORD: bivpgcathcdgvndw
       SALT_ROUNDS: 10
       VERSION_GUID: 4
+      IMAGEN_DEFUALT: default.jpg
+      API_URL: http://localhost:4200
+      NOTAS_IMAGENES_ENPOINT: /notas/imagenes/
     container_name: apirest
 
 
