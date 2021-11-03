@@ -28,17 +28,18 @@ export async function guardarImagen(imagen) {
     const { name, data } = imagen;
     const id = Guid.newGuid();
 
-    const path = `${carpeta}/notas/${id}${name}`;
+    const nombreCompleto = `${id}${name}`;
+    const path = `${carpeta}/notas/${nombreCompleto}`;
 
     var respuesta = {
       seGuardo: false,
-      path: ""
+      nombreCompleto: ""
     }
 
     return guardarArchivo(path, data).then(seGuardo => {
       if (seGuardo) {
         respuesta.seGuardo = seGuardo;
-        respuesta.path = path;
+        respuesta.nombreCompleto = nombreCompleto;
       }
 
       return respuesta;
