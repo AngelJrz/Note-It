@@ -1,8 +1,7 @@
-// const ENDPOINT = 'http://localhost:4200/estudiantes';
-const ENDPOINT = 'https://jsonplaceholder.typicode.com';
+const ENDPOINT = 'http://localhost:4200';
 
 export async function servicioObtenerNotas() {
-    return fetch(`${ENDPOINT}/posts`, {
+    return fetch(`${ENDPOINT}/api/notas`, {
         method: "get",
         headers: {
             'Content-Type': 'application/json'
@@ -10,7 +9,20 @@ export async function servicioObtenerNotas() {
     })
     .then(response => response.json())
     .then(data => {
-        return data;
+        return data.data;
+    })    
+}
+
+export async function servicioObtenerNota(idNota) {
+    return fetch(`${ENDPOINT}/api/notas?id=${idNota}`, {
+        method: "get",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        return data.data;
     })    
 }
 

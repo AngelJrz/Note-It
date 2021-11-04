@@ -29,10 +29,15 @@ export default function MenuLateral(props){
                             <span className="nav__name">Usuario</span>
                         </Link>
 
-                        <Link to="/" className="nav__link">
-                            <i className='bx bx-note nav__icon' ></i>
-                            <span className="nav__name">Notas</span>
+                        <Link to="/crear-nota" className="nav__link">
+                            <i className='bx bxs-plus-square nav__icon' ></i>
+                            <span className="nav__name">Crear nota</span>
                         </Link>
+
+                        {/* <Link to="/crear-nota" className="nav__link">
+                            <i className='bx bx-note nav__icon' ></i>
+                            <span className="nav__name">Crear nota</span>
+                        </Link> */}
 
                         <Link to="/" className="nav__link">
                             <i className='bx bx-notepad nav__icon' ></i>

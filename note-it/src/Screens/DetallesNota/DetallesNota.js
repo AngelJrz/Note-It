@@ -6,10 +6,15 @@ import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+
+import { ObtenerNota } from '../../hooks/Notas.js';
 
 
 export default function DetallesNota(props){
     let idNota = props.match.params.id;
+    const { nota } = ObtenerNota(idNota);
+    console.log(nota);
 
     function stringToColor(string) {
         let hash = 0;
@@ -41,47 +46,34 @@ export default function DetallesNota(props){
       }
     
     return( 
-        // <Box
-        //     sx={{
-        //         display: 'flex',
-        //         flexWrap: 'wrap',
-        //         '& > :not(style)': {
-        //         m: 1,
-        //         width: 128,
-        //         height: 128,
-        //         },
-        //     }}
-        //     >
-
-        // </Box>
-
-        <Grid container spacing={2}>
+      <div>
+      {
+        nota && nota.map(n => (
+          <Grid container spacing={2}>
             <Grid item xs={8}>
-                <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }}>
-                    <Typography variant="h4" gutterBottom component="div">
-                        Titulo de la nota {idNota}
-                    </Typography>
-                    <Typography variant="h5" gutterBottom component="div">
-                        Usuario Generico
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-                        blanditiis tenetur unde suscipit, quam beatae rerum inventore consectetur,
-                        neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum
-                        quasi quidem quibusdam.
-                    </Typography>
-                </Paper>
+              <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }}>
+                  <Typography variant="h4" gutterBottom component="div">
+                      {n.titulo}
+                  </Typography>
+                  <Divider />
+                  <Typography variant="h5" gutterBottom component="div">
+                      {n.autor.nombres}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                      {n.cuerpo}
+                  </Typography>
+              </Paper>
             </Grid>
 
             <Grid item xs={4}>
-                <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }}>
-                    <Avatar {...stringAvatar('Usuario generico')} />
+               <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }}>
+                    <Avatar {...stringAvatar(`${n.autor.apellidos} salt`)} />
                     <Typography variant="h6" gutterBottom component="div" sx={{marginTop: 1 }}>
-                        Usuario generico
+                      {nota.nombres}
                     </Typography>
+                    <Divider />
                     <Typography variant="body2" gutterBottom component="div" sx={{marginTop: 1 }}>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-                        blanditiis tenetur unde suscipit, quam beatae rerum inventore consectetur.
+                        {nota.cuerpo}
                     </Typography>
                 </Paper>
             </Grid>
@@ -108,6 +100,9 @@ export default function DetallesNota(props){
                     </Box>
                 </Paper>
             </Grid>
-        </Grid>
+          </Grid>
+        ))
+      }
+      </div>
     );
 }

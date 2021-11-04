@@ -17,19 +17,19 @@ export default function Nota(props){
         <Card sx={{ maxWidth: 250, minHeight: 300, margin: 1 }}>
             <CardContent>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    Usuario generico
+                    {nota.autor.usuario}
                 </Typography>
                 <Typography sx={{ fontSize: 16, fontWeight: 600 }} component="div">
-                    {nota.title}
+                    {nota.titulo}
                 </Typography>
                 <Typography variant="body2">
                 {
-                    nota.body
+                    nota.cuerpo
                 }
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button variant="contained" size="small" onClick={() => history.push(`/Nota/${324234}`)}>Leer</Button>
+                <Button variant="contained" size="small" onClick={() => history.push(`/Nota/${nota.id}`)}>Leer</Button>
             </CardActions>
         </Card>
     );
