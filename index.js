@@ -49,7 +49,7 @@ app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(fileUpload());
 app.use(express.json());
-app.use('/notas/images', express.static("images/notas"))
+app.use('/notas/imagenes', express.static("images/notas"))
 
 app.use("/estudiantes", cors(corsOptionsDelegate), estudianteRouter);
 app.use("/api/verificacion", cors(corsOptionsDelegate), verificacionRouter);

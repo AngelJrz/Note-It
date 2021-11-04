@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const { model, Schema, SchemaTypes } = mongoose;
+const { model, Schema } = mongoose;
 
 const comentarioSchema = new Schema({
   usuario: { type: String },
@@ -29,15 +29,21 @@ const notaSchema = new Schema(
 notaSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id;
-    returnedObject.fechaCreacion = returnedObject.updatedAt;
+    returnedObject.fechaCreacion = returnedObject.createdAt;
     returnedObject.informacionAcademica = {
       carrera: returnedObject.carrera,
       materia: returnedObject.materia,
       tema: returnedObject.tema
     };
 
+    const API_URL = process.env.API_URL;
+    const NOTAS_IMAGENES_ENPOINT = process.env.NOTAS_IMAGENES_ENPOINT;
+
+    returnedObject.imagen = `${API_URL}${NOTAS_IMAGENES_ENPOINT}${returnedObject.imagen}`
+
     delete returnedObject._id;
     delete returnedObject.__v;
+    delete returnedObject.createdAt;
     delete returnedObject.updatedAt;
     delete returnedObject.carrera,
     delete returnedObject.materia,
