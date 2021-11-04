@@ -1,6 +1,7 @@
 const ENDPOINT = "http://localhost:4200/api/materias";
 
 export async function obtenerTemas(idMateria) {
+  if (idMateria) {
     return fetch(`${ENDPOINT}/${idMateria}/temas`, {
       method: "GET",
     })
@@ -11,7 +12,8 @@ export async function obtenerTemas(idMateria) {
         const { data } = resultado;
         return data;
       })
-      .catch(err => {
-          return [];
+      .catch((err) => {
+        return [];
       });
+  }
 } 

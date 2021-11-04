@@ -4,7 +4,6 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import RegistroScreen from './Screens/Registro/index.js';
 import ValidarCodigo from './Screens/ValidarCodigo/index.js';
 import Header from './components/header/header.js';
-import { Link } from 'react-router-dom';
 import MenuLateral from './components/menuLateral/menulateral.js';
 import CrearNota from './Screens/CrearNota/index.js';
 import DetallesNota from './Screens/DetallesNota/DetallesNota.js';
