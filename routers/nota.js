@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
-import { validationResult, checkSchema } from "express-validator";
+
+import { validationResult, checkSchema, query } from "express-validator";
 
 import { crearNuevaNota, obtenerNotas } from '../controllers/nota.js';
 import { VerificarToken } from "../utilities/jsonWebToken.js";
@@ -61,7 +62,31 @@ async (req, res) => {
 })
 
 
-router.get("/", async (req, res) => {
+router.get(
+  "/",
+  [
+    query("id")
+      .optional()
+      .isMongoId()
+      .withMessage("El id de la nota tiene un formato incorrecto."),
+    query("carrera")
+      .optional()
+      .isMongoId()
+      .withMessage("El id de la carrera tiene un formato incorrecto."),
+    query("materia")
+      .optional()
+      .isMongoId()
+      .withMessage("El id de la materia tiene un formato incorrecto."),
+    query("tema")
+      .optional()
+      .isMongoId()
+      .withMessage("El id del tema tiene un formato incorrecto."),
+    query("op")
+      .optional()
+      .isNumeric()
+      .withMessage("La op no es un valor númerico."),
+  ],
+  async (req, res) => {
     const busqueda = req.query;
 
     var respuesta = {
@@ -69,6 +94,16 @@ router.get("/", async (req, res) => {
       mensaje: "Nota(s) encontrada(s)",
       data: null,
     };
+
+    const { errors } = validationResult(req);
+
+    if (errors.length > 0) {
+      respuesta.exitoso = false;
+      respuesta.mensaje =
+        "Se encontaron errores al intentar obtener las notas.";
+      respuesta.data = errors;
+      return res.status(400).send(respuesta).end();
+    }
 
     obtenerNotas(busqueda)
       .then((notas) => {
@@ -90,6 +125,7 @@ router.get("/", async (req, res) => {
 
         return res.status(500).send(respuesta);
       });
-})
+  }
+);
 
 export default router;

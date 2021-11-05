@@ -81,7 +81,7 @@ export async function crearNuevaNota(nuevaNota) {
 }
 
 export async function obtenerNotas(busqueda) {
-  const { id, titulo, carrera, materia, tema, op } = busqueda;
+  const { id, texto, carrera, materia, tema, op } = busqueda;
 
     if (id) {
         return Nota.findById(id)
@@ -140,8 +140,11 @@ export async function obtenerNotas(busqueda) {
           });
     }
 
-    if (titulo) {
-      filtro.titulo = { $regex: titulo, $options: "i" };
+    if (texto) {
+      filtro.$or = [
+        { titulo: { $regex: texto, $options: "i" } },
+        { cuerpo: { $regex: texto, $options: "i" } },
+      ];
     }
 
     if (materia) {
