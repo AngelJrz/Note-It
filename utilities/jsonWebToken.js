@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 export function obtenerToken(estudiante) {
-    return jwt.sign({usuario: estudiante}, 'secretKey', {expiresIn: "60s"});
+    return jwt.sign({usuario: estudiante}, 'secretKey', {expiresIn: "1h"});
 }
 
 export function VerificarToken(req, res, next) {
