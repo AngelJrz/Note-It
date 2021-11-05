@@ -23,9 +23,7 @@ export default function Nota(props){
                     {nota.titulo}
                 </Typography>
                 <Typography variant="body2">
-                {
-                    nota.cuerpo
-                }
+                <div className="post__description" dangerouslySetInnerHTML={{ __html: nota.cuerpo}}  />
                 </Typography>
             </CardContent>
             <CardActions>

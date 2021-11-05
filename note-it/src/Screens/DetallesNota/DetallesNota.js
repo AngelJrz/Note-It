@@ -60,7 +60,8 @@ export default function DetallesNota(props){
                       {n.autor.nombres}
                   </Typography>
                   <Typography variant="body1" gutterBottom>
-                      {n.cuerpo}
+                      {/* {n.cuerpo} */}
+                      <div className="post__description" dangerouslySetInnerHTML={{ __html: n.cuerpo}}  />
                   </Typography>
               </Paper>
             </Grid>
@@ -69,11 +70,11 @@ export default function DetallesNota(props){
                <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }}>
                     <Avatar {...stringAvatar(`${n.autor.apellidos} salt`)} />
                     <Typography variant="h6" gutterBottom component="div" sx={{marginTop: 1 }}>
-                      {nota.nombres}
+                      {n.autor.nombres}
                     </Typography>
                     <Divider />
                     <Typography variant="body2" gutterBottom component="div" sx={{marginTop: 1 }}>
-                        {nota.cuerpo}
+                        Info generica de usuario
                     </Typography>
                 </Paper>
             </Grid>

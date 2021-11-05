@@ -13,6 +13,7 @@ export default function Header(props){
         </div>
         <div>
           <Link to="/login">Inicia sesión</Link>
+          <Link to="/registro">Registrarse</Link>
         </div>
       </header>
     );

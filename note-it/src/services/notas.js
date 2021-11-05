@@ -34,7 +34,7 @@ export async function crearNuevaNota(nota) {
     form.append("carrera", nota.carrera);
     form.append("materia", nota.materia);
     form.append("tema", nota.tema);
-    form.append("autor", "6178e0f1f6e1c4551f2fee59");
+    form.append("autor", "6178db2ca64a62f62989cf93");
 
     if (nota.imagen && nota.imagen.files.length > 0) {
         form.append("imagen", nota.imagen.files[0], nota.imagen.value);
@@ -42,7 +42,10 @@ export async function crearNuevaNota(nota) {
 
     return fetch(`http://localhost:4200/api/notas`, {
         method: "POST",
-        body: form
+        body: form,
+        headers:{
+            'authorization': sessionStorage.getItem('token')
+        }
     })
     .then(response => {
         return response.json();
