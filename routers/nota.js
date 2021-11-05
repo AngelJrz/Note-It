@@ -1,16 +1,16 @@
 import express from "express";
 const router = express.Router();
-
 import { validationResult, checkSchema } from "express-validator";
 
 import { crearNuevaNota, obtenerNotas } from '../controllers/nota.js';
+import { VerificarToken } from "../utilities/jsonWebToken.js";
 
 import checkSchemaNota from "../utilities/validadorNota.js";
 
-router.post("/", 
-checkSchema(checkSchemaNota),
+router.post("/",
+VerificarToken,
+checkSchema(checkSchemaNota), 
 async (req, res) => {
-
   const { errors } = validationResult(req);
 
   var resultado = {

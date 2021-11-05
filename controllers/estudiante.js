@@ -1,10 +1,9 @@
-import jwt from 'jsonwebtoken';
-
 import Estudiante from "../models/Estudiante.js";
 import enviarCorreoCodigoVerificacion from "../utilities/mailer.js";
 import generarCodigoVerificacion from "../utilities/generadorDeCodigo.js";
 import { crearVerificacion } from "../controllers/verificacion.js";
 import { encriptar } from "../utilities/hashManager.js";
+import { obtenerToken } from '../utilities/jsonWebToken.js';
 
 export function existeUsuario(usuario) {
   return Estudiante.findOne({ usuario: usuario, activo: true })
@@ -85,7 +84,7 @@ export function loginEstudiante(datosUsuario) {
         return {
               resultado: true,
               mensaje: "Login exitoso",
-              data: jwt.sign({usuario: estudiante}, 'secretKey')
+              data: obtenerToken(estudiante)
             }
       } else {
         return {
