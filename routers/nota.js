@@ -47,7 +47,7 @@ async (req, res) => {
         } else {
           resultado.exitoso = false;
           resultado.mensaje = resultadoCreacion.mensaje;
-          res.status(400).send(resultado);
+          return res.status(400).send(resultado);
         }
     })
     .catch(error => {

@@ -25,6 +25,7 @@ estudianteSchema.set('toJSON', {
     delete returnedObject.createdAt
     delete returnedObject.updatedAt
     delete returnedObject.contrasenia
+    delete returnedObject.activo
   }
 })
 

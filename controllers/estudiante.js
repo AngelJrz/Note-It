@@ -2,7 +2,7 @@ import Estudiante from "../models/Estudiante.js";
 import enviarCorreoCodigoVerificacion from "../utilities/mailer.js";
 import generarCodigoVerificacion from "../utilities/generadorDeCodigo.js";
 import { crearVerificacion } from "../controllers/verificacion.js";
-import { encriptar } from "../utilities/hashManager.js";
+import { comparar, encriptar } from "../utilities/hashManager.js";
 import { obtenerToken } from '../utilities/jsonWebToken.js';
 
 export function existeUsuario(usuario) {
@@ -80,19 +80,32 @@ export function loginEstudiante(datosUsuario) {
               data: null
             }
     } else {
-      if (datosUsuario.contrasenia === estudiante.contrasenia) {
-        return {
-              resultado: true,
-              mensaje: "Login exitoso",
-              data: obtenerToken(estudiante)
-            }
-      } else {
-        return {
+      return comparar(estudiante.contrasenia, datosUsuario.contrasenia).then((sonIguales) => {
+        if (sonIguales) {
+          return {
+            resultado: true,
+            mensaje: "Login exitoso",
+            data: obtenerToken(estudiante),
+          };
+        } else {
+          return {
             resultado: false,
             mensaje: "Contraseña incorrecta",
-            data: null
-          }
-      }
+            data: null,
+          };
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+
+        return {
+          resultado: false,
+          mensaje: "Ocurrió un error al intentar validar la información.",
+          data: null,
+        };
+      })
+      
+      
     }
   })
   .catch(() => {

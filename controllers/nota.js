@@ -1,20 +1,13 @@
 import Nota from '../models/Nota.js';
 import { guardarImagen } from "../utilities/fileManager.js";
+import {
+  AUTOR_POPULATE_CONFIG,
+  CATALOGO_POPULATE_CONFIG,
+  OP_NOTAS_UTILES,
+  OP_NOTAS_MAS_VISUALIZADAS,
+} from "../utilities/constantes.js";
 
 const IMAGEN_DEFUALT = process.env.IMAGEN_DEFUALT;
-
-const AUTOR_POPULATE_CONFIG = {
-  nombres: 1,
-  apellidos: 1,
-  usuario: 1,
-};
-
-const CATALOGO_POPULATE_CONFIG = {
-    nombre: 1
-}
-
-const OP_NOTAS_UTILES = "1";
-const OP_NOTAS_MAS_VISUALIZADAS = "2";
 
 export async function crearNuevaNota(nuevaNota) {
     const { imagen } = nuevaNota;
@@ -168,4 +161,24 @@ export async function obtenerNotas(busqueda) {
 
         return [];
       });
+}
+
+export function existeNota(id) {
+  var existe = true;
+
+  return Nota.findById(id)
+    .then((nota) => {
+      if (!nota) {
+        existe = false;
+      }
+
+      return existe;
+    })
+    .catch((err) => {
+      console.error(err);
+
+      existe = false;
+
+      return existe;
+    })
 }

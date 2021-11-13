@@ -9,6 +9,7 @@ import verificacionRouter from './routers/verificacion.js';
 import carreraRouter from './routers/carrera.js';
 import notaRouter from './routers/nota.js';
 import materiaRouter from './routers/materia.js';
+import listaRouter from './routers/lista.js';
 
 const app = express();
 const PORT = 4200;
@@ -49,13 +50,14 @@ app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(fileUpload());
 app.use(express.json());
-app.use('/notas/imagenes', express.static("images/notas"))
+app.use('/api/notas/imagenes', express.static("images/notas"))
 
 app.use("/estudiantes", cors(corsOptionsDelegate), estudianteRouter);
 app.use("/api/verificacion", cors(corsOptionsDelegate), verificacionRouter);
 app.use("/api/carreras", cors(corsOptionsDelegate), carreraRouter);
 app.use("/api/notas", cors(corsOptionsDelegate), notaRouter);
 app.use("/api/materias", cors(corsOptionsDelegate), materiaRouter);
+app.use("/api/listas", cors(corsOptionsDelegate), listaRouter);
 
 app.all("*", cors(corsOptionsDelegate), (req, res) => res.status(404).send(
     {exitoso: false, 
