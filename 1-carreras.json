@@ -1,0 +1,37 @@
+[
+  {
+    "_id": {
+      "$oid": "61787209f57911dc05a94ea1"
+    },
+    "nombre": "Lic. en Ingeniería de Software",
+    "descripcion": "Formar profesionistas que cubran las necesidades que demanda la sociedad en materia de Ingeniería de Software, proponiendo soluciones que involucren la abstracción, análisis, diseño, implementación y prueba de software, así como la selección de metodologías y herramientas a emplear. Todo esto en un ambiente de tolerancia, respeto y honestidad hacia el cliente y su información, empleando los recursos de manera responsable y puntual."
+  },
+  {
+    "_id": {
+      "$oid": "61787590512d6b78b60ebc24"
+    },
+    "nombre": "Lic. Estadística",
+    "descripcion": "Formar profesionistas con conocimientos sólidos en la disciplina Estadística bajo un enfoque metodológico, utilizando software y herramientas computacionales de manera eficiente, con aplicación en diversos ámbitos del conocimiento y fomentando el trabajo multidisciplinario e interdisciplinario."
+  },
+  {
+    "_id": {
+      "$oid": "617875acb9057cd74bce5068"
+    },
+    "nombre": "Lic. en Tecnologías Computacionales",
+    "descripcion": "Formar profesionales en Tecnologías Computacionales de manera integral, ética, proactiva y de calidad, que tengan las competencias para proponer soluciones sustentables basadas en tecnologías computacionales que satisfagan necesidades sociales y contribuyan al desarrollo económico y social de la región y del país."
+  },
+  {
+    "_id": {
+      "$oid": "617875d43c242ac897fe4f88"
+    },
+    "nombre": "Lic. Ciencias y Técnicas Estadísticas",
+    "descripcion": "Formar profesionales responsables, honestos, versátiles, con alto sentido del trabajo en equipo y con valores éticos universales, conocimientos sólidos en la disciplina profesional de la estadística a nivel de comprensión, para que tengan la capacidad de generarlos y aplicarlos en la toma de decisiones, con habilidades y actitudes para brindar servicios de consultoría y asesoría estadística."
+  },
+  {
+    "_id": {
+      "$oid": "6178760054aee1e3e6e772ba"
+    },
+    "nombre": "Lic. en Redes y Servicios de Cómputo",
+    "descripcion": "Formar profesionales en Redes y Servicios de Cómputo de manera integral, ética, proactiva y de calidad, que tengan las competencias para proponer soluciones sustentables basadas en tecnologías computacionales que satisfagan necesidades sociales y contribuyan al desarrollo económico y social de la región y del país."
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "_id": {"$oid":  "6178dae2b465244de051804c"},
+    "nombre": "El ensayo",
+    "descripcion":
+      "Que el estudiante conozca los conceptos básicos sobre un ensayo.",
+    "materia": {"$oid":  "6178d9388c9c391890f678aa"}
+  },
+  {
+    "_id": {"$oid":  "618c4acfc82ba916a614428f"},
+    "nombre": "Habilidades sociales",
+    "descripcion":
+      "Que el estudiante conozca los conceptos básicos sobre las habilidades sociales.",
+    "materia": {"$oid":  "6178d9388c9c391890f678aa"}
+  },
+  {
+    "_id": {"$oid":  "618c4ca9723f33fc2ae92fd0"},
+    "nombre": "La comunicación",
+    "descripcion":
+      "Que el estudiante conozca los conceptos básicos sobre la comunicación.",
+    "materia": {"$oid":  "6178d9388c9c391890f678aa"}
+  },
+
+  {
+    "_id": {"$oid":  "618c4d2bda986d69cf2e2168"},
+    "nombre": "El problema",
+    "descripcion":
+      "Que el estudiante conozca los conceptos básicos sobre el problema.",
+    "materia": {"$oid":  "6178d98ac42c26109e227277"}
+  },
+  {
+    "_id": {"$oid":  "618c4d91f6324098569f7e49"},
+    "nombre": "Pasos para la resolución de un problema",
+    "descripcion":
+      "Que el estudiante conozca los conceptos básicos sobre cómo resolver un problema.",
+    "materia": {"$oid":  "6178d98ac42c26109e227277"}
+  }
+]

@@ -129,6 +129,35 @@ db.temas.insertMany([
       "Que el estudiante conozca los conceptos básicos sobre un ensayo.",
     materia: ObjectId("6178d9388c9c391890f678aa"),
   },
+  {
+    _id: ObjectId("618c4acfc82ba916a614428f"),
+    nombre: "Habilidades sociales",
+    descripcion:
+      "Que el estudiante conozca los conceptos básicos sobre las habilidades sociales.",
+    materia: ObjectId("6178d9388c9c391890f678aa"),
+  },
+  {
+    _id: ObjectId("618c4ca9723f33fc2ae92fd0"),
+    nombre: "La comunicación",
+    descripcion:
+      "Que el estudiante conozca los conceptos básicos sobre la comunicación.",
+    materia: ObjectId("6178d9388c9c391890f678aa"),
+  },
+
+  {
+    _id: ObjectId("618c4d2bda986d69cf2e2168"),
+    nombre: "El problema",
+    descripcion:
+      "Que el estudiante conozca los conceptos básicos sobre el problema.",
+    materia: ObjectId("6178d98ac42c26109e227277"),
+  },
+  {
+    _id: ObjectId("618c4d91f6324098569f7e49"),
+    nombre: "Pasos para la resolución de un problema",
+    descripcion:
+      "Que el estudiante conozca los conceptos básicos sobre cómo resolver un problema.",
+    materia: ObjectId("6178d98ac42c26109e227277"),
+  },
 ]);
 
 db.estudiantes.insertMany([
@@ -138,9 +167,20 @@ db.estudiantes.insertMany([
     apellidos: "Suarez Martinez",
     usuario: "abizair",
     correo: "abizairsm@gmail.com",
-    contrasenia: "mipassword",
+    contrasenia: "$2a$10$a.0vJ8kWX38JHz7O5dJtSe.rbuJMLBsqlaOXv8U4quNsH8fU3STqy", // = abizair
     biografia: "Hola, soy estudiante de Lic. en Ingeniería de Software.",
     carrera: ObjectId("61787209f57911dc05a94ea1"),
+    activo: true,
+  },
+  {
+    _id: ObjectId("618c5035e51edf705ef5350d"),
+    nombres: "Ruben",
+    apellidos: "Rivera Bajaras",
+    usuario: "ruben123",
+    correo: "ruben123@gmail.com",
+    contrasenia: "$2a$10$Nbof66F9.wntnQMq6.VNPORbAoUH/Czf6mJibIMk2/A2db4QAfuBO",
+    biografia: "Hola, soy estudiante de Lic. en Estadística.",
+    carrera: ObjectId("61787590512d6b78b60ebc24"),
     activo: true,
   },
 ]);

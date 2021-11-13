@@ -1,0 +1,24 @@
+[
+  {
+    "_id": { "$oid": "6178db2ca64a62f62989cf93" },
+    "nombres": "Abizair",
+    "apellidos": "Suarez Martinez",
+    "usuario": "abizair",
+    "correo": "abizairsm@gmail.com",
+    "contrasenia": "$2a$10$a.0vJ8kWX38JHz7O5dJtSe.rbuJMLBsqlaOXv8U4quNsH8fU3STqy",
+    "biografia": "Hola, soy estudiante de Lic. en Ingeniería de Software.",
+    "carrera": { "$oid": "61787209f57911dc05a94ea1" },
+    "activo": true
+  },
+  {
+    "_id": { "$oid": "618c5035e51edf705ef5350d" },
+    "nombres": "Ruben",
+    "apellidos": "Rivera Bajaras",
+    "usuario": "ruben123",
+    "correo": "ruben123@gmail.com",
+    "contrasenia": "$2a$10$Nbof66F9.wntnQMq6.VNPORbAoUH/Czf6mJibIMk2/A2db4QAfuBO",
+    "biografia": "Hola, soy estudiante de Lic. en Estadística.",
+    "carrera": { "$oid": "61787590512d6b78b60ebc24" },
+    "activo": true
+  }
+]

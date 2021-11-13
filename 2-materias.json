@@ -1,0 +1,68 @@
+[
+  {
+    "_id": { "$oid": "6178d9388c9c391890f678aa" },
+    "nombre": "Habilidades de comunicación",
+    "descripcion": "Se basa en el análisis, selección y práctica de técnicas para la mejor expresión y comunicación de ideas, tanto oral como escrita. El desempeño de la unidad de competencia se evidencia mediante exposiciones, tareas y prácticas; suficientes, pertinentes y puntuales; y mediante un examen escrito, suficiente.",
+    "carrera": { "$oid": "61787209f57911dc05a94ea1" }
+  },
+  {
+    "_id": { "$oid": "6178d98ac42c26109e227277" },
+    "nombre": "Laboratorio de resolución de problemas",
+    "descripcion": "El estudiante se enfrenta por primera vez a las tareas de resolución de problemas, diseñando alternativas de software a través del empleo de diversos métodos ayudándose de las herramientas correspondientes.",
+    "carrera": { "$oid": "61787209f57911dc05a94ea1" }
+  },
+  {
+    "_id": { "$oid": "6178d9a4c43f850b47a0db4c" },
+    "nombre": "Introducción a la programación",
+    "descripcion": "Brinda competencias necesarias para resolver problemas algorítmicos, que permitirán resolver problemas con un enfoque teórico-metodológicos a través de la construcción de sistemas de software.",
+    "carrera": { "$oid": "61787209f57911dc05a94ea1" }
+  },
+  {
+    "_id": { "$oid": "6178d9c90a0408fa7b409ac4" },
+    "nombre": "Requerimientos de software",
+    "descripcion": "La identificación de requerimientos es la primera fase en el proceso de desarrollo de software, en la cual se describen las necesidades del cliente, es decir, las funcionalidades que debe cubrir el software a desarrollar, además de los criterios de calidad, siguiendo de manera sistemática una serie de actividades para generar una especificación, que será la base para el desarrollo del producto.",
+    "carrera": { "$oid": "61787209f57911dc05a94ea1" }
+  },
+  {
+    "_id": { "$oid": "6178d9dadf2ad2987a73e85e" },
+    "nombre": "Diseño de software",
+    "descripcion": "Los estudiantes diseñan software usable y basado en componentes mediante diferentes modelos de manera consciente y con apertura; verifican el cumplimiento de los requisitos en la solución y que sus modelos sean coherentes entre sí.",
+    "carrera": { "$oid": "61787209f57911dc05a94ea1" }
+  },
+  {
+    "_id": { "$oid": "6178da22750cab8a12935b5a" },
+    "nombre": "Introducción a la programación estadística",
+    "descripcion": "Los desarrollos en metodología estadística se deben implementar computacionalmente, esto implica el desarrollo de código en algún lenguaje de programación, y en consecuencia el estadístico debe tener las competencias y habilidades en programación, así como el conocimiento y entendimiento de los principios básicos del pensamiento algorítmico.",
+    "carrera": { "$oid": "61787590512d6b78b60ebc24" }
+  },
+  {
+    "_id": { "$oid": "6178da489988045d83008909" },
+    "nombre": "Álgebra lineal aplicada a la estadística II",
+    "descripcion": "Se hace énfasis en el uso de la matemática, en este caso de la teoría sobre espacios vectoriales, transformaciones lineales y valores y vectores propios, como herramienta de análisis para la estadística, proporcionando a los estudiantes habilidades para la resolución de problemas, constituyendo un conjunto sólido de saberes matemáticos.",
+    "carrera": { "$oid": "61787590512d6b78b60ebc24" }
+  },
+  {
+    "_id": { "$oid": "6178da588ce83ffc8c205d24" },
+    "nombre": "Seminario de aplicaciones estadísticas",
+    "descripcion": "El estudiante tendrá la oportunidad de buscar, identificar, discernir y conocer con el apoyo del profesor a cargo y expositores invitados, prácticas y experiencias del desarrollo de la estadística en diferentes campos del conocimiento científico.",
+    "carrera": { "$oid": "61787590512d6b78b60ebc24" }
+  },
+  {
+    "_id": { "$oid": "44539472-df29-4237-b466-0f94e07d31a4" },
+    "nombre": "Modelos de regresion lineal y no lineal",
+    "descripcion": "Da inicio a la modelación estadística, siendo esencial para el estudiante el estudio y análisis de la relación entre variables, iniciando con la regresión lineal simple, siguiendo con la regresión lineal múltiple, hasta llegar a la regresión no lineal.",
+    "carrera": { "$oid": "61787590512d6b78b60ebc24" }
+  },
+  {
+    "_id": { "$oid": "6178daa6271e03e3ed2bf430" },
+    "nombre": "Sistemas Operativos",
+    "descripcion": "Permitirá que el estudiante conozca los componentes de un sistema operativo, con esto podrá identificar sus funciones a fin de que pueda utilizarlo de forma eficiente y optimice sus recursos.",
+    "carrera": { "$oid": "617875acb9057cd74bce5068" }
+  },
+  {
+    "_id": { "$oid": "6178dac19a618294e62c1f44" },
+    "nombre": "Ingeniería de software",
+    "descripcion": "El estudiante conoce diversos aspectos importantes del desarrollo, especialmente lo relativo a los requerimientos del usuario. Al mismo tiempo se introduce a las metodologías de análisis y diseño orientadas a objetos usando UML.",
+    "carrera": { "$oid": "617875acb9057cd74bce5068" }
+  }
+]
