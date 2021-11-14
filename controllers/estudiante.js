@@ -4,6 +4,7 @@ import generarCodigoVerificacion from "../utilities/generadorDeCodigo.js";
 import { crearVerificacion } from "../controllers/verificacion.js";
 import { comparar, encriptar } from "../utilities/hashManager.js";
 import { obtenerToken } from '../utilities/jsonWebToken.js';
+import { RETURNED_ESTUDIANTE_LOGIN_INFO } from "../utilities/constantes.js";
 
 export function existeUsuario(usuario) {
   return Estudiante.findOne({ usuario: usuario, activo: true })
@@ -71,50 +72,55 @@ export async function activarEstudiante(usuario) {
 }
 
 export function loginEstudiante(datosUsuario) {
-  return Estudiante.findOne({ usuario: datosUsuario.usuario })
-  .then((estudiante) => {
-    if (estudiante == null) {
-      return {
+  return Estudiante.findOne(
+    { usuario: datosUsuario.usuario, activo: true },
+    RETURNED_ESTUDIANTE_LOGIN_INFO
+  )
+    .then((estudiante) => {
+      if (estudiante == null) {
+        return {
+          resultado: false,
+          mensaje: "El usuario no existe",
+          data: null,
+        };
+      }
+      
+      return comparar(estudiante.contrasenia, datosUsuario.contrasenia)
+        .then((sonIguales) => {
+          if (!sonIguales) {
+            return {
               resultado: false,
-              mensaje: "El usuario no existe",
-              data: null
-            }
-    } else {
-      return comparar(estudiante.contrasenia, datosUsuario.contrasenia).then((sonIguales) => {
-        if (sonIguales) {
+              mensaje: "Contraseña incorrecta",
+              data: null,
+            };
+          }
+
           return {
             resultado: true,
             mensaje: "Login exitoso",
-            data: obtenerToken(estudiante),
+            data: {
+              estudiante: estudiante,
+              token: obtenerToken(estudiante),
+            },
           };
-        } else {
+        })
+        .catch((err) => {
+          console.error(err);
+
           return {
             resultado: false,
-            mensaje: "Contraseña incorrecta",
+            mensaje: "Ocurrió un error al intentar validar la información.",
             data: null,
           };
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-
-        return {
-          resultado: false,
-          mensaje: "Ocurrió un error al intentar validar la información.",
-          data: null,
-        };
-      })
-      
-      
-    }
-  })
-  .catch(() => {
-    return {
-      resultado: false,
-      mensaje: "Error en servicio en controlador de estudiante",
-      data: null
-    }
-  });
+        });
+    })
+    .catch(() => {
+      return {
+        resultado: false,
+        mensaje: "Error en servicio en controlador de estudiante",
+        data: null,
+      };
+    });
 }
 
 

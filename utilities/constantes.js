@@ -1,3 +1,10 @@
+export const RETURNED_ESTUDIANTE_LOGIN_INFO = {
+  nombres: 1,
+  apellidos : 1,
+  usuario: 1,
+  contrasenia: 1
+}
+
 export const AUTOR_POPULATE_CONFIG = {
   nombres: 1,
   apellidos: 1,
