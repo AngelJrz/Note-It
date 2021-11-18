@@ -1,3 +1,4 @@
+import { app, server } from "../index.js";
 import supertest from "supertest";
 import mongoose from "mongoose";
 import {
@@ -6,357 +7,405 @@ import {
   PATH_IMAGEN,
   eliminarTodasLasNotas,
   MENSAJE_NOTAS_ENCONTRADAS,
-  idCarreraDefault,
-  idMateriaDefault,
-  idTemaDefault,
+  ID_CARRERA_DEFAULT,
+  ID_MATERIA_DEFAULT,
+  ID_TEMA_DEFUALT,
   palabraBusqueda,
   OP_NOTAS_UTILES,
   OP_NOTAS_MAS_VISUALIZADAS,
   buscarNotas,
   MENSAJE_ERROR_OBTENER_NOTAS,
+  ENDPOINT_NOTAS,
+  MENSAJE_REGISTRO,
+  MENSAJE_ERROR_REGISTRO,
+  MENSAJE_ERROR_TITULO,
+  MENSAJE_ERROR_CUERPO,
+  MENSAJE_ERROR_AUTOR,
 } from "./notaHelper.js";
 
-import { app, server } from "../index.js";
+import {
+  iniciarSesion,
+  registrarEstudiantesDefault,
+  USUARIO_ESTUDIANTE_1_DEFAULT,
+  CONTRASENIA_ESTUDIANTE_1_DEFAULT,
+  ID_ERRONEO,
+} from "./estudianteHelper.js";
+import {
+  MENSAJE_ERROR_CARRERA_INEXISTENTE,
+  MENSAJE_ERROR_MATERIA_INEXISTENTE,
+  MENSAJE_ERROR_TEMA_INEXISTENTE,
+} from "./catalogoHelper.js";
 
 const api = supertest(app);
 
-beforeEach(async () => {
+var infoLogin;
+
+beforeAll(async () => {
+  await registrarEstudiantesDefault();
   await eliminarTodasLasNotas();
   await crearNotasDefault();
 });
 
-test("registrar nota exitosamente", async () => {
+describe("registrar ", () => {
+
+  beforeAll(async () => {
+    infoLogin = await iniciarSesion(
+      USUARIO_ESTUDIANTE_1_DEFAULT,
+      CONTRASENIA_ESTUDIANTE_1_DEFAULT
+    );
+  })
+
+  test("nota exitosamente", async () => {
+    const { estudiante, token } = infoLogin.data;
+    
     const respuesta = await api
-      .post("/api/notas")
+      .post(ENDPOINT_NOTAS)
+      .set("authorization", token)
       .attach("imagen", PATH_IMAGEN)
       .field("titulo", "Mi primera nota")
       .field(
         "cuerpo",
         "En mi primera nota quiero comentar sobre lo que me ocurrió."
       )
-      .field("carrera", "6178e14bf6e1c4551f2fee5c")
-      .field("materia", "6178e468f6e1c4551f2fee74")
-      .field("tema", "6178e500f6e1c4551f2fee80")
-      .field("autor", "6178e0f1f6e1c4551f2fee59");
+      .field("carrera", ID_CARRERA_DEFAULT)
+      .field("materia", ID_MATERIA_DEFAULT)
+      .field("tema", ID_TEMA_DEFUALT)
+      .field("autor", String(estudiante._id));
 
     const { body } = respuesta;
-    
+
     expect(body.exitoso).toBe(true);
-    expect(body.mensaje).toBe("La nota fue creada exitosamente.");
-})
+    expect(body.mensaje).toBe(MENSAJE_REGISTRO);
+  });
 
-test("registrar nota exitosamente sin imagen", async () => {
-  const respuesta = await api
-    .post("/api/notas")
-    .field("titulo", "Mi primera nota sin imagen")
-    .field(
-      "cuerpo",
-      "En mi primera nota quiero comentar sobre lo que me ocurrió."
-    )
-    .field("carrera", "6178e14bf6e1c4551f2fee5c")
-    .field("materia", "6178e468f6e1c4551f2fee74")
-    .field("tema", "6178e500f6e1c4551f2fee80")
-    .field("autor", "6178e0f1f6e1c4551f2fee59");
+  test("nota exitosamente sin imagen", async () => {
+    const { estudiante, token } = infoLogin.data;
 
-  const { body } = respuesta;
+    const respuesta = await api
+      .post(ENDPOINT_NOTAS)
+      .set("authorization", token)
+      .field("titulo", "Mi primera nota sin imagen")
+      .field(
+        "cuerpo",
+        "En mi primera nota quiero comentar sobre lo que me ocurrió."
+      )
+      .field("carrera", ID_CARRERA_DEFAULT)
+      .field("materia", ID_MATERIA_DEFAULT)
+      .field("tema", ID_TEMA_DEFUALT)
+      .field("autor", String(estudiante._id));
 
-  expect(body.exitoso).toBe(true);
-  expect(body.mensaje).toBe("La nota fue creada exitosamente.");
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_REGISTRO);
+  });
+
+  test("nota sin titulo", async () => {
+    const { estudiante, token } = infoLogin.data;
+
+    const respuesta = await api
+      .post(ENDPOINT_NOTAS)
+      .set("authorization", token)
+      .field(
+        "cuerpo",
+        "En mi primera nota quiero comentar sobre lo que me ocurrió."
+      )
+      .field("carrera", ID_CARRERA_DEFAULT)
+      .field("materia", ID_MATERIA_DEFAULT)
+      .field("tema", ID_TEMA_DEFUALT)
+      .field("autor", String(estudiante._id));
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_REGISTRO);
+
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_TITULO);
+  });
+
+  test("nota sin cuerpo", async () => {
+    const { estudiante, token } = infoLogin.data;
+
+    const respuesta = await api
+      .post(ENDPOINT_NOTAS)
+      .set("authorization", token)
+      .field("titulo", "Mi primera nota sin cuerpo")
+      .field("carrera", ID_CARRERA_DEFAULT)
+      .field("materia", ID_MATERIA_DEFAULT)
+      .field("tema", ID_TEMA_DEFUALT)
+      .field("autor", String(estudiante._id));
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_REGISTRO);
+
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_CUERPO);
+  });
+
+  test("nota con una carrera que no existe", async () => {
+    const { estudiante, token } = infoLogin.data;
+
+    const respuesta = await api
+      .post(ENDPOINT_NOTAS)
+      .set("authorization", token)
+      .attach("imagen", PATH_IMAGEN)
+      .field("titulo", "Mi primera nota")
+      .field(
+        "cuerpo",
+        "En mi primera nota quiero comentar sobre lo que me ocurrió."
+      )
+      .field("carrera", ID_ERRONEO)
+      .field("materia", ID_MATERIA_DEFAULT)
+      .field("tema", ID_TEMA_DEFUALT)
+      .field("autor", String(estudiante._id));
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_REGISTRO);
+
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_CARRERA_INEXISTENTE);
+  });
+
+  test("nota con una materia que no existe", async () => {
+    const { estudiante, token } = infoLogin.data;
+
+    const respuesta = await api
+      .post("/api/notas")
+      .set("authorization", token)
+      .attach("imagen", PATH_IMAGEN)
+      .field("titulo", "Mi primera nota")
+      .field(
+        "cuerpo",
+        "En mi primera nota quiero comentar sobre lo que me ocurrió."
+      )
+      .field("carrera", ID_CARRERA_DEFAULT)
+      .field("materia", ID_ERRONEO)
+      .field("tema", ID_TEMA_DEFUALT)
+      .field("autor", String(estudiante._id));
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_REGISTRO);
+
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_MATERIA_INEXISTENTE);
+  });
+
+  test("nota con un tema que no existe", async () => {
+    const { estudiante, token } = infoLogin.data;
+
+    const respuesta = await api
+      .post("/api/notas")
+      .set("authorization", token)
+      .attach("imagen", PATH_IMAGEN)
+      .field("titulo", "Mi primera nota")
+      .field(
+        "cuerpo",
+        "En mi primera nota quiero comentar sobre lo que me ocurrió."
+      )
+      .field("carrera", ID_CARRERA_DEFAULT)
+      .field("materia", ID_MATERIA_DEFAULT)
+      .field("tema", ID_ERRONEO)
+      .field("autor", String(estudiante._id));
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_REGISTRO);
+
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_TEMA_INEXISTENTE);
+  });
+
+  test("nota con un autor que no existe", async () => {
+    const { token } = infoLogin.data;
+
+    const respuesta = await api
+      .post("/api/notas")
+      .set("authorization", token)
+      .attach("imagen", PATH_IMAGEN)
+      .field("titulo", "Mi primera nota")
+      .field(
+        "cuerpo",
+        "En mi primera nota quiero comentar sobre lo que me ocurrió."
+      )
+      .field("carrera", ID_CARRERA_DEFAULT)
+      .field("materia", ID_MATERIA_DEFAULT)
+      .field("tema", ID_TEMA_DEFUALT)
+      .field("autor", ID_ERRONEO);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_REGISTRO);
+
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_AUTOR);
+  });
 });
 
-test("registrar nota sin titulo", async () => {
-  const respuesta = await api
-    .post("/api/notas")
-    .field(
-      "cuerpo",
-      "En mi primera nota quiero comentar sobre lo que me ocurrió."
-    )
-    .field("carrera", "6178e14bf6e1c4551f2fee5c")
-    .field("materia", "6178e468f6e1c4551f2fee74")
-    .field("tema", "6178e500f6e1c4551f2fee80")
-    .field("autor", "6178e0f1f6e1c4551f2fee59");
-
-  const { body } = respuesta;
-
-  expect(body.exitoso).toBe(false);
-  expect(body.mensaje).toBe("Se encontaron errores al validar la nota.");
-
-  const mensajes = body.data.map((error) => error.msg);
-
-  expect(mensajes).toContain(
-    "El título de la nota debe tener al menos 5 caracteres y máximo 50 caracteres."
-  );
-});
-
-test("registrar nota sin cuerpo", async () => {
-  const respuesta = await api
-    .post("/api/notas")
-    .field("titulo", "Mi primera nota sin cuerpo")
-    .field("carrera", "6178e14bf6e1c4551f2fee5c")
-    .field("materia", "6178e468f6e1c4551f2fee74")
-    .field("tema", "6178e500f6e1c4551f2fee80")
-    .field("autor", "6178e0f1f6e1c4551f2fee59");
-
-  const { body } = respuesta;
-
-  expect(body.exitoso).toBe(false);
-  expect(body.mensaje).toBe("Se encontaron errores al validar la nota.");
-
-  const mensajes = body.data.map((error) => error.msg);
-
-  expect(mensajes).toContain(
-    "El cuerpo de la nota debe tener al menos 10 caracteres y máximo 1000"
-  );
-});
-
-test("registrar nota con una carrera que no existe", async () => {
-  const respuesta = await api
-    .post("/api/notas")
-    .attach("imagen", PATH_IMAGEN)
-    .field("titulo", "Mi primera nota")
-    .field(
-      "cuerpo",
-      "En mi primera nota quiero comentar sobre lo que me ocurrió."
-    )
-    .field("carrera", "idNoExistente")
-    .field("materia", "6178e468f6e1c4551f2fee74")
-    .field("tema", "6178e500f6e1c4551f2fee80")
-    .field("autor", "6178e0f1f6e1c4551f2fee59");
-
-  const { body } = respuesta;
-
-  expect(body.exitoso).toBe(false);
-  expect(body.mensaje).toBe("Se encontaron errores al validar la nota.");
-
-  const mensajes = body.data.map((error) => error.msg);
-
-  expect(mensajes).toContain(
-    "La carrera especificada no existe. Por favor verifique la información."
-  );
-});
-
-test("registrar nota con una materia que no existe", async () => {
-  const respuesta = await api
-    .post("/api/notas")
-    .attach("imagen", PATH_IMAGEN)
-    .field("titulo", "Mi primera nota")
-    .field(
-      "cuerpo",
-      "En mi primera nota quiero comentar sobre lo que me ocurrió."
-    )
-    .field("carrera", "6178e14bf6e1c4551f2fee5c")
-    .field("materia", "idNoExiste")
-    .field("tema", "6178e500f6e1c4551f2fee80")
-    .field("autor", "6178e0f1f6e1c4551f2fee59");
-
-  const { body } = respuesta;
-
-  expect(body.exitoso).toBe(false);
-  expect(body.mensaje).toBe("Se encontaron errores al validar la nota.");
-
-  const mensajes = body.data.map((error) => error.msg);
-
-  expect(mensajes).toContain(
-    "La materia especificada no se encuentra en la carrera seleccionada. Por favor verifique la información."
-  );
-});
-
-test("registrar nota con un tema que no existe", async () => {
-  const respuesta = await api
-    .post("/api/notas")
-    .attach("imagen", PATH_IMAGEN)
-    .field("titulo", "Mi primera nota")
-    .field(
-      "cuerpo",
-      "En mi primera nota quiero comentar sobre lo que me ocurrió."
-    )
-    .field("carrera", "6178e14bf6e1c4551f2fee5c")
-    .field("materia", "6178e468f6e1c4551f2fee74")
-    .field("tema", "idNoExiste")
-    .field("autor", "6178e0f1f6e1c4551f2fee59");
-
-  const { body } = respuesta;
-
-  expect(body.exitoso).toBe(false);
-  expect(body.mensaje).toBe("Se encontaron errores al validar la nota.");
-
-  const mensajes = body.data.map((error) => error.msg);
-
-  expect(mensajes).toContain(
-    "El tema especificado no se encuentra en la materia seleccionada. Por favor verifique la información."
-  );
-});
-
-test("registrar nota con un autor que no existe", async () => {
-  const respuesta = await api
-    .post("/api/notas")
-    .attach("imagen", PATH_IMAGEN)
-    .field("titulo", "Mi primera nota")
-    .field(
-      "cuerpo",
-      "En mi primera nota quiero comentar sobre lo que me ocurrió."
-    )
-    .field("carrera", "6178e14bf6e1c4551f2fee5c")
-    .field("materia", "6178e468f6e1c4551f2fee74")
-    .field("tema", "6178e500f6e1c4551f2fee80")
-    .field("autor", "idNoExiste");
-
-  const { body } = respuesta;
-
-  expect(body.exitoso).toBe(false);
-  expect(body.mensaje).toBe("Se encontaron errores al validar la nota.");
-
-  const mensajes = body.data.map((error) => error.msg);
-
-  expect(mensajes).toContain(
-    "El autor especificado no se encuentra activo o no existe. Por favor verifique la información."
-  );
-});
-
-test("obtener todas las notas", async () => {
-  const respuesta = await api.get("/api/notas");
-
-  const { body } = respuesta;
-
-  expect(body.exitoso).toBe(true);
-  expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
-  expect(body.data.length).toBe(notasDefault.length);
-})
-
-test("obtener notas por carrera", async () => {
-  const respuesta = await api.get(
-    `/api/notas?carrera=${idCarreraDefault}`
-  );
-
-  const { body } = respuesta;
-
-  const busqueda = { carrera: idCarreraDefault };
-  const notasPorCarrera = await buscarNotas(busqueda);
-
-  expect(body.exitoso).toBe(true);
-  expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
-  expect(body.data.length).toBe(notasPorCarrera.length);
-})
-
-test("obtener notas por materia", async () => {
-  const respuesta = await api.get(`/api/notas?carrera=${idCarreraDefault}&materia=${idMateriaDefault}`);
+describe("obtener ", () => {
+  test("todas las notas", async () => {
+    const respuesta = await api.get(ENDPOINT_NOTAS);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
+    expect(body.data.length).toBe(notasDefault.length);
+  });
+
+  test("notas por carrera", async () => {
+    const respuesta = await api.get(`/api/notas?carrera=${ID_CARRERA_DEFAULT}`);
+
+    const { body } = respuesta;
+
+    const busqueda = { carrera: ID_CARRERA_DEFAULT };
+    const notasPorCarrera = await buscarNotas(busqueda);
 
-  const { body } = respuesta;
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
+    expect(body.data.length).toBe(notasPorCarrera.length);
+  });
 
-  const busqueda = { carrera: idCarreraDefault, materia: idMateriaDefault };
-  const notaPorMateria = await buscarNotas(busqueda);
-
-  expect(body.exitoso).toBe(true);
-  expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
-  expect(body.data.length).toBe(notaPorMateria.length);
-})
+  test("obtener notas por materia", async () => {
+    const respuesta = await api.get(
+      `/api/notas?carrera=${ID_CARRERA_DEFAULT}&materia=${ID_MATERIA_DEFAULT}`
+    );
 
-test("obtener notas por tema", async () => {
-  const respuesta = await api.get(
-    `/api/notas?carrera=${idCarreraDefault}&materia=${idMateriaDefault}&tema=${idTemaDefault}`
-  );
+    const { body } = respuesta;
 
-  const { body } = respuesta;
+    const busqueda = {
+      carrera: ID_CARRERA_DEFAULT,
+      materia: ID_MATERIA_DEFAULT,
+    };
+    const notaPorMateria = await buscarNotas(busqueda);
 
-  const busqueda = { carrera: idCarreraDefault, materia: idMateriaDefault, tema: idTemaDefault };
-  const notaPorMateria = await buscarNotas(busqueda);
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
+    expect(body.data.length).toBe(notaPorMateria.length);
+  });
 
-  expect(body.exitoso).toBe(true);
-  expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
-  expect(body.data.length).toBe(notaPorMateria.length);
-});
+  test("obtener notas por tema", async () => {
+    const respuesta = await api.get(
+      `/api/notas?carrera=${ID_CARRERA_DEFAULT}&materia=${ID_MATERIA_DEFAULT}&tema=${ID_TEMA_DEFUALT}`
+    );
 
-test("obtener notas que contengan cierta palabra", async () => {
-  
-  const respuesta = await api.get(
-    `/api/notas?texto=${palabraBusqueda}`
-  );
+    const { body } = respuesta;
 
-  const { body } = respuesta;
-  const busqueda = { texto: palabraBusqueda };
-  const notasBuscadas = await buscarNotas(busqueda);
+    const busqueda = {
+      carrera: ID_CARRERA_DEFAULT,
+      materia: ID_MATERIA_DEFAULT,
+      tema: ID_TEMA_DEFUALT,
+    };
+    const notaPorMateria = await buscarNotas(busqueda);
 
-  expect(body.exitoso).toBe(true);
-  expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
-  expect(body.data.length).toBe(notasBuscadas.length);
-})
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
+    expect(body.data.length).toBe(notaPorMateria.length);
+  });
 
-test("obtener notas mas utiles", async () => {
-  const respuesta = await api.get(`/api/notas?op=${OP_NOTAS_UTILES}`);
+  test("obtener notas que contengan cierta palabra", async () => {
+    const respuesta = await api.get(`/api/notas?texto=${palabraBusqueda}`);
 
-  const { body } = respuesta;
-  const busqueda = { op: OP_NOTAS_UTILES };
-  const notas = await buscarNotas(busqueda);
+    const { body } = respuesta;
+    const busqueda = { texto: palabraBusqueda };
+    const notasBuscadas = await buscarNotas(busqueda);
 
-  expect(body.exitoso).toBe(true);
-  expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
-  expect(body.data.length).toBe(notas.length);
-})
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
+    expect(body.data.length).toBe(notasBuscadas.length);
+  });
 
-test("obtener notas mas visualizadas", async () => {
-  const respuesta = await api.get(`/api/notas?op=${OP_NOTAS_MAS_VISUALIZADAS}`);
+  test("obtener notas mas utiles", async () => {
+    const respuesta = await api.get(`/api/notas?op=${OP_NOTAS_UTILES}`);
 
-  const { body } = respuesta;
-  const busqueda = { op: OP_NOTAS_MAS_VISUALIZADAS };
-  const notas = await buscarNotas(busqueda);
+    const { body } = respuesta;
+    const busqueda = { op: OP_NOTAS_UTILES };
+    const notas = await buscarNotas(busqueda);
 
-  expect(body.exitoso).toBe(true);
-  expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
-  expect(body.data.length).toBe(notas.length);
-});
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
+    expect(body.data.length).toBe(notas.length);
+  });
 
-test("obtener notas con id carrera incorrecto", async () => {
-  const respuesta = await api.get(`/api/notas?carrera=85665sasas`);
+  test("obtener notas mas visualizadas", async () => {
+    const respuesta = await api.get(
+      `/api/notas?op=${OP_NOTAS_MAS_VISUALIZADAS}`
+    );
 
-  const { body } = respuesta;
+    const { body } = respuesta;
+    const busqueda = { op: OP_NOTAS_MAS_VISUALIZADAS };
+    const notas = await buscarNotas(busqueda);
 
-  expect(body.exitoso).toBe(false);
-  expect(body.mensaje).toBe(MENSAJE_ERROR_OBTENER_NOTAS);
-  const mensajes = body.data.map((error) => error.msg);
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_NOTAS_ENCONTRADAS);
+    expect(body.data.length).toBe(notas.length);
+  });
 
-  expect(mensajes).toContain(
-    "El id de la carrera tiene un formato incorrecto."
-  );
-})
+  test("obtener notas con id carrera incorrecto", async () => {
+    const respuesta = await api.get(`/api/notas?carrera=85665sasas`);
 
-test("obtener notas con id materia incorrecto", async () => {
-  const respuesta = await api.get(`/api/notas?materia=85665sasas`);
+    const { body } = respuesta;
 
-  const { body } = respuesta;
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_OBTENER_NOTAS);
+    const mensajes = body.data.map((error) => error.msg);
 
-  expect(body.exitoso).toBe(false);
-  expect(body.mensaje).toBe(MENSAJE_ERROR_OBTENER_NOTAS);
-  const mensajes = body.data.map((error) => error.msg);
+    expect(mensajes).toContain(
+      "El id de la carrera tiene un formato incorrecto."
+    );
+  });
 
-  expect(mensajes).toContain(
-    "El id de la materia tiene un formato incorrecto."
-  );
-});
+  test("obtener notas con id materia incorrecto", async () => {
+    const respuesta = await api.get(`/api/notas?materia=85665sasas`);
 
-test("obtener notas con id tema incorrecto", async () => {
-  const respuesta = await api.get(`/api/notas?tema=85665sasas`);
+    const { body } = respuesta;
 
-  const { body } = respuesta;
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_OBTENER_NOTAS);
+    const mensajes = body.data.map((error) => error.msg);
 
-  expect(body.exitoso).toBe(false);
-  expect(body.mensaje).toBe(MENSAJE_ERROR_OBTENER_NOTAS);
-  const mensajes = body.data.map((error) => error.msg);
+    expect(mensajes).toContain(
+      "El id de la materia tiene un formato incorrecto."
+    );
+  });
 
-  expect(mensajes).toContain(
-    "El id del tema tiene un formato incorrecto."
-  );
-});
+  test("obtener notas con id tema incorrecto", async () => {
+    const respuesta = await api.get(`/api/notas?tema=85665sasas`);
 
-test("obtener notas con opcion incorrecta", async () => {
-  const respuesta = await api.get(`/api/notas?op=85665sasas`);
+    const { body } = respuesta;
 
-  const { body } = respuesta;
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_OBTENER_NOTAS);
+    const mensajes = body.data.map((error) => error.msg);
 
-  expect(body.exitoso).toBe(false);
-  expect(body.mensaje).toBe(MENSAJE_ERROR_OBTENER_NOTAS);
-  const mensajes = body.data.map((error) => error.msg);
+    expect(mensajes).toContain("El id del tema tiene un formato incorrecto.");
+  });
 
-  expect(mensajes).toContain("La op no es un valor númerico.");
+  test("obtener notas con opcion incorrecta", async () => {
+    const respuesta = await api.get(`/api/notas?op=85665sasas`);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_OBTENER_NOTAS);
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain("La op no es un valor númerico.");
+  });
 })
 
 afterAll(async () => {

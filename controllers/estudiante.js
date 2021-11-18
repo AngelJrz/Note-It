@@ -32,13 +32,9 @@ export async function registrarEstudiante(estudiante) {
         const codigoVerificacion = generarCodigoVerificacion();
 
         return crearVerificacion(usuario, codigoVerificacion)
-          .then((creado) => {
+          .then(async (creado) => {
             if (creado) {
-              enviarCorreoCodigoVerificacion(
-                correo,
-                usuario,
-                codigoVerificacion
-              );
+              await enviarCorreoCodigoVerificacion(correo, usuario, codigoVerificacion);
             }
 
             return creado;

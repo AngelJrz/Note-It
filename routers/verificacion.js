@@ -18,11 +18,11 @@ router.post("/", async (req, res, next) => {
     .then((resultado) => {
       if (resultado && resultado.correcto) {
         activarEstudiante(usuario)
-          .then((activado) => {
+          .then(async (activado) => {
             if (activado) {
               respuesta.mensaje = resultado.mensaje;
 
-              eliminarVerificacion(usuario, codigoVerificacion)
+              await eliminarVerificacion(usuario, codigoVerificacion)
                 .then((eliminado) => console.log("Verificación eliminada: ", eliminado))
                 .catch((error) => console.error(error));
               return res.status(200).send(respuesta);
