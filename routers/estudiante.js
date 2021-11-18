@@ -2,8 +2,7 @@ import express from 'express';
 const router = express.Router();
 import { validationResult, checkSchema, param } from "express-validator";
 
-import Estudiante from "../models/Estudiante.js";
-import { existeUsuario, registrarEstudiante, loginEstudiante } from "../controllers/estudiante.js";
+import { existeUsuario, registrarEstudiante, loginEstudiante, existeEstudiante } from "../controllers/estudiante.js";
 import checkSchemaEstudiante from '../utilities/validadorEstudiante.js';
 import { crearLista, obtenerListaPorEstudiante, obtenerListasPorEstudiante } from '../controllers/lista.js';
 import checkSchemaLista from '../utilities/validadorLista.js';
@@ -84,7 +83,19 @@ router.get(
   VerificarToken,
   param("creador")
     .isMongoId()
-    .withMessage("El id del estudiante tiene un formato incorrecto."),
+    .withMessage("El id del estudiante tiene un formato incorrecto.")
+    .bail()
+    .custom(async (value) => {
+      return existeEstudiante(value).then((existe) => {
+        if (!existe) {
+          return Promise.reject(
+            "El creador especificado no se encuentra activo o no existe. Por favor verifique la información."
+          );
+        }
+
+        return existe;
+      });
+    }),
   async (req, res) => {
     var resultado = {
       exitoso: true,
@@ -108,7 +119,8 @@ router.get(
       .then((listas) => {
         if (listas && listas.length == 0) {
           resultado.exitoso = false;
-          resultado.mensaje = "No se contraron listas creadas para el estudiante.";
+          resultado.mensaje =
+            "No se contraron listas creadas para el estudiante.";
         }
 
         resultado.data = listas;
@@ -119,10 +131,11 @@ router.get(
         console.error(err);
 
         resultado.exitoso = false;
-        resultado.mensaje = "Ocurrió un error en el servidor al intentar obtener las listas. Intente más tarde.";
+        resultado.mensaje =
+          "Ocurrió un error en el servidor al intentar obtener las listas. Intente más tarde.";
 
         return res.status(500).send(resultado);
-      })
+      });
   }
 );
 
@@ -131,7 +144,19 @@ router.get(
   VerificarToken,
   param("creador")
     .isMongoId()
-    .withMessage("El id del estudiante tiene un formato incorrecto."),
+    .withMessage("El id del estudiante tiene un formato incorrecto.")
+    .bail()
+    .custom(async (value) => {
+      return existeEstudiante(value).then((existe) => {
+        if (!existe) {
+          return Promise.reject(
+            "El creador especificado no se encuentra activo o no existe. Por favor verifique la información."
+          );
+        }
+
+        return existe;
+      });
+    }),
   param("idLista")
     .isMongoId()
     .withMessage("El id de la lista tiene un formato incorrecto."),
@@ -158,7 +183,7 @@ router.get(
         if (!lista) {
           resultado.exitoso = false;
           resultado.mensaje =
-            "No se encontró la lista creadas para el estudiante.";
+            "No se encontró la lista creada para el estudiante.";
         }
 
         resultado.data = lista;

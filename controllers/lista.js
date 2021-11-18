@@ -97,7 +97,7 @@ export async function agregarNotaALista(idLista, nota) {
 
             if(!resultado) {
                 resultadoAgreacion.exitoso = false;
-                resultadoAgreacion.mensaje = "La nota no pudo ser agregada a la lista.";
+                resultadoAgreacion.mensaje = "La lista especificada no existe.";
             }
 
             return resultadoAgreacion;

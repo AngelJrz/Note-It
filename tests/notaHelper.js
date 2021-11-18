@@ -1,8 +1,12 @@
 import Nota from "../models/Nota.js";
 import { obtenerNotas } from '../controllers/nota.js';
+import mongoose from "mongoose";
+
+export const ID_NOTA_1_DEFAULT = "61842ecd2800613878909bf2";
 
 export const notasDefault = [
   {
+    _id: new mongoose.Types.ObjectId(ID_NOTA_1_DEFAULT),
     titulo: "Nota para pruebas 1",
     cuerpo: "<p>Cuerpo para la nota de pruebas 1</p>",
     carrera: "6178e14bf6e1c4551f2fee5c",

@@ -52,7 +52,7 @@ app.use(fileUpload());
 app.use(express.json());
 app.use('/api/notas/imagenes', express.static("images/notas"))
 
-app.use("/estudiantes", cors(corsOptionsDelegate), estudianteRouter);
+app.use("/api/estudiantes", cors(corsOptionsDelegate), estudianteRouter);
 app.use("/api/verificacion", cors(corsOptionsDelegate), verificacionRouter);
 app.use("/api/carreras", cors(corsOptionsDelegate), carreraRouter);
 app.use("/api/notas", cors(corsOptionsDelegate), notaRouter);

@@ -36,7 +36,7 @@ router.post(
 
     if (errors.length > 0) {
       resultado.exitoso = false;
-      resultado.mensaje = "Se encontaron errores al validar la nota a agregar";
+      resultado.mensaje = "Se encontaron errores al validar la nota a agregar.";
       resultado.data = errors;
       return res.status(400).send(resultado).end();
     }

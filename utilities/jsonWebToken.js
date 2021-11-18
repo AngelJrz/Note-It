@@ -14,7 +14,7 @@ export function VerificarToken(req, res, next) {
           res.status(403).send(
             {
               exitoso: false,
-              mensaje: "No cuentas con un usuario",
+              mensaje: "El token recibido ha expirado o no existe.",
               data: null,
             }
           )
@@ -27,7 +27,7 @@ export function VerificarToken(req, res, next) {
       res.status(403).send(
         {
           exitoso: false,
-          mensaje: "No cuentas con un usuario",
+          mensaje: "Token no especificado.",
           data: null,
         }
       )
