@@ -130,3 +130,35 @@ export async function existeEstudiante(id) {
       return false;
     });
 }
+
+
+export function BuscarEstudiante(usuario) {
+  return Estudiante.findOne(
+    { usuario: usuario },
+  )
+    .then((estudiante) => {
+      if (estudiante == null) {
+        return {
+          resultado: false,
+          mensaje: "El usuario no existe",
+          data: null,
+        };
+      }else{
+        estudiante._id = null;
+        return {
+          resultado: true,
+          mensaje: "Usuario encontrado",
+          data: {
+            estudiante: estudiante
+          },
+        };
+      }
+    })
+    .catch(() => {
+      return {
+        resultado: false,
+        mensaje: "Error en servicio en controlador de estudiante",
+        data: null,
+      };
+    });
+}
