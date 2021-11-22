@@ -5,6 +5,8 @@ import {
   CATALOGO_POPULATE_CONFIG,
   OP_NOTAS_UTILES,
   OP_NOTAS_MAS_VISUALIZADAS,
+  OK_STATUS,
+  ACTUALIZAR_CONFIG,
 } from "../utilities/constantes.js";
 
 const IMAGEN_DEFUALT = process.env.IMAGEN_DEFUALT;
@@ -181,4 +183,67 @@ export function existeNota(id) {
 
       return existe;
     })
+}
+
+export async function actualizarNota(notaAActualizar) {
+  var queryDeActualizacion = {};
+
+  if (notaAActualizar.titulo) {
+    queryDeActualizacion.titulo = notaAActualizar.titulo;
+  }
+
+  if (notaAActualizar.cuerpo) {
+    queryDeActualizacion.cuerpo = notaAActualizar.cuerpo;
+  }
+
+  if (notaAActualizar.carrera) {
+    queryDeActualizacion.carrera = notaAActualizar.carrera;
+  }
+
+  if (notaAActualizar.materia) {
+    queryDeActualizacion.materia = notaAActualizar.materia;
+  }
+
+  if (notaAActualizar.tema) {
+    queryDeActualizacion.tema = notaAActualizar.tema;
+  }
+  
+  var seActualizo = true;
+
+  return Nota.findByIdAndUpdate(notaAActualizar.id, queryDeActualizacion, ACTUALIZAR_CONFIG)
+  .then((resultado) => {
+    if (resultado.ok !== OK_STATUS) {
+      seActualizo = false;
+    }
+
+    return seActualizo;
+  })
+  .catch((err) => {
+    console.error(err);
+
+    seActualizo = false;
+
+    return seActualizo;
+  });
+}
+
+export async function eliminarNota(id) {
+  var seElimino = true;
+
+  return Nota.findByIdAndDelete(id, { rawResult: true })
+  .then((resultado) => {
+    
+    if (resultado.value === null || resultado.ok !== OK_STATUS) {
+      seElimino = false;
+    }
+
+    return seElimino;
+  })
+  .catch((err) => {
+    console.error(err);
+
+    seElimino = false;
+
+    return seElimino;
+  })
 }

@@ -1,9 +1,10 @@
 import { existeCarrera } from "../controllers/carrera.js";
 import { existeEstudiante, existeUsuario } from "../controllers/estudiante.js";
 import { existeMateria } from "../controllers/materia.js";
+import { existeNota } from "../controllers/nota.js";
 import { existeTema } from "../controllers/tema.js";
 
-const checkSchemaNota = {
+export const checkSchemaNota = {
   titulo: {
     isString: true,
     isLength: {
@@ -20,6 +21,10 @@ const checkSchemaNota = {
     },
   },
   carrera: {
+    isMongoId: {
+      errorMessage: "El id de la carrera no cuenta con un formato correcto.",
+      bail: true,
+    },
     custom: {
       options: async (value) => {
         return existeCarrera(value).then((existe) => {
@@ -35,6 +40,10 @@ const checkSchemaNota = {
     },
   },
   materia: {
+    isMongoId: {
+      errorMessage: "El id de la materia no cuenta con un formato correcto.",
+      bail: true,
+    },
     custom: {
       options: async (value, { req }) => {
         return existeMateria(req.body.carrera, value).then((existe) => {
@@ -50,6 +59,10 @@ const checkSchemaNota = {
     },
   },
   tema: {
+    isMongoId: {
+      errorMessage: "El id del tema no cuenta con un formato correcto.",
+      bail: true,
+    },
     custom: {
       options: async (value, { req }) => {
         return existeTema(req.body.materia, value).then((existe) => {
@@ -65,6 +78,10 @@ const checkSchemaNota = {
     },
   },
   autor: {
+    isMongoId: {
+      errorMessage: "El id del autor no cuenta con un formato correcto.",
+      bail: true,
+    },
     custom: {
       options: async (value) => {
         return existeEstudiante(value).then((existe) => {
@@ -81,4 +98,93 @@ const checkSchemaNota = {
   },
 };
 
-export default checkSchemaNota;
+export const checkSchemaActualizarNota = {
+  id: {
+    in: "params",
+    isMongoId: {
+      errorMessage:
+        "El id de la nota no tiene el formato correcto. Verifique la información.",
+      bail: true,
+    },
+    custom: {
+      options: async (value) => {
+        return existeNota(value)
+        .then((existe) => {
+          if (!existe) {
+            return Promise.reject(
+              "La nota especificado no existe. Por favor verifique la información."
+            );
+          }
+
+          return existe;
+        })
+      }
+    }
+  },
+
+  titulo: {
+    ...checkSchemaNota.titulo,
+    optional: true,
+  },
+
+  cuerpo: {
+    ...checkSchemaNota.cuerpo,
+    optional: true,
+  },
+
+  carrera: {
+    ...checkSchemaNota.carrera,
+    optional: true,
+  },
+
+  materia: {
+    ...checkSchemaNota.materia,
+    custom: {
+      options: async (_, { req }) => {
+        if (!req.body.carrera) {
+          return Promise.reject(
+            "La carrera es requerida cuando se desea actualizar la materia."
+          );
+        }
+      },
+    },
+    optional: true,
+  },
+
+  tema: {
+    ...checkSchemaNota.tema,
+    custom: {
+      options: async (_, { req }) => {
+        if (!req.body.materia) {
+          return Promise.reject(
+            "La materia es requerida cuando se desea actualizar el tema."
+          );
+        }
+      },
+    },
+    optional: true,
+  },
+};
+
+export const checkSchemaEliminarNota = {
+  id: {
+    isMongoId: {
+      errorMessage:
+        "El id de la nota no tiene el formato correcto. Verifique la información.",
+      bail: true,
+    },
+    custom: {
+      options: async (value) => {
+        return existeNota(value).then((existe) => {
+          if (!existe) {
+            return Promise.reject(
+              "La nota especificada no existe. Por favor verifique la información."
+            );
+          }
+
+          return existe;
+        });
+      },
+    },
+  },
+};

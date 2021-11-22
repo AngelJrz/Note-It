@@ -3,10 +3,10 @@ const router = express.Router();
 
 import { validationResult, checkSchema, query } from "express-validator";
 
-import { crearNuevaNota, obtenerNotas } from '../controllers/nota.js';
+import { actualizarNota, crearNuevaNota, eliminarNota, obtenerNotas } from '../controllers/nota.js';
 import { VerificarToken } from "../utilities/jsonWebToken.js";
 
-import checkSchemaNota from "../utilities/validadorNota.js";
+import { checkSchemaActualizarNota, checkSchemaEliminarNota, checkSchemaNota } from "../utilities/validadorNota.js";
 
 router.post("/",
 VerificarToken,
@@ -127,5 +127,87 @@ router.get(
       });
   }
 );
+
+router.put(
+  "/:id",
+  VerificarToken,
+  checkSchema(checkSchemaActualizarNota),
+  async (req, res) => {
+    var resultado = {
+      exitoso: true,
+      mensaje: "La nota fue actualizada exitosamente.",
+      data: {},
+    };
+
+    const { errors } = validationResult(req);
+    if (errors.length > 0) {
+      resultado.exitoso = false;
+      resultado.mensaje = "Se encontaron errores al validar la nota.";
+      resultado.data = errors;
+      return res.status(400).send(resultado).end();
+    }
+
+    var { id } = req.params;
+    var notaAActualizar = req.body;
+
+    notaAActualizar.id = id;
+
+    actualizarNota(notaAActualizar)
+      .then((actualizado) => {
+        if (!actualizado) {
+          resultado.exitoso = false;
+          resultado.mensaje =
+            "La nota no pudo ser actualizada. Intente más tarde.";
+        }
+
+        return res.status(200).send(resultado);
+      })
+      .catch((err) => {
+        console.error(err);
+        resultado.exitoso = false;
+        resultado.mensaje =
+          "Ocurrió un error en el servidor. Intenté más tarde.";
+
+        return res.status(500).send(resultado);
+      });
+  }
+);
+
+router.delete("/:id", 
+  VerificarToken, 
+  checkSchema(checkSchemaEliminarNota), 
+  async (req, res) => {
+  var resultado = {
+    exitoso: true,
+    mensaje: "La nota fue eliminada exitosamente.",
+    data: {},
+  };
+
+  const { errors } = validationResult(req);
+  if (errors.length > 0) {
+    resultado.exitoso = false;
+    resultado.mensaje = "Se encontaron errores al validar la nota.";
+    resultado.data = errors;
+    return res.status(400).send(resultado).end();
+  }
+
+  const { id } = req.params;
+
+  eliminarNota(id)
+  .then((seElimino) => {
+    if (!seElimino) {
+      resultado.exitoso = false;
+      resultado.mensaje = "La nota no pudo ser eliminada. Intente más tarde.";
+    }
+
+    return res.status(200).send(resultado);
+  })
+  .catch(() => {
+    resultado.exitoso = false;
+    resultado.mensaje = "Ocurrió un error en el servidor. Intente más tarde.";
+
+    return res.status(500).send(resultado);
+  })
+})
 
 export default router;

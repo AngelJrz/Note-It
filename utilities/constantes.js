@@ -25,5 +25,8 @@ export const NOTA_LISTA_POPULATE_CONFIG = {
   visualizaciones: 1
 }
 
+export const ACTUALIZAR_CONFIG = { rawResult: true, useFindAndModify: false };
+
 export const OP_NOTAS_UTILES = "1";
 export const OP_NOTAS_MAS_VISUALIZADAS = "2";
+export const OK_STATUS = 1;

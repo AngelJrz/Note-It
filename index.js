@@ -12,7 +12,7 @@ import materiaRouter from './routers/materia.js';
 import listaRouter from './routers/lista.js';
 
 const app = express();
-const PORT = 4200;
+const PORT = process.env.PORT || 4200;
 const DATABASE_URL = process.env.MONGODB_URL;
 const USER = process.env.USER;
 const PASSWORD = process.env.PASSWORD;
