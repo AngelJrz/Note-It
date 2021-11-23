@@ -1,16 +1,25 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
-import {servicioLogin} from '../../services/login';
+import useUser from '../../hooks/useUser';
 import './login.css'
 import Boton from "../../components/Boton/index.js";
+import contextoEstudiante from '../../context/UserContext';
 
 export default function LoginScreen() {
     const history = useHistory();
+    const {datosEstudiante} = useContext(contextoEstudiante);
+    const { loginContext } = useUser();
     const [datos, setDatos] = useState({
         usuario: '',
         contrasenia: ''
     });
+
+    useEffect(() => {
+        if (datosEstudiante !== null) {
+            history.push("/");
+        }
+    }, [datosEstudiante, history])
 
     const CambioDeDatos = (e) => {
         setDatos({
@@ -21,22 +30,15 @@ export default function LoginScreen() {
 
     function login(e) {
         e.preventDefault();
-        servicioLogin(datos)
-        .then(datosLogin => {
-            if (datosLogin.resultado) {
-                sessionStorage.setItem('token', datosLogin.data);
-                history.push("/");
-            }else{
-                alert(datosLogin.mensaje);
-            }
-        }).catch(err => {
-            alert("Ocurrió un error");
-        })   
+        loginContext(datos);
+        if (datosEstudiante !== null) {
+            history.push("/");
+        }
     }
 
     return (
         <div>
-            <form className='form' onSubmit={login}> 
+            <form className='form formLogin' onSubmit={login}> 
                 <div>
                     <h1>Inicia Sesión</h1>
                 </div>

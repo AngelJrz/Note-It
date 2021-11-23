@@ -34,6 +34,7 @@ export async function crearNuevaNota(nota) {
     form.append("carrera", nota.carrera);
     form.append("materia", nota.materia);
     form.append("tema", nota.tema);
+    // form.append("autor", "Se supone que hay que cambiar este");
     form.append("autor", "6178db2ca64a62f62989cf93");
 
     if (nota.imagen && nota.imagen.files.length > 0) {
@@ -63,4 +64,17 @@ export async function crearNuevaNota(nota) {
             data: err
         }
     })
+}
+
+export async function servicioEliminarNota(idNota) {
+    return fetch(`${ENDPOINT}/api/notas/${idNota}`, {
+        method: "delete",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        return data;
+    })    
 }

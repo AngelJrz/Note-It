@@ -1,7 +1,7 @@
 const API_ENDPOINT = 'http://localhost:4200'
 
 export async function registrarEstudiante(nuevoEstudiante) {
-    return fetch(`${API_ENDPOINT}/estudiantes`, {
+    return fetch(`${API_ENDPOINT}/api/estudiantes`, {
         method: 'POST',
         headers: {
             "Content-type": "application/json"

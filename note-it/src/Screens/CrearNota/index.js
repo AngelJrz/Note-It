@@ -1,11 +1,20 @@
-import React from 'react'
-
+import React, {useEffect, useContext} from 'react'
+import { useHistory } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import { Grid } from '@mui/material';
 import useStyles from './styles';
 import CreacionNota from '../../components/CreacionNota';
+import contextoEstudiante from '../../context/UserContext';
 
 export default function CrearNota() {
+  const history = useHistory();
+  const {datosEstudiante} = useContext(contextoEstudiante);
+  console.log(datosEstudiante);
+  useEffect(() => { 
+    if (datosEstudiante === null) {
+        history.push("/");
+    }
+}, [datosEstudiante, history])
 
   const styles = useStyles();
 

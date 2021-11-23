@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { servicioObtenerNotas, servicioObtenerNota } from "../services/notas";
+import { servicioObtenerNotas, servicioObtenerNota, servicioEliminarNota } from "../services/notas";
 
 export function ObtenerNotas() {
   const [notas, setNotas] = useState([]);
@@ -12,7 +12,7 @@ export function ObtenerNotas() {
       console.error(error);
       setNotas([])
     });
-  }, [notas]);
+  }, []);
 
   return { notas };
 }
@@ -22,7 +22,6 @@ export function ObtenerNota(idNota) {
 
   useEffect(function () {
     servicioObtenerNota(idNota).then(nota => {
-      console.log("sadfhksdj" + nota);
       setNota(nota);
     })
     .catch(error => {
@@ -32,4 +31,14 @@ export function ObtenerNota(idNota) {
   }, []);
 
   return { nota };
+}
+
+export function EliminarNota(idNota) {
+  return servicioEliminarNota(idNota)
+  .then(resultado => {
+    return resultado; 
+  })
+  .catch(error => {
+    console.error(error);
+  });
 }
