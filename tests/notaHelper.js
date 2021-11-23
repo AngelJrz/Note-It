@@ -2,6 +2,7 @@ import Nota from "../models/Nota.js";
 import { obtenerNotas } from '../controllers/nota.js';
 import { ID_ESTUDIANTE_1_DEFUALT } from './estudianteHelper.js';
 import mongoose from "mongoose";
+import { abrirConexion } from "../models/conexion.js";
 
 export const ID_NOTA_1_DEFAULT = "61842ecd2800613878909bf2";
 export const ID_CARRERA_DEFAULT = "61787209f57911dc05a94ea1";
@@ -74,12 +75,16 @@ export const MENSAJE_ERROR_AUTOR =
   "El autor especificado no se encuentra activo o no existe. Por favor verifique la información.";
 
 export async function crearNotasDefault() {
+    await abrirConexion();
+
     const resultado = await Nota.insertMany(notasDefault);
 
     return resultado;
 }
 
 export async function eliminarTodasLasNotas() {
+  await abrirConexion();
+
     const resultado = await Nota.deleteMany({});
 
     return resultado;

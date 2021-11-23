@@ -5,8 +5,11 @@ import { crearVerificacion } from "../controllers/verificacion.js";
 import { comparar, encriptar } from "../utilities/hashManager.js";
 import { obtenerToken } from '../utilities/jsonWebToken.js';
 import { RETURNED_ESTUDIANTE_LOGIN_INFO } from "../utilities/constantes.js";
+import { abrirConexion, cerrarConexion } from "../models/conexion.js";
 
-export function existeUsuario(usuario) {
+export async function existeUsuario(usuario) {
+  await abrirConexion();
+
   return Estudiante.findOne({ usuario: usuario, activo: true })
     .then((estudiante) => {
       if (estudiante) return true;
@@ -16,6 +19,9 @@ export function existeUsuario(usuario) {
     .catch((error) => {
       console.error(error);
       return error;
+    })
+    .finally(async () => {
+      await cerrarConexion();
     });
 }
 
@@ -23,6 +29,8 @@ export async function registrarEstudiante(estudiante) {
   const contraniaEncriptada = encriptar(estudiante.contrasenia)
   estudiante.contrasenia = contraniaEncriptada
   const nuevoEstudiante = new Estudiante(estudiante);
+
+  await abrirConexion();
 
   return nuevoEstudiante
     .save()
@@ -34,7 +42,11 @@ export async function registrarEstudiante(estudiante) {
         return crearVerificacion(usuario, codigoVerificacion)
           .then(async (creado) => {
             if (creado) {
-              await enviarCorreoCodigoVerificacion(correo, usuario, codigoVerificacion);
+              await enviarCorreoCodigoVerificacion(
+                correo,
+                usuario,
+                codigoVerificacion
+              );
             }
 
             return creado;
@@ -50,24 +62,35 @@ export async function registrarEstudiante(estudiante) {
     .catch((error) => {
       console.error(error);
       return false;
+    })
+    .finally(async () => {
+      await cerrarConexion();
     });
 }
 
 export async function activarEstudiante(usuario) {
-    const estudianteActivo = {
-        activo: true
-    }
-    return Estudiante.updateOne({usuario: usuario}, estudianteActivo)
-        .then(resultado => {
-            return resultado.ok == 1;
-        })
-        .catch(error => {
-          console.error(error);
-          return false;
-        })
+  const estudianteActivo = {
+    activo: true,
+  };
+
+  await abrirConexion();
+
+  return Estudiante.updateOne({ usuario: usuario }, estudianteActivo)
+    .then((resultado) => {
+      return resultado.ok == 1;
+    })
+    .catch((error) => {
+      console.error(error);
+      return false;
+    })
+    .finally(async () => {
+      await cerrarConexion();
+    });
 }
 
-export function loginEstudiante(datosUsuario) {
+export async function loginEstudiante(datosUsuario) {
+  await abrirConexion();
+
   return Estudiante.findOne(
     { usuario: datosUsuario.usuario, activo: true },
     RETURNED_ESTUDIANTE_LOGIN_INFO
@@ -80,7 +103,7 @@ export function loginEstudiante(datosUsuario) {
           data: null,
         };
       }
-      
+
       return comparar(estudiante.contrasenia, datosUsuario.contrasenia)
         .then((sonIguales) => {
           if (!sonIguales) {
@@ -108,6 +131,9 @@ export function loginEstudiante(datosUsuario) {
             mensaje: "Ocurrió un error al intentar validar la información.",
             data: null,
           };
+        })
+        .finally(() => {
+          cerrarConexion();
         });
     })
     .catch(() => {
@@ -116,11 +142,16 @@ export function loginEstudiante(datosUsuario) {
         mensaje: "Error en servicio en controlador de estudiante",
         data: null,
       };
+    })
+    .finally(async () => {
+      await cerrarConexion();
     });
 }
 
 
 export async function existeEstudiante(id) {
+  await abrirConexion();
+
   return Estudiante.exists({ _id: id, activo: true })
     .then((existe) => {
       return existe;
@@ -128,11 +159,17 @@ export async function existeEstudiante(id) {
     .catch((error) => {
       console.error(error);
       return false;
-    });
+    })
+    .finally(() => {
+      cerrarConexion();
+    })
 }
 
 
-export function BuscarEstudiante(usuario) {
+export async function BuscarEstudiante(usuario) {
+
+  await abrirConexion();
+
   return Estudiante.findOne(
     { usuario: usuario },
   )
@@ -160,5 +197,8 @@ export function BuscarEstudiante(usuario) {
         mensaje: "Error en servicio en controlador de estudiante",
         data: null,
       };
+    })
+    .finally(() => {
+      cerrarConexion();
     });
 }

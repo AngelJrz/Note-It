@@ -8,6 +8,7 @@ import {
   OK_STATUS,
   ACTUALIZAR_CONFIG,
 } from "../utilities/constantes.js";
+import { cerrarConexion, abrirConexion } from '../models/conexion.js';
 
 const IMAGEN_DEFUALT = process.env.IMAGEN_DEFUALT;
 
@@ -51,32 +52,40 @@ export async function crearNuevaNota(nuevaNota) {
         autor: nuevaNota.autor
     }
 
+    await abrirConexion();
+
     const nota = new Nota(notaCompleta);
 
-    return nota.save()
-    .then((notaGuardada) => {
+    return nota
+      .save()
+      .then((notaGuardada) => {
         console.log(notaGuardada);
-        if(!notaGuardada) {
-            resultadoCreacion.seCreo = false;
-            resultadoCreacion.mensaje = "Ocurrió un error al intentar crear la nota. Intenté de nuevo."
+        if (!notaGuardada) {
+          resultadoCreacion.seCreo = false;
+          resultadoCreacion.mensaje =
+            "Ocurrió un error al intentar crear la nota. Intenté de nuevo.";
 
-            return resultadoCreacion;
+          return resultadoCreacion;
         }
-            
 
         return resultadoCreacion;
-    })
-    .catch(error => {
+      })
+      .catch((error) => {
         console.error(error);
         resultadoCreacion.seCreo = false;
         resultadoCreacion.mensaje =
           "Ocurrió un error al intentar crear la nota. Intenté de nuevo.";
         return resultadoCreacion;
-    })
+      })
+      .finally(async () => {
+        await cerrarConexion();
+      });
 }
 
 export async function obtenerNotas(busqueda) {
   const { id, texto, carrera, materia, tema, op } = busqueda;
+
+  await abrirConexion();
 
     if (id) {
         return Nota.findById(id)
@@ -91,6 +100,9 @@ export async function obtenerNotas(busqueda) {
             console.error(err);
 
             return [];
+          })
+          .finally(async () => {
+            await cerrarConexion();
           });
     }
 
@@ -116,6 +128,9 @@ export async function obtenerNotas(busqueda) {
             console.error(err);
 
             return [];
+          })
+          .finally(async () => {
+            await cerrarConexion();
           });
       case OP_NOTAS_MAS_VISUALIZADAS:
         filtro.visualizaciones = { $gt: 0 };
@@ -132,6 +147,9 @@ export async function obtenerNotas(busqueda) {
             console.error(err);
 
             return [];
+          })
+          .finally(async () => {
+            await cerrarConexion();
           });
     }
 
@@ -162,11 +180,16 @@ export async function obtenerNotas(busqueda) {
         console.error(err);
 
         return [];
+      })
+      .finally(async () => {
+        await cerrarConexion();
       });
 }
 
-export function existeNota(id) {
+export async function existeNota(id) {
   var existe = true;
+
+  await abrirConexion();
 
   return Nota.findById(id)
     .then((nota) => {
@@ -183,6 +206,9 @@ export function existeNota(id) {
 
       return existe;
     })
+    .finally(async () => {
+      await cerrarConexion();
+    });
 }
 
 export async function actualizarNota(notaAActualizar) {
@@ -210,40 +236,53 @@ export async function actualizarNota(notaAActualizar) {
   
   var seActualizo = true;
 
-  return Nota.findByIdAndUpdate(notaAActualizar.id, queryDeActualizacion, ACTUALIZAR_CONFIG)
-  .then((resultado) => {
-    if (resultado.ok !== OK_STATUS) {
+  await abrirConexion();
+
+  return Nota.findByIdAndUpdate(
+    notaAActualizar.id,
+    queryDeActualizacion,
+    ACTUALIZAR_CONFIG
+  )
+    .then((resultado) => {
+      if (resultado.ok !== OK_STATUS) {
+        seActualizo = false;
+      }
+
+      return seActualizo;
+    })
+    .catch((err) => {
+      console.error(err);
+
       seActualizo = false;
-    }
 
-    return seActualizo;
-  })
-  .catch((err) => {
-    console.error(err);
-
-    seActualizo = false;
-
-    return seActualizo;
-  });
+      return seActualizo;
+    })
+    .finally(async () => {
+      await cerrarConexion();
+    });
 }
 
 export async function eliminarNota(id) {
   var seElimino = true;
 
+  await abrirConexion();
+
   return Nota.findByIdAndDelete(id, { rawResult: true })
-  .then((resultado) => {
-    
-    if (resultado.value === null || resultado.ok !== OK_STATUS) {
+    .then((resultado) => {
+      if (resultado.value === null || resultado.ok !== OK_STATUS) {
+        seElimino = false;
+      }
+
+      return seElimino;
+    })
+    .catch((err) => {
+      console.error(err);
+
       seElimino = false;
-    }
 
-    return seElimino;
-  })
-  .catch((err) => {
-    console.error(err);
-
-    seElimino = false;
-
-    return seElimino;
-  })
+      return seElimino;
+    })
+    .finally(async () => {
+      await cerrarConexion();
+    });
 }

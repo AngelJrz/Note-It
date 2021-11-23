@@ -1,7 +1,6 @@
 import cors from 'cors';
 import 'dotenv/config.js';
 import express from 'express';
-import mongoose from 'mongoose';
 import fileUpload from 'express-fileupload';
 
 import estudianteRouter from './routers/estudiante.js';
@@ -13,21 +12,6 @@ import listaRouter from './routers/lista.js';
 
 const app = express();
 const PORT = process.env.PORT || 4200;
-const DATABASE_URL = process.env.MONGODB_URL;
-const USER = process.env.USER;
-const PASSWORD = process.env.PASSWORD;
-
-mongoose.connect(DATABASE_URL,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    user: USER,
-    pass: PASSWORD
-}).then(() => {
-    console.log('successfully connected to the database');
-}).catch(err => {
-    console.log(err);
-    process.exit();
-});
 
 const allowedOrigins = [
     'http://localhost:3000',

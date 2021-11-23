@@ -2,6 +2,7 @@ import { loginEstudiante } from "../controllers/estudiante.js";
 import Estudiante from "../models/Estudiante.js";
 import Verificacion from "../models/Verificacion.js";
 import mongoose from "mongoose";
+import { abrirConexion, cerrarConexion } from "../models/conexion.js";
 
 export const ID_ESTUDIANTE_1_DEFUALT = "6178db2ca64a62f62989cf93";
 export const CONTRASENIA_ESTUDIANTE_1_DEFAULT = "abizair";
@@ -59,6 +60,7 @@ export const estudiantesDefault = [
 ];
 
 export async function registrarEstudiantesDefault() {
+  await abrirConexion();
 
     try {
         await Estudiante.deleteMany({});
@@ -66,6 +68,9 @@ export async function registrarEstudiantesDefault() {
         await Estudiante.insertMany(estudiantesDefault);
     } catch (error) {
         console.error(error);
+    }
+    finally {
+      cerrarConexion();
     }
     
 }
@@ -82,6 +87,7 @@ export async function iniciarSesion(usuario, contrasenia) {
 }
 
 export async function desactivarEstudianteDefault() {
+  await abrirConexion();
   try {
     await Estudiante.updateOne(
       { usuario: USUARIO_ESTUDIANTE_1_DEFAULT },
@@ -100,6 +106,8 @@ export async function crearVerificacionDefault() {
     codigo: CODIGO_VERIFICACION_DEFAULT,
   };
 
+  await abrirConexion();
+
   const nuevaVerificacion = new Verificacion(verificacionInicial);
 
   try {
@@ -111,6 +119,8 @@ export async function crearVerificacionDefault() {
 }
 
 export async function eliminarVerificaciones() {
+  await abrirConexion();
+
   try {
     await Verificacion.deleteMany({});
   } catch (error) {

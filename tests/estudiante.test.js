@@ -27,6 +27,7 @@ import {
   MENSAJE_ERROR_CARRERA_INEXISTENTE,
   MENSAJE_ERROR_FORMATO_CARRERA,
 } from "./catalogoHelper.js";
+import { cerrarConexion } from '../models/conexion.js';
 
 const api = supertest(app);
 
@@ -238,6 +239,6 @@ describe("confirmar correo ", () => {
 });
 
 afterAll(async () => {
-    await mongoose.connection.close();
-    server.close();
+    await cerrarConexion();
+    await server.close();
 })

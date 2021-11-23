@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { abrirConexion, cerrarConexion } from "../models/conexion.js";
 import Lista from "../models/Lista.js";
 import { ID_ESTUDIANTE_1_DEFUALT } from "./estudianteHelper.js";
 
@@ -54,10 +55,15 @@ export const MENSAJE_ERROR_ID_LISTA =
 export const MENSAJE_ERROR_NOTA_EXISTENTE = "La nota ya se encuentra agregada a la lista.";
 
 export async function crearListasDefualt() {
+  await abrirConexion();
+
   try {
     await Lista.deleteMany({});
     await Lista.insertMany(listasIniciales);
   } catch (error) {
     console.error(error);
+  }
+  finally {
+    cerrarConexion();
   }
 }
