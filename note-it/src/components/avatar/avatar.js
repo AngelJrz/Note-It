@@ -18,7 +18,6 @@ export default function AvatarPerfil(props) {
   const {logoutContext} = useUser();
   const open = Boolean(anchorEl);
   const {usuario} = props;
-  console.log(usuario);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -35,7 +34,7 @@ export default function AvatarPerfil(props) {
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         <Tooltip title="Mi perfil">
           <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
-            <Avatar sx={{ width: 50, height: 50 }}>M</Avatar>
+            <Avatar sx={{ width: 50, height: 50 }}>{usuario.estudiante.nombres.substring(0, 2).charAt(0).toUpperCase() + usuario.estudiante.nombres.substring(0, 2).charAt(1)}</Avatar>
           </IconButton>
         </Tooltip>
       </Box>

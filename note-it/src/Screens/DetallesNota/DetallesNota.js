@@ -96,8 +96,7 @@ export default function DetallesNota(props){
                       <div className="post__description" dangerouslySetInnerHTML={{ __html: n.cuerpo}}  />
                   </Typography>
                   {
-                    // datosEstudiante !== null && datosEstudiante.usuario === n.autor.usuario ?
-                    true ?
+                    datosEstudiante !== null && datosEstudiante.estudiante.usuario === n.autor.usuario ?
                     <Stack direction="row" spacing={2} sx={{ marginTop: 4, flexDirection: "row-reverse" }}>
                     <Button onClick={handleOpen} variant="outlined" color="error" startIcon={<DeleteIcon />} sx={{ marginLeft: 2}}>Eliminar</Button>
                     <Modal

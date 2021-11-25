@@ -26,7 +26,7 @@ export async function servicioObtenerNota(idNota) {
     })    
 }
 
-export async function crearNuevaNota(nota) {
+export async function crearNuevaNota(nota, datosEstudiante) {
     var form = new FormData();
 
     form.append("titulo", nota.titulo);
@@ -34,8 +34,7 @@ export async function crearNuevaNota(nota) {
     form.append("carrera", nota.carrera);
     form.append("materia", nota.materia);
     form.append("tema", nota.tema);
-    // form.append("autor", "Se supone que hay que cambiar este");
-    form.append("autor", "6178db2ca64a62f62989cf93");
+    form.append("autor", datosEstudiante.estudiante.id);
 
     if (nota.imagen && nota.imagen.files.length > 0) {
         form.append("imagen", nota.imagen.files[0], nota.imagen.value);
@@ -45,7 +44,7 @@ export async function crearNuevaNota(nota) {
         method: "POST",
         body: form,
         headers:{
-            'authorization': sessionStorage.getItem('token')
+            'authorization': datosEstudiante.token
         }
     })
     .then(response => {

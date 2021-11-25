@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./index.css";
 import Boton from "../../components/Boton/index.js";
 import ImageUpload from "../../components/ImageUpload";
@@ -7,9 +7,10 @@ import Progreso from "../../components/Progreso";
 import Notificacion from "../../components/Notificacion";
 import EditorContenido from "../EditorContenido";
 import useAdminNota from "../../hooks/useAdminNota";
+import contextoEstudiante from "../../context/UserContext";
 
 export default function CreacionNota() {
-
+  const {datosEstudiante} = useContext(contextoEstudiante);
     const {
       nota,
       carreras,
@@ -78,7 +79,7 @@ export default function CreacionNota() {
 
     setAbrirProgreso(true);
 
-    crearNuevaNota(nota)
+    crearNuevaNota(nota, datosEstudiante)
       .then((respuesta) => {
         console.log("Respuesta en GUI: ", respuesta);
         setAbrirProgreso(false);
