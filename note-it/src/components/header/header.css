@@ -12,8 +12,17 @@
 	transition: .5s;
 	height: 90px;
 	/* background-color: hsl(211, 100%, 63%); */
-  }
+}
 
-  .logoHeader{
-	  height: 60px;
-  }
+.logoHeader{
+	height: 60px;
+}
+
+
+/* .d1 {
+	background-color: aqua;
+}
+
+.d2 {
+	background-color:blue;
+} */

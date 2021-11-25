@@ -7,15 +7,20 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import AvatarPerfil from '../avatar/avatar';
 
+import BarraBusqueda from '../BarraBusqueda';
+
 export default function Header(props){
   const {datosEstudiante} = useContext(contextoEstudiante);
 
-    return( 
-        <header className="row header">
+    return (
+      <header className="row header">
         <div>
           <Link to="/">
             <img src={noteItLogo} alt="Logo" className="logoHeader"/>
           </Link>
+        </div>
+        <div>
+          <BarraBusqueda />
         </div>
         <div>
           {

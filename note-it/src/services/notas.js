@@ -76,5 +76,70 @@ export async function servicioEliminarNota(idNota) {
     .then(response => response.json())
     .then(data => {
         return data;
-    })    
+    })
+}
+
+export async function buscarNotas(busqueda) {
+    const { id, texto, carrera, materia, tema, op } = busqueda;
+
+    var query = '';
+    var tieneParametros = false;
+
+    if (id) {
+        query += `id=${id}`;
+    }
+    else {
+        if (texto) {
+            query += `texto=${texto}`;
+
+            tieneParametros = true;
+        }
+
+        if (carrera) {
+            if (tieneParametros) {
+                query += '&'
+            }
+
+            query += `carrera=${carrera}`;
+            tieneParametros = true;
+        }
+
+        if (materia) {
+            if (tieneParametros) {
+              query += "&";
+            }
+
+            query += `materia=${materia}`;
+            tieneParametros = true;
+        }
+
+        if (tema) {
+          if (tieneParametros) {
+            query += "&";
+          }
+
+          query += `tema=${tema}`;
+          tieneParametros = true;
+        }
+
+        if (op) {
+          if (tieneParametros) {
+            query += "&";
+          }
+
+          query += `op=${op}`;
+        }
+    }
+    
+
+    return fetch(`${ENDPOINT}/api/notas?${query}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        return data.data;
+      }); 
 }

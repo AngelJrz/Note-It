@@ -23,7 +23,7 @@ export default function ImageUpload(props) {
         />
         {imagenPreview && (
           <div className="imagenPreview">
-            <img src={imagenPreview} alt="" />
+            <img src={imagenPreview} alt="Imagen seleccionada" />
             <Boton onClick={eliminarImagen} texto="Eliminar" tipo="principal" />
           </div>
         )}
