@@ -1,8 +1,9 @@
-const ENDPOINT = "http://localhost:4200/api/materias";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+const REACT_APP_MATERIAS_ENDPOINT = process.env.REACT_APP_MATERIAS_ENDPOINT;
 
 export async function obtenerTemas(idMateria) {
   if (idMateria) {
-    return fetch(`${ENDPOINT}/${idMateria}/temas`, {
+    return fetch(`${REACT_APP_API_URL}${REACT_APP_MATERIAS_ENDPOINT}/${idMateria}/temas`, {
       method: "GET",
     })
       .then((response) => {
@@ -16,4 +17,4 @@ export async function obtenerTemas(idMateria) {
         return [];
       });
   }
-} 
+}

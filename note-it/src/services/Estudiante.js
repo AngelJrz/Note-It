@@ -1,7 +1,8 @@
-const ENDPOINT = 'http://localhost:4200/api/estudiantes';
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+const REACT_APP_ESTUDIANTES_ENDPOINT = process.env.REACT_APP_ESTUDIANTES_ENDPOINT;
 
 export async function servicioLogin(datosDeUsuario) {
-    return fetch(`${ENDPOINT}/login`, {
+    return fetch(`${REACT_APP_API_URL}${REACT_APP_ESTUDIANTES_ENDPOINT}/login`, {
         method: "post",
         headers: {
             'Content-Type': 'application/json'
@@ -18,7 +19,7 @@ export async function servicioLogin(datosDeUsuario) {
 }
 
 export async function servicioBuscarEstudiante(nombreUsuario) {
-    return fetch(`${ENDPOINT}/${nombreUsuario}`, {
+    return fetch(`${REACT_APP_API_URL}${REACT_APP_ESTUDIANTES_ENDPOINT}/${nombreUsuario}`, {
         method: "get",
         headers: {
             'Content-Type': 'application/json'

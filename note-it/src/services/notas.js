@@ -1,7 +1,8 @@
-const ENDPOINT = 'http://localhost:4200';
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+const REACT_APP_NOTAS_ENDPOINT = process.env.REACT_APP_NOTAS_ENDPOINT;
 
 export async function servicioObtenerNotas() {
-    return fetch(`${ENDPOINT}/api/notas`, {
+    return fetch(`${REACT_APP_API_URL}${REACT_APP_NOTAS_ENDPOINT}`, {
         method: "get",
         headers: {
             'Content-Type': 'application/json'
@@ -14,16 +15,19 @@ export async function servicioObtenerNotas() {
 }
 
 export async function servicioObtenerNota(idNota) {
-    return fetch(`${ENDPOINT}/api/notas?id=${idNota}`, {
+    return fetch(
+      `${REACT_APP_API_URL}${REACT_APP_NOTAS_ENDPOINT}?id=${idNota}`,
+      {
         method: "get",
         headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
         return data.data;
-    })    
+      });    
 }
 
 export async function crearNuevaNota(nota, datosEstudiante) {
@@ -40,42 +44,43 @@ export async function crearNuevaNota(nota, datosEstudiante) {
         form.append("imagen", nota.imagen.files[0], nota.imagen.value);
     }
 
-    return fetch(`http://localhost:4200/api/notas`, {
-        method: "POST",
-        body: form,
-        headers:{
-            'authorization': datosEstudiante.token
-        }
+    return fetch(`${REACT_APP_API_URL}${REACT_APP_NOTAS_ENDPOINT}`, {
+      method: "POST",
+      body: form,
+      headers: {
+        authorization: datosEstudiante.token,
+      },
     })
-    .then(response => {
+      .then((response) => {
         return response.json();
-    })
-    .then(resultado => {
+      })
+      .then((resultado) => {
         console.log(resultado);
         return resultado;
-    })
-    .catch(err => {
+      })
+      .catch((err) => {
         console.error(err);
 
         return {
-            exitoso: false,
-            mensaje: "Ocurrió un error al intentar conectarse al servidor. Intente más tarde.",
-            data: err
-        }
-    })
+          exitoso: false,
+          mensaje:
+            "Ocurrió un error al intentar conectarse al servidor. Intente más tarde.",
+          data: err,
+        };
+      });
 }
 
 export async function servicioEliminarNota(idNota) {
-    return fetch(`${ENDPOINT}/api/notas/${idNota}`, {
-        method: "delete",
-        headers: {
-            'Content-Type': 'application/json'
-        }
+    return fetch(`${REACT_APP_API_URL}${REACT_APP_NOTAS_ENDPOINT}/${idNota}`, {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-    .then(response => response.json())
-    .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         return data;
-    })
+      });
 }
 
 export async function buscarNotas(busqueda) {
@@ -131,7 +136,7 @@ export async function buscarNotas(busqueda) {
     }
     
 
-    return fetch(`${ENDPOINT}/api/notas?${query}`, {
+    return fetch(`${REACT_APP_API_URL}${REACT_APP_NOTAS_ENDPOINT}?${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

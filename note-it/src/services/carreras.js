@@ -1,30 +1,32 @@
-const ENDPOINT = "http://localhost:4200/api/carreras";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+const REACT_APP_CARRERAS_ENDPOINT = process.env.REACT_APP_CARRERAS_ENDPOINT;
 
-export function obtenerCarreras() {
-    return fetch(ENDPOINT)
-    .then(response => {
-        return response.json()
-    }).then(resultado => {
-        const { data } = resultado
-        return data;
+export async function obtenerCarreras() {
+  return fetch(`${REACT_APP_API_URL}${REACT_APP_CARRERAS_ENDPOINT}`)
+    .then((response) => {
+      return response.json();
     })
+    .then((resultado) => {
+      const { data } = resultado;
+      return data;
+    });
 }
 
 export async function obtenerCarrera(idCarrera) {
-    return fetch(`${ENDPOINT}?idCarrera=${idCarrera}`, {
-      method: "GET",
+  return fetch(`${REACT_APP_API_URL}${REACT_APP_CARRERAS_ENDPOINT}?idCarrera=${idCarrera}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
     })
-      .then((response) => {
-        return response.json();
-      })
-      .then((carreras) => {
-        return carreras;
-      });
+    .then((carreras) => {
+      return carreras;
+    });
 }
 
 export async function obtenerMaterias(idCarrera) {
   if (idCarrera) {
-    return fetch(`${ENDPOINT}/${idCarrera}/materias`, {
+    return fetch(`${REACT_APP_API_URL}${REACT_APP_CARRERAS_ENDPOINT}/${idCarrera}/materias`, {
       method: "GET",
     })
       .then((response) => {
@@ -35,5 +37,4 @@ export async function obtenerMaterias(idCarrera) {
         return data;
       });
   }
-  
 }
