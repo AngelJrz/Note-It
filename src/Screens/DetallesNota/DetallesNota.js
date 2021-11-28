@@ -37,6 +37,13 @@ export default function DetallesNota(props){
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const [abrirAviso, setAbrirAviso] = React.useState(false);
+    const handleOpenAviso = () => setAbrirAviso(true);
+    const handleCloseAviso = () => {
+      setAbrirAviso(false);
+      history.push("/");
+    }
+
     function stringToColor(string) {
         let hash = 0;
         let i;
@@ -67,11 +74,10 @@ export default function DetallesNota(props){
       }
 
     function eliminaNota() {
-      EliminarNota(nota[0].id).then(resultado => {
-        const lskadjf = resultado;
+      EliminarNota(nota[0].id, datosEstudiante.token).then(resultado => {
         if (resultado.exitoso) {
-          alert('Se elimino la nota: ' + nota[0].id);
-          history.push('/');
+          handleClose();
+          handleOpenAviso();
         } else {
           alert('No se elimino');
         }
@@ -115,6 +121,25 @@ export default function DetallesNota(props){
                         <Stack direction="row" spacing={2} sx={{ marginTop: 3, flexDirection: "row-reverse" }}>
                           <Button onClick={handleClose} variant="contained" color="error" sx={{ marginLeft: 2}}>Cancelar</Button>
                           <Button onClick={eliminaNota} variant="contained" color="success">Sí</Button>
+                        </Stack>
+                      </Box>
+                    </Modal>
+
+                    <Modal
+                      open={abrirAviso}
+                      onClose={handleClose}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                    >
+                      <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                          Éxito
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          La operación se realizo correctamente
+                        </Typography>
+                        <Stack direction="row" spacing={2} sx={{ marginTop: 3, flexDirection: "row-reverse" }}>
+                          <Button onClick={handleCloseAviso} variant="contained" color="success">Aceptar</Button>
                         </Stack>
                       </Box>
                     </Modal>

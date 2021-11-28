@@ -70,11 +70,12 @@ export async function crearNuevaNota(nota, datosEstudiante) {
       });
 }
 
-export async function servicioEliminarNota(idNota) {
+export async function servicioEliminarNota(idNota, token) {
     return fetch(`${REACT_APP_API_URL}${REACT_APP_NOTAS_ENDPOINT}/${idNota}`, {
       method: "delete",
       headers: {
-        "Content-Type": "application/json",
+       'Content-Type': 'application/json',
+       'authorization': token
       },
     })
       .then((response) => response.json())

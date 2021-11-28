@@ -33,8 +33,8 @@ export function ObtenerNota(idNota) {
   return { nota };
 }
 
-export function EliminarNota(idNota) {
-  return servicioEliminarNota(idNota)
+export function EliminarNota(idNota, token) {
+  return servicioEliminarNota(idNota, token)
   .then(resultado => {
     return resultado; 
   })
