@@ -3,6 +3,7 @@ import { existeEstudiante, existeUsuario } from "../controllers/estudiante.js";
 import { existeMateria } from "../controllers/materia.js";
 import { existeNota } from "../controllers/nota.js";
 import { existeTema } from "../controllers/tema.js";
+import { checkSchemaEstudianteId, checkSchemaUsuarioEstudiante } from "./validadorEstudiante.js";
 
 export const checkSchemaNota = {
   titulo: {
@@ -98,7 +99,7 @@ export const checkSchemaNota = {
   },
 };
 
-export const checkSchemaActualizarNota = {
+export const checkSchemaId = {
   id: {
     in: "params",
     isMongoId: {
@@ -108,18 +109,23 @@ export const checkSchemaActualizarNota = {
     },
     custom: {
       options: async (value) => {
-        return existeNota(value)
-        .then((existe) => {
+        return existeNota(value).then((existe) => {
           if (!existe) {
             return Promise.reject(
-              "La nota especificado no existe. Por favor verifique la información."
+              "La nota especificada no existe. Por favor verifique la información."
             );
           }
 
           return existe;
-        })
-      }
-    }
+        });
+      },
+    },
+  },
+};
+
+export const checkSchemaActualizarNota = {
+  id: {
+    ...checkSchemaId.id
   },
 
   titulo: {
@@ -166,25 +172,28 @@ export const checkSchemaActualizarNota = {
   },
 };
 
-export const checkSchemaEliminarNota = {
+export const checkSchemaComentario = {
   id: {
-    isMongoId: {
-      errorMessage:
-        "El id de la nota no tiene el formato correcto. Verifique la información.",
-      bail: true,
-    },
-    custom: {
-      options: async (value) => {
-        return existeNota(value).then((existe) => {
-          if (!existe) {
-            return Promise.reject(
-              "La nota especificada no existe. Por favor verifique la información."
-            );
-          }
+    ...checkSchemaId.id,
+  },
 
-          return existe;
-        });
-      },
+  usuario: {
+    ...checkSchemaUsuarioEstudiante.usuario,
+  },
+
+  contenido: {
+    isLength: {
+      errorMessage:
+        "El contenido del comentario debe tener al menos 20 caracteres y máximo 300.",
+      options: { min: 5, max: 300 },
+      bail: true
     },
+    customSanitizer: {
+      options: (value) => {
+        const contenidoSanitizado = value.replace(/ +(?= )/g, "");
+
+        return contenidoSanitizado;
+      }
+    }
   },
 };

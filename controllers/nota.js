@@ -169,6 +169,7 @@ export async function obtenerNotas(busqueda) {
     }
     
     return Nota.find(filtro)
+      .sort("-createdAt")
       .populate("autor", AUTOR_POPULATE_CONFIG)
       .populate("carrera", CATALOGO_POPULATE_CONFIG)
       .populate("materia", CATALOGO_POPULATE_CONFIG)
@@ -281,6 +282,37 @@ export async function eliminarNota(id) {
       seElimino = false;
 
       return seElimino;
+    })
+    .finally(async () => {
+      await cerrarConexion();
+    });
+}
+
+export async function agregarComentario(id, comentario) {
+  await abrirConexion();
+
+  var comentarioAgregado = true;
+
+  return Nota.findByIdAndUpdate(
+    id,
+    { $push: { comentarios: comentario } },
+    { new: true, useFindAndModify: true }
+  )
+    .then((resultado) => {
+      console.log(resultado);
+
+      if (!resultado) {
+        comentarioAgregado = false;
+      }
+
+      return comentarioAgregado;
+    })
+    .catch((err) => {
+      console.error(err);
+
+      comentarioAgregado = false;
+
+      return comentarioAgregado;
     })
     .finally(async () => {
       await cerrarConexion();

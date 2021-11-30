@@ -1,4 +1,5 @@
 import { existeCarrera } from "../controllers/carrera.js";
+import { existeEstudiante, existeUsuario } from "../controllers/estudiante.js";
 
 function esEmailCorrecto(email) {
   const patter = /zs([0-9]{8})+@estudiantes\.uv\.mx/;
@@ -14,7 +15,7 @@ function esEmailCorrecto(email) {
   }
 }
 
-const checkSchemaEstudiante = {
+export const checkSchemaEstudiante = {
   nombres: {
     isLength: {
       errorMessage: "El nombre debe tener al menos dos caracteres.",
@@ -62,4 +63,42 @@ const checkSchemaEstudiante = {
   },
 };
 
-export default checkSchemaEstudiante;
+export const checkSchemaEstudianteId = {
+  id: {
+    in: "params",
+    isMongoId: {
+      errorMessage:
+        "El id del estudiante no tiene el formato correcto. Verifique la información.",
+      bail: true,
+    },
+    options: async (value) => {
+      return existeEstudiante(value).then((existe) => {
+        if (!existe) {
+          return Promise.reject(
+            "El estudiante especificado no se encuentra activo o no existe. Por favor verifique la información."
+          );
+        }
+
+        return existe;
+      });
+    },
+  },
+};
+
+export const checkSchemaUsuarioEstudiante = {
+  usuario: {
+    custom: {
+      options: async (value) => {
+        return existeUsuario(value).then((existe) => {
+          if (!existe) {
+            return Promise.reject(
+              "El usuario especificado no existe. Por favor verifique la información."
+            );
+          }
+
+          return existe;
+        });
+      },
+    },
+  },
+};

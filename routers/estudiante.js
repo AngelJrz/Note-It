@@ -3,7 +3,7 @@ const router = express.Router();
 import { validationResult, checkSchema, param } from "express-validator";
 
 import { existeUsuario, registrarEstudiante, loginEstudiante, existeEstudiante, BuscarEstudiante } from "../controllers/estudiante.js";
-import checkSchemaEstudiante from '../utilities/validadorEstudiante.js';
+import { checkSchemaEstudiante } from '../utilities/validadorEstudiante.js';
 import { crearLista, obtenerListaPorEstudiante, obtenerListasPorEstudiante } from '../controllers/lista.js';
 import checkSchemaLista from '../utilities/validadorLista.js';
 import { VerificarToken } from '../utilities/jsonWebToken.js';

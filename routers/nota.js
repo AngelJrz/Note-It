@@ -3,10 +3,10 @@ const router = express.Router();
 
 import { validationResult, checkSchema, query } from "express-validator";
 
-import { actualizarNota, crearNuevaNota, eliminarNota, obtenerNotas } from '../controllers/nota.js';
+import { actualizarNota, agregarComentario, crearNuevaNota, eliminarNota, obtenerNotas } from '../controllers/nota.js';
 import { VerificarToken } from "../utilities/jsonWebToken.js";
 
-import { checkSchemaActualizarNota, checkSchemaEliminarNota, checkSchemaNota } from "../utilities/validadorNota.js";
+import { checkSchemaActualizarNota, checkSchemaComentario, checkSchemaId, checkSchemaNota } from "../utilities/validadorNota.js";
 
 router.post("/",
 VerificarToken,
@@ -175,7 +175,7 @@ router.put(
 
 router.delete("/:id", 
   VerificarToken, 
-  checkSchema(checkSchemaEliminarNota), 
+  checkSchema(checkSchemaId), 
   async (req, res) => {
   var resultado = {
     exitoso: true,
@@ -209,5 +209,50 @@ router.delete("/:id",
     return res.status(500).send(resultado);
   })
 })
+
+router.post(
+  "/:id/comentarios",
+  VerificarToken,
+  checkSchema(checkSchemaComentario),
+  async (req, res) => {
+    var resultado = {
+      exitoso: true,
+      mensaje: "El comentario fue agregado exitosamente.",
+      data: {},
+    };
+
+    const { errors } = validationResult(req);
+
+    if (errors.length > 0) {
+      resultado.exitoso = false;
+      resultado.mensaje = "Se encontaron errores al validar el comentario.";
+      resultado.data = errors;
+      return res.status(400).send(resultado).end();
+    }
+
+    const { id } = req.params;
+    const comentario = req.body;
+
+    agregarComentario(id, comentario)
+    .then((comentarioAgregado) => {
+      if (!comentarioAgregado) {
+        resultado.exitoso = false;
+        resultado.mensaje = "El comentario no pudo ser agregado. Intente más tarde si el problema persiste."
+      }
+
+      return res.status(200).send(resultado);
+    })
+    .catch((err) => {
+
+      console.error(err);
+
+      resultado.exitoso = false;
+      resultado.mensaje =
+        "Ocurrió un error en el servidor. Por favor, intente más tade.";
+
+      return res.status(500).send(resultado);
+    })
+  }
+);
 
 export default router;

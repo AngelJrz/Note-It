@@ -26,6 +26,14 @@ const notaSchema = new Schema(
   }
 );
 
+comentarioSchema.set("toJSON", {
+  transform: (_, returnedObject) => {
+    returnedObject.id = returnedObject._id;
+
+    delete returnedObject._id;
+  }
+})
+
 notaSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id;
