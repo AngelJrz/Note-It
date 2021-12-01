@@ -5,12 +5,14 @@ import { validationResult, checkSchema, query } from "express-validator";
 
 import { actualizarNota, agregarComentario, crearNuevaNota, eliminarNota, obtenerNotas } from '../controllers/nota.js';
 import { VerificarToken } from "../utilities/jsonWebToken.js";
+import { validarImagen } from "../utilities/validadorImagen.js";
 
 import { checkSchemaActualizarNota, checkSchemaComentario, checkSchemaId, checkSchemaNota } from "../utilities/validadorNota.js";
 
 router.post("/",
 VerificarToken,
 checkSchema(checkSchemaNota), 
+validarImagen, 
 async (req, res) => {
   const { errors } = validationResult(req);
 
