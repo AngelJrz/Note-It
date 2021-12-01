@@ -34,6 +34,9 @@ export const MENSAJE_CODIGO_VERIFICACION_INCORRECTO =
 export const MENSAJE_CODIGO_VERIFICACION_EXPIRADO =
   "No se encontró un usuario para la verificación o el código de verificación ha expirado.";
 
+export const MENSAJE_ERROR_USUARIO =
+  "El usuario especificado no existe. Por favor verifique la información.";
+
 export const estudiantesDefault = [
   {
     _id: new mongoose.Types.ObjectId(ID_ESTUDIANTE_1_DEFUALT),

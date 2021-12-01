@@ -74,6 +74,11 @@ export const MENSAJE_ERROR_CUERPO =
 export const MENSAJE_ERROR_AUTOR =
   "El autor especificado no se encuentra activo o no existe. Por favor verifique la información.";
 
+export const MENSAJE_COMENTARIO_AGREGADO = "El comentario fue agregado exitosamente.";
+export const MENSAJE_COMENTARIO_ERRORES = "Se encontraron errores al validar el comentario.";
+export const MENSAJE_COMENTARIO_ERROR_CONTENIDO =
+  "El contenido del comentario debe tener al menos 20 caracteres y máximo 300.";
+
 export async function crearNotasDefault() {
     await abrirConexion();
 

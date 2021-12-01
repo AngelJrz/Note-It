@@ -225,7 +225,7 @@ router.post(
 
     if (errors.length > 0) {
       resultado.exitoso = false;
-      resultado.mensaje = "Se encontaron errores al validar el comentario.";
+      resultado.mensaje = "Se encontraron errores al validar el comentario.";
       resultado.data = errors;
       return res.status(400).send(resultado).end();
     }

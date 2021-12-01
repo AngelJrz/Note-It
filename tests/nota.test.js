@@ -21,6 +21,10 @@ import {
   MENSAJE_ERROR_TITULO,
   MENSAJE_ERROR_CUERPO,
   MENSAJE_ERROR_AUTOR,
+  ID_NOTA_1_DEFAULT,
+  MENSAJE_COMENTARIO_AGREGADO,
+  MENSAJE_COMENTARIO_ERROR_CONTENIDO,
+  MENSAJE_COMENTARIO_ERRORES,
 } from "./notaHelper.js";
 
 import {
@@ -29,6 +33,9 @@ import {
   USUARIO_ESTUDIANTE_1_DEFAULT,
   CONTRASENIA_ESTUDIANTE_1_DEFAULT,
   ID_ERRONEO,
+  MENSAJE_ERROR_USUARIO,
+  TOKEN_ERRONEO,
+  MENSAJE_ERROR_TOKEN,
 } from "./estudianteHelper.js";
 import {
   MENSAJE_ERROR_CARRERA_INEXISTENTE,
@@ -405,6 +412,164 @@ describe("obtener ", () => {
     const mensajes = body.data.map((error) => error.msg);
 
     expect(mensajes).toContain("La op no es un valor númerico.");
+  });
+})
+
+describe("agregar comentario ", () => {
+  beforeAll(async () => {
+    infoLogin = await iniciarSesion(
+      USUARIO_ESTUDIANTE_1_DEFAULT,
+      CONTRASENIA_ESTUDIANTE_1_DEFAULT
+    );
+  });
+
+  test("con informacion correcta", async () => {
+    const { estudiante, token } = infoLogin.data;
+
+    const nuevoComentario = {
+      usuario: estudiante.usuario,
+      contenido: "Contenido correcto de comentario.",
+    };
+
+    const respuesta = await api
+      .post(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}/comentarios`)
+      .set("authorization", token)
+      .send(nuevoComentario);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_COMENTARIO_AGREGADO);
+  })
+
+  test("sin contenido", async () => {
+    const { estudiante, token } = infoLogin.data;
+
+    const nuevoComentario = {
+      usuario: estudiante.usuario
+    };
+
+    const respuesta = await api
+      .post(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}/comentarios`)
+      .set("authorization", token)
+      .send(nuevoComentario);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_COMENTARIO_ERRORES);
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_COMENTARIO_ERROR_CONTENIDO);
+  })
+
+  test("con el tamaño del contenido menor al permitido", async () => {
+    const { estudiante, token } = infoLogin.data;
+
+    const nuevoComentario = {
+      usuario: estudiante.usuario,
+      contenido: "Con"
+    };
+
+    const respuesta = await api
+      .post(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}/comentarios`)
+      .set("authorization", token)
+      .send(nuevoComentario);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_COMENTARIO_ERRORES);
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_COMENTARIO_ERROR_CONTENIDO);
+  });
+
+  test("con el tamaño del contenido mayor al permitido", async () => {
+    const { estudiante, token } = infoLogin.data;
+
+    const nuevoComentario = {
+      usuario: estudiante.usuario,
+      contenido:
+        "Esto es un comentario de prueba que sobrepasa los caracteres permitidos para la validación. Esto es un comentario de prueba que sobrepasa los caracteres permitidos para la validación. Esto es un comentario de prueba que sobrepasa los caracteres permitidos para la validación. Esto es un comentario de prueba que sobrepasa los caracteres permitidos para la validación.",
+    };
+
+    const respuesta = await api
+      .post(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}/comentarios`)
+      .set("authorization", token)
+      .send(nuevoComentario);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_COMENTARIO_ERRORES);
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_COMENTARIO_ERROR_CONTENIDO);
+  });
+
+  test("sin usuario", async () => {
+    const { token } = infoLogin.data;
+
+    const nuevoComentario = {
+      contenido:
+        "Esto es un comentario de prueba 1233.",
+    };
+
+    const respuesta = await api
+      .post(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}/comentarios`)
+      .set("authorization", token)
+      .send(nuevoComentario);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_COMENTARIO_ERRORES);
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_USUARIO);
+  });
+
+  test("con usuario inexistente", async () => {
+    const { token } = infoLogin.data;
+
+    const nuevoComentario = {
+      usuario: "usuarioNoExiste",
+      contenido: "Esto es un comentario de prueba 1233.",
+    };
+
+    const respuesta = await api
+      .post(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}/comentarios`)
+      .set("authorization", token)
+      .send(nuevoComentario);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_COMENTARIO_ERRORES);
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_USUARIO);
+  });
+
+  test("con token inactivo", async () => {
+    const { estudiante } = infoLogin.data;
+
+    const nuevoComentario = {
+      usuario: estudiante.usuario,
+      contenido: "Esto es un comentario de prueba 1233.",
+    };
+
+    const respuesta = await api
+      .post(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}/comentarios`)
+      .set("authorization", TOKEN_ERRONEO)
+      .send(nuevoComentario);
+
+    const { body } = respuesta;
+
+    console.log("BODY: ", body)
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_TOKEN);
   });
 })
 
