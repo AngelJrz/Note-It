@@ -83,7 +83,7 @@ export async function crearNuevaNota(nuevaNota) {
 }
 
 export async function obtenerNotas(busqueda) {
-  const { id, texto, carrera, materia, tema, op } = busqueda;
+  const { id, texto, carrera, materia, tema, op, offset = "0", limit = "0" } = busqueda;
 
   await abrirConexion();
 
@@ -174,6 +174,8 @@ export async function obtenerNotas(busqueda) {
       .populate("carrera", CATALOGO_POPULATE_CONFIG)
       .populate("materia", CATALOGO_POPULATE_CONFIG)
       .populate("tema", CATALOGO_POPULATE_CONFIG)
+      .skip(parseInt(offset))
+      .limit(parseInt(limit))
       .then((notas) => {
         return notas;
       })
