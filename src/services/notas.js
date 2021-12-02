@@ -85,7 +85,7 @@ export async function servicioEliminarNota(idNota, token) {
 }
 
 export async function buscarNotas(busqueda) {
-    const { id, texto, carrera, materia, tema, op } = busqueda;
+    const { id, texto, carrera, materia, tema, op, offset, limit } = busqueda;
 
     var query = '';
     var tieneParametros = false;
@@ -98,6 +98,24 @@ export async function buscarNotas(busqueda) {
             query += `texto=${texto}`;
 
             tieneParametros = true;
+        }
+
+        if (offset) {
+          if (tieneParametros) {
+            query += "&";
+          }
+
+          query += `offset=${offset}`;
+          tieneParametros = true;
+        }
+
+        if (limit) {
+          if (tieneParametros) {
+            query += "&";
+          }
+
+          query += `limit=${limit}`;
+          tieneParametros = true;
         }
 
         if (carrera) {

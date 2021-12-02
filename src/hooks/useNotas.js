@@ -7,6 +7,7 @@ export function useNotas(busqueda) {
 
   useEffect(
     function () {
+      console.log("BUSQUEDA: ", busqueda);
       buscarNotas(busqueda)
         .then((notas) => {
           setNotas(notas);
@@ -24,6 +25,8 @@ export function useNotas(busqueda) {
       busqueda.materia,
       busqueda.tema,
       busqueda.op,
+      busqueda.offset,
+      busqueda.limit
     ]
   );
 
