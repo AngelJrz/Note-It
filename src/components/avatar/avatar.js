@@ -80,7 +80,13 @@ export default function AvatarPerfil(props) {
           <ListItemIcon>
             <NoteAddIcon fontSize="small" />
           </ListItemIcon>
-          <Link to="/crear-nota">Crea una nota</Link>
+          <Link to="/crear-nota">Crear una nota</Link>
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <NoteAddIcon fontSize="small" />
+          </ListItemIcon>
+          <Link to="/crear-lista">Crear una lista</Link>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>

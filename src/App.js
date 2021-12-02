@@ -9,6 +9,7 @@ import DetallesNota from './Screens/DetallesNota/DetallesNota.js';
 import {EstudianteContextProvider}  from './context/UserContext.js';
 import PerfilEstudiante from './Screens/perfilEstudiante/PerfilEstudiante.js';
 import ResultadoBusqueda from './Screens/ResultadoBusqueda/index.js';
+import Crearlista from './Screens/CrearLista/CrearLista.js';
 
 function App() { 
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/Nota/:id" component={DetallesNota} exact></Route>
             <Route path="/validar-codigo" component={ValidarCodigo}></Route>
             <Route path="/crear-nota" component={CrearNota}></Route>
+            <Route path="/crear-lista" component={Crearlista}></Route>
             <Route
               path="/estudiante/:usuario"
               component={PerfilEstudiante}
