@@ -2,20 +2,28 @@ import { useState, useEffect } from "react";
 import { buscarNotas } from "../services/notas";
 
 export function useNotas(busqueda) {
-  const [notas, setNotas] = useState([]);
-//   const [busqueda, setBusqueda] = useState({});
+  const notasIniciales = [];
+
+  const [notas, setNotas] = useState(notasIniciales);
+
+  const limiteDeNotas = 3;
 
   useEffect(
     function () {
       console.log("BUSQUEDA: ", busqueda);
       buscarNotas(busqueda)
         .then((notas) => {
-          setNotas(notas);
+          if (notas) {
+            setNotas(notas);
+          }
+          else {
+            setNotas(notasIniciales);
+          }
+          
         })
         .catch((err) => {
-          console.err(err);
-
-          setNotas([]);
+          console.error(err);
+          setNotas(notasIniciales);
         });
     },
     [
@@ -24,11 +32,9 @@ export function useNotas(busqueda) {
       busqueda.carrera,
       busqueda.materia,
       busqueda.tema,
-      busqueda.op,
-      busqueda.offset,
-      busqueda.limit
+      busqueda.op
     ]
   );
 
-  return { /*busqueda, setBusqueda,*/ notas };
+  return { notas, limiteDeNotas };
 }

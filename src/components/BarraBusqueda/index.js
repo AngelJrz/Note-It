@@ -15,14 +15,13 @@ export default function BarraBusqueda() {
     const history = useHistory();
 
     const offsetDefault = 0;
-    const limitDefault = 1;
 
     const realizarBusqueda = (e) => {
         e.preventDefault();
 
         history.push({
           pathname: "/busqueda",
-          search: `?q=${textoBusqueda}&offset=${offsetDefault}`,
+          search: `?q=${textoBusqueda}`,
         });
     }
 
