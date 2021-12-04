@@ -83,12 +83,13 @@ export async function crearNuevaNota(nuevaNota) {
 }
 
 export async function obtenerNotas(busqueda) {
-  const { id, texto, carrera, materia, tema, op, offset = "0", limit = "0" } = busqueda;
+  const { id, texto, carrera, materia, tema, op } = busqueda;
 
   await abrirConexion();
 
     if (id) {
-        return Nota.findById(id)
+        console.log("Búsqueda por ID");
+        return await Nota.findById(id)
           .populate("autor", AUTOR_POPULATE_CONFIG)
           .populate("carrera", CATALOGO_POPULATE_CONFIG)
           .populate("materia", CATALOGO_POPULATE_CONFIG)
@@ -112,10 +113,26 @@ export async function obtenerNotas(busqueda) {
       filtro.carrera = carrera;
     }
 
+    if (texto) {
+      filtro.$or = [
+        { titulo: { $regex: texto, $options: "i" } },
+        { cuerpo: { $regex: texto, $options: "i" } },
+      ];
+    }
+
+    if (materia) {
+      filtro.materia = materia;
+    }
+
+    if (tema) {
+      filtro.tema = tema;
+    }
+
     switch (op) {
       case OP_NOTAS_UTILES:
+        console.log("Búsqueda por Notas utiles: ", filtro);
         filtro.esUtil = { $gt: 0 };
-        return Nota.find(filtro)
+        return await Nota.find(filtro)
           .sort("-esUtil")
           .populate("autor", AUTOR_POPULATE_CONFIG)
           .populate("carrera", CATALOGO_POPULATE_CONFIG)
@@ -133,8 +150,9 @@ export async function obtenerNotas(busqueda) {
             await cerrarConexion();
           });
       case OP_NOTAS_MAS_VISUALIZADAS:
+        console.log("Búsqueda por Notas más visualizadas: ", filtro);
         filtro.visualizaciones = { $gt: 0 };
-        return Nota.find(filtro)
+        return await Nota.find(filtro)
           .sort("-visualizaciones")
           .populate("autor", AUTOR_POPULATE_CONFIG)
           .populate("carrera", CATALOGO_POPULATE_CONFIG)
@@ -152,30 +170,14 @@ export async function obtenerNotas(busqueda) {
             await cerrarConexion();
           });
     }
-
-    if (texto) {
-      filtro.$or = [
-        { titulo: { $regex: texto, $options: "i" } },
-        { cuerpo: { $regex: texto, $options: "i" } },
-      ];
-    }
-
-    if (materia) {
-      filtro.materia = materia;
-    }
-
-    if (tema) {
-      filtro.tema = tema;
-    }
     
-    return Nota.find(filtro)
+    console.log("Búsqueda: ", filtro);
+    return await Nota.find(filtro)
       .sort("-createdAt")
       .populate("autor", AUTOR_POPULATE_CONFIG)
       .populate("carrera", CATALOGO_POPULATE_CONFIG)
       .populate("materia", CATALOGO_POPULATE_CONFIG)
       .populate("tema", CATALOGO_POPULATE_CONFIG)
-      .skip(parseInt(offset))
-      .limit(parseInt(limit))
       .then((notas) => {
         return notas;
       })
