@@ -14,15 +14,17 @@ export default function BarraBusqueda() {
     const [textoBusqueda, setTextoBusqueda] = useState("");
     const history = useHistory();
 
-    const offsetDefault = 0;
-
     const realizarBusqueda = (e) => {
         e.preventDefault();
+
+        window.localStorage.setItem("texto", textoBusqueda);
 
         history.push({
           pathname: "/busqueda",
           search: `?q=${textoBusqueda}`,
         });
+
+        setTextoBusqueda("")
     }
 
     const actualizarTextoBusqueda = (e) => {

@@ -1,37 +1,88 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { useCarreras } from "../../hooks/useCarreras";
 import { useMaterias } from "../../hooks/useMaterias";
 import useTemas from "../../hooks/useTemas";
 import Boton from "../../components/Boton/index.js";
+import './index.css'
 
-export default function Filtros() {
-    const { carreras } = useCarreras();
+function Filtros(props) {
+    const { carrera = "", materia = "", tema = "", op = "", cargar } = props;
+
+    const texto = window.localStorage.getItem("texto") || "";
+
+    const history = useHistory();
+
+    const { carreras } = useCarreras(cargar);
     const { materias, setCarrera } = useMaterias();
     const { temas, setMateria } = useTemas();
 
-
     const filtrosIniciales = {
-      carrera: "",
-      materia: "",
-      tema: "",
+      carrera,
+      materia,
+      tema,
+      op
     };
 
     const [filtros, setFiltros] = useState(filtrosIniciales);
 
-    const cambioDeFiltro = () => {};
+    const cambioDeFiltro = (e) => {
+
+      const nombre = e.target.name;
+      const valor = e.target.value;
+
+      setFiltros({
+        ...filtros,
+        [e.target.name]: e.target.value,
+      });
+
+      
+
+      if (nombre === "carrera") {
+        setCarrera(valor);
+      } else if (nombre === "materia") {
+        setMateria(valor);
+      }
+      
+    };
 
     const buscarFiltros = (event) => {
         event.preventDefault();
+
+        var query = `?q=${texto}`;
+
+        console.log("FILTROS: ", filtros);
+
+        if (filtros.carrera) {
+          query += `&carrera=${filtros.carrera}`;
+        }
+
+        if (filtros.materia) {
+          query += `&mareria=${filtros.materia}`;
+        }
+
+        if (filtros.tema) {
+          query += `&tema=${filtros.tema}`;
+        }
+
+        if (filtros.op) {
+          query += `&op=${filtros.op}`;
+        }
+
+        history.push({
+          pathname: "/busqueda",
+          search: query,
+        });
     }
 
-
     return (
-      <form onSubmit={buscarFiltros}>
+      <form onSubmit={buscarFiltros} className="formulario-filtros">
         <fieldset>
-          <label htmlFor="carrera">Carrera</label>
+          <label htmlFor="carrera" className="label">
+            Carrera
+          </label>
           <select
             id="carreras"
-            required
             name="carrera"
             value={filtros.carrera}
             onChange={cambioDeFiltro}
@@ -49,7 +100,6 @@ export default function Filtros() {
           <label htmlFor="materia">Materia</label>
           <select
             id="materias"
-            required
             name="materia"
             value={filtros.materia}
             onChange={cambioDeFiltro}
@@ -69,7 +119,6 @@ export default function Filtros() {
           <select
             id="temas"
             name="tema"
-            required
             value={filtros.tema}
             onChange={cambioDeFiltro}
           >
@@ -87,20 +136,30 @@ export default function Filtros() {
           <label>
             <input
               type="radio"
-              id="masVisualizadas"
-              name="masVisualizadas"
+              id="utiles"
+              name="op"
               value="1"
+              onChange={cambioDeFiltro}
+            />
+            Más útiles
+          </label>
+          <label>
+            <input
+              type="radio"
+              id="masVisualizadas"
+              name="op"
+              value="2"
+              onChange={cambioDeFiltro}
             />
             Más visualizadas
           </label>
-
-          <label>
-            <input type="radio" id="utiles" name="utiles" value="2" />
-            Útiles
-          </label>
         </fieldset>
 
-        <Boton texto="Buscar" tipo="boton principal w-50" />
+        <div className="boton-container">
+          <Boton texto="Buscar" tipo="boton principal w-50" />
+        </div>
       </form>
     );
 }
+
+export default React.memo(Filtros);

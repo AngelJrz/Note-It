@@ -13,3 +13,9 @@
 .texto-busqueda {
     text-align: center;
 }
+
+.paginacion {
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
+}

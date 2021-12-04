@@ -5,15 +5,22 @@ export function useNotas(busqueda) {
   const notasIniciales = [];
 
   const [notas, setNotas] = useState(notasIniciales);
+  const [cargandoNotas, setCargandoNotas] = useState(false);
+  const [errorBusqueda, setErrorBusqueda] = useState({
+    error: false,
+    mensaje: ""
+  });
 
   const limiteDeNotas = 3;
 
   useEffect(
     function () {
-      console.log("BUSQUEDA: ", busqueda);
+      setCargandoNotas(true);
       buscarNotas(busqueda)
         .then((notas) => {
-          if (notas) {
+          setCargandoNotas(false);
+          if (notas && notas.length > 0) {
+            
             setNotas(notas);
           }
           else {
@@ -23,6 +30,12 @@ export function useNotas(busqueda) {
         })
         .catch((err) => {
           console.error(err);
+
+          setErrorBusqueda({
+            error: true,
+            mensaje: "Ocurrió un error al intentar obtener las notas. Intente más tarde."
+          })
+          setCargandoNotas(false);
           setNotas(notasIniciales);
         });
     },
@@ -36,5 +49,5 @@ export function useNotas(busqueda) {
     ]
   );
 
-  return { notas, limiteDeNotas };
+  return { notas, limiteDeNotas, cargandoNotas, errorBusqueda };
 }
