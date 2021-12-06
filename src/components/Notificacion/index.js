@@ -13,7 +13,7 @@ const useStyle = makeStyles(theme => ({
 
 export default function Notificacion(props) {
 
-    const { notificar, setNotificar} = props;
+    const { notificar = {}, setNotificar} = props;
     const classes = useStyle();
 
     const controlarApertura = (event, reason) => {

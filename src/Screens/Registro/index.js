@@ -1,43 +1,58 @@
 import React, { useState } from "react";
 
 import Boton from "../../components/Boton/index.js";
-import { registrarEstudiante } from "../../services/registrar";
 import { useCarreras } from "../../hooks/useCarreras";
+import Notificacion from "../../components/Notificacion/index.js";
 
 import './index.css'
+import Progreso from "../../components/Progreso/index.js";
+import { useRegistro } from "../../hooks/useRegistro.js";
 
 export default function RegistroScreen({ history }) {
-  const [nuevoEstudiante, setNuevoEstudiante] = useState({
+  const estudianteInicial = {
     nombres: "",
     apellidos: "",
     correo: "",
     usuario: "",
     contrasenia: "",
     carrera: "",
+  };
+  const [nuevoEstudiante, setNuevoEstudiante] = useState(estudianteInicial);
+  const [notificar, setNotificar] = useState({
+    abrir: false,
+    mensaje: "",
+    tipo: "success",
   });
 
   const [errorConfirmacionContrasenia, setErrorConfirmacionContrasenia] =
     useState("");
 
+  const [confirmacionContrasenia, setConfirmacionContrasenia] = useState("")
+
   const { carreras } = useCarreras();
 
-  const [errorRegistro, setErrorRegistro] = useState("");
+  const { registrar, cargando } = useRegistro();
 
   const actualizarInfo = (e) => {
     setNuevoEstudiante({
       ...nuevoEstudiante,
       [e.target.name]: e.target.value,
     });
-
-    setErrorRegistro("");
   };
 
   const cancelarRegistro = () => {
     history.push("/");
   };
 
+  const limpiarCampos = () => {
+    setNuevoEstudiante(estudianteInicial);
+    setConfirmacionContrasenia("");
+  }
+
   const validarConfirmacionContrasenia = (e) => {
     const confirmaContrasenia = e.target.value;
+
+    setConfirmacionContrasenia(confirmaContrasenia);
 
     if (nuevoEstudiante.contrasenia !== confirmaContrasenia) {
       setErrorConfirmacionContrasenia(
@@ -52,20 +67,29 @@ export default function RegistroScreen({ history }) {
     e.preventDefault();
 
     if (!errorConfirmacionContrasenia) {
-      registrarEstudiante(nuevoEstudiante)
-        .then((respuesta) => {
-          if (respuesta.exitoso) {
+      registrar(nuevoEstudiante).then((respuesta) => {
+        if (respuesta.exitoso) {
+          limpiarCampos();
+          setNotificar({
+            tipo: "info",
+            abrir: true,
+            mensaje: "Verifica tu correo.",
+          });
+          
+          setTimeout(() => {
             history.push({
               pathname: "validar-codigo",
               state: { usuario: nuevoEstudiante.usuario },
             });
-          } else {
-            setErrorRegistro(respuesta.mensaje);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          }, 3000);
+        } else {
+          setNotificar({
+            tipo: "error",
+            abrir: true,
+            mensaje: respuesta.mensaje,
+          });
+        }
+      });
     }
   };
 
@@ -78,6 +102,7 @@ export default function RegistroScreen({ history }) {
           Nombres (<span>*</span>)
         </label>
         <input
+          value={nuevoEstudiante.nombres}
           id="nombres"
           type="text"
           placeholder="Ingresa tu(s) nombre(s)"
@@ -91,6 +116,7 @@ export default function RegistroScreen({ history }) {
           Apellidos (<span>*</span>)
         </label>
         <input
+          value={nuevoEstudiante.apellidos}
           id="apellidos"
           type="text"
           minLength="2"
@@ -104,6 +130,7 @@ export default function RegistroScreen({ history }) {
           Correo electrónico (<span>*</span>)
         </label>
         <input
+          value={nuevoEstudiante.correo}
           id="correo"
           type="email"
           placeholder="zsXXXXXXXX@estudiantes.uv.mx"
@@ -118,11 +145,14 @@ export default function RegistroScreen({ history }) {
           Usuario (<span>*</span>)
         </label>
         <input
+          value={nuevoEstudiante.usuario}
           id="usuario"
           type="text"
-          placeholder="Ingresa tu usuario"
+          placeholder="Ingresa tu usuario. Por ejemplo nuevoUsuario1."
           name="usuario"
           minLength="5"
+          pattern="^\S+$"
+          title="El usuario no debe contener espacios y debe tener al menos 5 caracteres."
           required
           onChange={actualizarInfo}
         ></input>
@@ -131,6 +161,7 @@ export default function RegistroScreen({ history }) {
           Contraseña (<span>*</span>)
         </label>
         <input
+          value={nuevoEstudiante.contrasenia}
           type="password"
           id="contrasenia"
           name="contrasenia"
@@ -143,6 +174,7 @@ export default function RegistroScreen({ history }) {
           Confirmar contraseña (<span>*</span>)
         </label>
         <input
+          value={confirmacionContrasenia}
           type="password"
           id="confirmaContrasenia"
           name="confirmaContrasenia"
@@ -156,18 +188,23 @@ export default function RegistroScreen({ history }) {
         <label htmlFor="carreras">
           Carrera en la que estudias (<span>*</span>)
         </label>
-        <select id="carreras" required name="carrera" onChange={actualizarInfo}>
+        <select
+          value={nuevoEstudiante.carrera}
+          id="carreras"
+          required
+          name="carrera"
+          onChange={actualizarInfo}
+        >
           <option value="" selected disabled>
             Selecciona una carrera
           </option>
-          {carreras.map((carrera) => (
+          {carreras && carreras.map((carrera) => (
             <option key={carrera.id} value={carrera.id}>
               {carrera.nombre}
             </option>
           ))}
         </select>
       </fieldset>
-      {errorRegistro && <span>{errorRegistro}</span>}
 
       <span>* Campos obligatorios</span>
 
@@ -177,6 +214,9 @@ export default function RegistroScreen({ history }) {
         tipo="boton secundario"
         onClick={cancelarRegistro}
       />
+
+      <Progreso abrir={cargando} />
+      <Notificacion notificar={notificar} setNotificar={setNotificar} />
     </form>
   );
 }

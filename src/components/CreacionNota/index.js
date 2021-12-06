@@ -81,7 +81,6 @@ export default function CreacionNota() {
 
     crearNuevaNota(nota, datosEstudiante)
       .then((respuesta) => {
-        console.log("Respuesta en GUI: ", respuesta);
         setAbrirProgreso(false);
         if (respuesta.exitoso) {
           limpiarInfoNota();
@@ -99,9 +98,7 @@ export default function CreacionNota() {
           });
         }
       })
-      .catch((err) => {
-        console.log("error en GUI: ", err);
-
+      .catch(() => {
         setNotificar({
           abrir: true,
           mensaje: "Ocurrió un error en el servidor. Intente más tarde.",

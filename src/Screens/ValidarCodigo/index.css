@@ -1,6 +1,6 @@
 .form-validar {
     padding: 30px 20px;
-    margin: 10px auto;
+    margin: 7em auto;
     max-width: 400px;
     border-radius: 10px;
     box-shadow: 2px 2px 15px rgb(156, 156, 156);
@@ -34,43 +34,4 @@
   margin-bottom: 10px;
   border-radius: 5px;
   text-align: center;
-}
-
-button.validar {
-  padding: 19px 39px 18px 39px;
-  color: #FFF;
-  background-color: #4bc970;
-  font-size: 18px;
-  text-align: center;
-  font-style: normal;
-  border-radius: 5px;
-  width: 100%;
-  border: 1px solid #3ac162;
-  box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-button.validar:hover {
-  background-color: #29b653;
-}
-
-button.reenviar {
-  padding: 10px 10px 10px 10px;
-  color: #3ac162;
-  background-color: #FFF;
-  font-size: 18px;
-  text-align: center;
-  font-style: normal;
-  border-radius: 5px;
-  width: 40%;
-  border: 1px solid #3ac162;
-  box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-button.reenviar:hover {
-  background-color: #c9f5d7;
 }

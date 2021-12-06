@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import Boton from "../../components/Boton";
-import { validarCodigo } from "../../services/registrar";
+
+import { useRegistro } from "../../hooks/useRegistro.js";
 import './index.css'
+import Progreso from "../../components/Progreso";
+import Notificacion from "../../components/Notificacion/index.js";
 
 export default function ValidarCodigo({ location, history }) {
-  const { usuario } = location.state;
+  const { usuario } = location.state || "";
 
   const [codigoVerificacion, setCodigoVerificacion] = useState("");
-  const [errorValidacion, setErrorValidacion] = useState({
-    error: false,
+  const [notificar, setNotificar] = useState({
+    abrir: false,
     mensaje: "",
+    tipo: "success",
   });
+
+  const { validar , cargando } = useRegistro();
 
   const actualizarCodigo = (e) => {
     setCodigoVerificacion(e.target.value);
@@ -19,27 +25,33 @@ export default function ValidarCodigo({ location, history }) {
   const validarCodigoVerificacion = (e) => {
     e.preventDefault();
 
-    validarCodigo(usuario, codigoVerificacion)
-      .then((resultado) => {
-        console.log(resultado);
-        if (resultado.exitoso) {
-          setErrorValidacion({
-            error: false,
-            mensaje: "",
-          });
+    const verificacion = {
+      usuario,
+      codigoVerificacion
+    }
 
-          history.push("/login");
-        } else {
-          setErrorValidacion({
-            error: true,
-            mensaje: resultado.mensaje,
+    validar(verificacion).then((respuesta) => {
+      if (respuesta.exitoso) {
+        setCodigoVerificacion("");
+        setNotificar({
+          tipo: "success",
+          abrir: true,
+          mensaje: respuesta.mensaje,
+        });
+
+        setTimeout(() => {
+          history.push({
+            pathname: "/login"
           });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    console.log(codigoVerificacion);
+        }, 3000);
+      } else {
+        setNotificar({
+          tipo: "error",
+          abrir: true,
+          mensaje: respuesta.mensaje,
+        });
+      }
+    })
   };
 
   return (
@@ -67,12 +79,13 @@ export default function ValidarCodigo({ location, history }) {
         ></input>
       </fieldset>
 
-      <span>{errorValidacion.error && errorValidacion.mensaje}</span>
-
       <Boton texto="Validar" tipo="boton principal" />
 
       <p>¿No te ha llegado el código de verificación?</p>
       <Boton tipo="boton secundario" texto="Enviar de nuevo" />
+
+      <Progreso abrir={cargando} />
+      <Notificacion notificar={notificar} setNotificar={setNotificar} />
     </form>
   );
 }

@@ -39,13 +39,6 @@ function ResultadoBusqueda() {
         <Grid item xs={4}>
           <Paper elevation={3} className="paper">
             <h1>Filtros</h1>
-
-            {/* {notas && notas.length > 0 ? (
-              <Filtros texto={texto} carrera={carrera} materia={materia} tema={tema} op={op}/>
-            ) : (
-              <span>No se encontraron notas con la búsqueda realizada.</span>
-            )} */}
-
             {notas && notas.length > 0 ? (
               <Filtros
                 texto={texto}
@@ -57,16 +50,6 @@ function ResultadoBusqueda() {
             ) : (
               <Filtros cargar={false} />
             )}
-
-            {/* {!cargandoNotas ?
-              (<Filtros
-                texto={texto}
-                carrera={carrera}
-                materia={materia}
-                tema={tema}
-                op={op}
-              />) : <></>
-            } */}
           </Paper>
         </Grid>
 
