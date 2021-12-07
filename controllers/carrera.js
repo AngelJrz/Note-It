@@ -18,9 +18,6 @@ export async function obtenerCarreras(idCarrera) {
         console.error(error);
         return error;
       })
-      .finally(async () => {
-        await cerrarConexion();
-      });
 }
 
 export async function existeCarrera(idCarrera) {

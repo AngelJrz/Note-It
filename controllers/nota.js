@@ -83,7 +83,7 @@ export async function crearNuevaNota(nuevaNota) {
 }
 
 export async function obtenerNotas(busqueda) {
-  const { id, texto, carrera, materia, tema, op } = busqueda;
+  const { id, texto, carrera, materia, tema, op, limit = "0" } = busqueda;
 
   await abrirConexion();
 
@@ -138,6 +138,7 @@ export async function obtenerNotas(busqueda) {
           .populate("carrera", CATALOGO_POPULATE_CONFIG)
           .populate("materia", CATALOGO_POPULATE_CONFIG)
           .populate("tema", CATALOGO_POPULATE_CONFIG)
+          .limit(parseInt(limit))
           .then((notas) => {
             return notas;
           })
@@ -146,9 +147,6 @@ export async function obtenerNotas(busqueda) {
 
             return [];
           })
-          .finally(async () => {
-            await cerrarConexion();
-          });
       case OP_NOTAS_MAS_VISUALIZADAS:
         console.log("Búsqueda por Notas más visualizadas: ", filtro);
         filtro.visualizaciones = { $gt: 0 };
@@ -158,6 +156,7 @@ export async function obtenerNotas(busqueda) {
           .populate("carrera", CATALOGO_POPULATE_CONFIG)
           .populate("materia", CATALOGO_POPULATE_CONFIG)
           .populate("tema", CATALOGO_POPULATE_CONFIG)
+          .limit(parseInt(limit))
           .then((notas) => {
             return notas;
           })
@@ -166,9 +165,6 @@ export async function obtenerNotas(busqueda) {
 
             return [];
           })
-          .finally(async () => {
-            await cerrarConexion();
-          });
     }
     
     console.log("Búsqueda: ", filtro);
@@ -178,6 +174,7 @@ export async function obtenerNotas(busqueda) {
       .populate("carrera", CATALOGO_POPULATE_CONFIG)
       .populate("materia", CATALOGO_POPULATE_CONFIG)
       .populate("tema", CATALOGO_POPULATE_CONFIG)
+      .limit(parseInt(limit))
       .then((notas) => {
         return notas;
       })
@@ -186,9 +183,6 @@ export async function obtenerNotas(busqueda) {
 
         return [];
       })
-      .finally(async () => {
-        await cerrarConexion();
-      });
 }
 
 export async function existeNota(id) {
