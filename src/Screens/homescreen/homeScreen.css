@@ -12,3 +12,8 @@
 .row.top{
 	align-items: flex-start;
 }
+
+.seccion-inicio {
+	margin-top: 7em;
+	margin-bottom: 5em;
+}

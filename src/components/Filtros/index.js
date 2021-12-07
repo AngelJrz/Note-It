@@ -1,30 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { useCarreras } from "../../hooks/useCarreras";
 import { useMaterias } from "../../hooks/useMaterias";
 import useTemas from "../../hooks/useTemas";
 import Boton from "../../components/Boton/index.js";
+import { OP_NOTAS_UTILES, OP_NOTAS_MAS_VISUALIZADAS } from '../../utilerias/constantes.js';
 import './index.css'
 
 function Filtros(props) {
-    const { carrera = "", materia = "", tema = "", op = "", cargar } = props;
-
-    const texto = window.localStorage.getItem("texto") || "";
+    const { texto= "", carrera = "", materia = "", tema = "", op = '' } = props;
 
     const history = useHistory();
 
-    const { carreras } = useCarreras(cargar);
+    const { carreras } = useCarreras();
     const { materias, setCarrera } = useMaterias();
     const { temas, setMateria } = useTemas();
 
-    const filtrosIniciales = {
+    const [filtros, setFiltros] = useState({
+      texto,
       carrera,
       materia,
       tema,
-      op
-    };
+      op,
+    });
 
-    const [filtros, setFiltros] = useState(filtrosIniciales);
+    useEffect(() => {
+      setFiltros({ texto, carrera, materia, tema, op });
+    }, [texto, carrera, materia, tema, op]);
 
     const cambioDeFiltro = (e) => {
 
@@ -35,8 +37,6 @@ function Filtros(props) {
         ...filtros,
         [e.target.name]: e.target.value,
       });
-
-      
 
       if (nombre === "carrera") {
         setCarrera(valor);
@@ -139,6 +139,7 @@ function Filtros(props) {
               id="utiles"
               name="op"
               value="1"
+              checked={filtros.op === OP_NOTAS_UTILES}
               onChange={cambioDeFiltro}
             />
             Más útiles
@@ -149,6 +150,7 @@ function Filtros(props) {
               id="masVisualizadas"
               name="op"
               value="2"
+              checked={filtros.op === OP_NOTAS_MAS_VISUALIZADAS}
               onChange={cambioDeFiltro}
             />
             Más visualizadas
