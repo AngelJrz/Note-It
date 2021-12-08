@@ -1,5 +1,7 @@
 import { existeCarrera } from "../controllers/carrera.js";
 import { existeEstudiante, existeUsuario } from "../controllers/estudiante.js";
+import { MENSAJE_ERROR_APELLIDOS_ESTUDIANTE, MENSAJE_ERROR_NOMBRE_ESTUDIANTE } from "./constantes.js";
+import { checkSchemaCadena } from "./validadorCadena.js";
 
 function esEmailCorrecto(email) {
   const patter = /zs([0-9]{8})+@estudiantes\.uv\.mx/;
@@ -17,16 +19,18 @@ function esEmailCorrecto(email) {
 
 export const checkSchemaEstudiante = {
   nombres: {
+    ...checkSchemaCadena.cadena,
     isLength: {
-      errorMessage: "El nombre debe tener al menos dos caracteres.",
-      options: { min: 2 },
+      errorMessage: MENSAJE_ERROR_NOMBRE_ESTUDIANTE,
+      options: { min: 2, max: 80 },
     },
   },
   apellidos: {
+    ...checkSchemaCadena.cadena,
     isLength: {
       errorMessage:
-        "El / Los appellido(s) debe(n) tener al menos dos caracteres.",
-      options: { min: 2 },
+        MENSAJE_ERROR_APELLIDOS_ESTUDIANTE,
+      options: { min: 2, max: 100 },
     },
   },
   correo: {
@@ -45,7 +49,7 @@ export const checkSchemaEstudiante = {
   carrera: {
     isMongoId: {
       errorMessage: "El id de la carrera no cuenta con un formato correcto.",
-      bail: true
+      bail: true,
     },
     custom: {
       options: async (value) => {

@@ -30,3 +30,10 @@ export const ACTUALIZAR_CONFIG = { rawResult: true, useFindAndModify: false };
 export const OP_NOTAS_UTILES = "1";
 export const OP_NOTAS_MAS_VISUALIZADAS = "2";
 export const OK_STATUS = 1;
+
+export const MENSAJE_ERROR_CADENA = "El dato esperado debe ser de tipo cadena.";
+export const MENSAJE_ERROR_NOMBRE_ESTUDIANTE =
+  "El nombre debe ser de al menos 2 caracteres y máximo 80.";
+
+export const MENSAJE_ERROR_APELLIDOS_ESTUDIANTE =
+  "El / Los appellido(s) debe(n) tener al menos 2 caracteres y máximo 100.";

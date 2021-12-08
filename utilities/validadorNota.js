@@ -3,11 +3,12 @@ import { existeEstudiante, existeUsuario } from "../controllers/estudiante.js";
 import { existeMateria } from "../controllers/materia.js";
 import { existeNota } from "../controllers/nota.js";
 import { existeTema } from "../controllers/tema.js";
+import { checkSchemaCadena } from "./validadorCadena.js";
 import { checkSchemaEstudianteId, checkSchemaUsuarioEstudiante } from "./validadorEstudiante.js";
 
 export const checkSchemaNota = {
   titulo: {
-    isString: true,
+    ...checkSchemaCadena.cadena,
     isLength: {
       errorMessage:
         "El título de la nota debe tener al menos 5 caracteres y máximo 50 caracteres.",
@@ -182,6 +183,7 @@ export const checkSchemaComentario = {
   },
 
   contenido: {
+    ...checkSchemaCadena.cadena,
     isLength: {
       errorMessage:
         "El contenido del comentario debe tener al menos 20 caracteres y máximo 300.",

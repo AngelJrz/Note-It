@@ -1,8 +1,9 @@
 import { existeEstudiante } from "../controllers/estudiante.js";
+import { checkSchemaCadena } from "./validadorCadena.js";
 
 const checkSchemaLista = {
   nombre: {
-    isString: true,
+    ...checkSchemaCadena.cadena,
     isLength: {
       options: { min: 3, max: 60 },
       errorMessage:
@@ -10,7 +11,7 @@ const checkSchemaLista = {
     },
   },
   descripcion: {
-    isString: true,
+    ...checkSchemaCadena.cadena,
     isLength: {
       options: { min: 0, max: 60 },
       errorMessage:
