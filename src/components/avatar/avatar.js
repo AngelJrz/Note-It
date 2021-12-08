@@ -92,7 +92,7 @@ export default function AvatarPerfil(props) {
           <ListItemIcon>
             <ListAltIcon fontSize="small" />
           </ListItemIcon>
-          Mis listas
+          <Link to="/listas">Mis listas</Link>
         </MenuItem>
         <MenuItem onClick={Salir}>
           <ListItemIcon>

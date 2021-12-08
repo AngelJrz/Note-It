@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import './DetallesNota.css'
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -16,6 +16,9 @@ import Modal from '@mui/material/Modal';
 import { EliminarNota, ObtenerNota } from '../../hooks/Notas.js';
 import contextoEstudiante from '../../context/UserContext';
 import { useHistory } from "react-router-dom";
+import Notificacion from "../../components/Notificacion/index";
+import Progreso from "../../components/Progreso";
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -36,13 +39,12 @@ export default function DetallesNota(props){
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-    const [abrirAviso, setAbrirAviso] = React.useState(false);
-    const handleOpenAviso = () => setAbrirAviso(true);
-    const handleCloseAviso = () => {
-      setAbrirAviso(false);
-      history.push("/");
-    }
+    const [abrirProgreso, setAbrirProgreso] = useState(false);
+    const [notificar, setNotificar] = useState({
+      abrir: false,
+      mensaje: "",
+      tipo: "success",
+    });
 
     function stringToColor(string) {
         let hash = 0;
@@ -74,13 +76,33 @@ export default function DetallesNota(props){
       }
 
     function eliminaNota() {
-      EliminarNota(nota[0].id, datosEstudiante.token).then(resultado => {
-        if (resultado.exitoso) {
+      setAbrirProgreso(true);
+      EliminarNota(nota[0].id, datosEstudiante.token)
+      .then(respuesta => {
+        setAbrirProgreso(false);
+        if (respuesta.exitoso) {
           handleClose();
-          handleOpenAviso();
+          setNotificar({
+            ...notificar,
+            abrir: true,
+            mensaje: respuesta.mensaje,
+          });
+          history.push("/");
         } else {
-          alert('No se elimino');
+          setAbrirProgreso(false);
+          setNotificar({
+            abrir: true,
+            mensaje: respuesta.mensaje,
+            tipo: "error",
+          });
         }
+      });
+    }
+
+    function AgregarALista() {
+      history.push({
+        pathname: '/listas',
+        state: { detail: idNota }
       });
     }
     
@@ -90,7 +112,7 @@ export default function DetallesNota(props){
         nota && nota.map(n => (
           <Grid container spacing={2}>
             <Grid item xs={8}>
-              <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }}>
+              <Paper elevation={3} sx={{ padding: 2.5, marginTop: 7  }}>
                   <Typography variant="h4" gutterBottom component="div">
                       <h1>{n.titulo}</h1>
                   </Typography>
@@ -103,7 +125,7 @@ export default function DetallesNota(props){
                   </Typography>
                   {
                     datosEstudiante !== null && datosEstudiante.estudiante.usuario === n.autor.usuario ?
-                    <Stack direction="row" spacing={2} sx={{ marginTop: 4, flexDirection: "row-reverse" }}>
+                  <Stack direction="row" spacing={2} sx={{ marginTop: 4, flexDirection: "row-reverse" }}>
                     <Button onClick={handleOpen} variant="outlined" color="error" startIcon={<DeleteIcon />} sx={{ marginLeft: 2}}>Eliminar</Button>
                     <Modal
                       open={open}
@@ -125,26 +147,13 @@ export default function DetallesNota(props){
                       </Box>
                     </Modal>
 
-                    <Modal
-                      open={abrirAviso}
-                      onClose={handleClose}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description"
-                    >
-                      <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                          Éxito
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                          La operación se realizo correctamente
-                        </Typography>
-                        <Stack direction="row" spacing={2} sx={{ marginTop: 3, flexDirection: "row-reverse" }}>
-                          <Button onClick={handleCloseAviso} variant="contained" color="success">Aceptar</Button>
-                        </Stack>
-                      </Box>
-                    </Modal>
-
-                    <Button variant="outlined" color="secondary" startIcon={<EditIcon />}>Editar</Button>
+                    <Button variant="outlined" color="secondary" startIcon={<EditIcon />} sx={{ marginLeft: 2}}>Editar</Button>
+                    <Button onClick={AgregarALista} variant="outlined" color="success" startIcon={<PlaylistAddIcon />}>Añadir a lista</Button>
+                  </Stack>
+                  :
+                  datosEstudiante !== null ?
+                  <Stack direction="row" spacing={2} sx={{ marginTop: 4, flexDirection: "row-reverse" }}>
+                    <Button onClick={AgregarALista} variant="outlined" color="success" startIcon={<PlaylistAddIcon />}>Añadir a lista</Button>
                   </Stack>
                   :
                   <p></p>
@@ -152,8 +161,8 @@ export default function DetallesNota(props){
               </Paper>
             </Grid>
 
-            <Grid item xs={4}>
-               <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }} justifyContent="center" style={{textAlign: "center"}}>
+            <Grid item xs={4} sx={{ marginTop: 7  }}>
+               <Paper elevation={3} sx={{ padding: 2.5 }} justifyContent="center" style={{textAlign: "center"}}>
                     <Avatar {...stringAvatar(`${n.autor.nombres} ${n.autor.apellidos}`)} sx={{ width: 80, height: 80, margin: "0 auto"}}/>
                     <Typography variant="h6" gutterBottom component="div" sx={{marginTop: 1 }}>
                     <Link to={`/estudiante/${n.autor.usuario}`}>
@@ -193,6 +202,8 @@ export default function DetallesNota(props){
           </Grid>
         ))
       }
+        <Progreso abrir={abrirProgreso} />
+        <Notificacion notificar={notificar} setNotificar={setNotificar} />
       </div>
     );
 }

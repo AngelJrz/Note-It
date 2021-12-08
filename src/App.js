@@ -10,6 +10,8 @@ import {EstudianteContextProvider}  from './context/UserContext.js';
 import PerfilEstudiante from './Screens/perfilEstudiante/PerfilEstudiante.js';
 import ResultadoBusqueda from './Screens/ResultadoBusqueda/index.js';
 import Crearlista from './Screens/CrearLista/CrearLista.js';
+import ListasScreen from './Screens/Listas/ListasScreen.js';
+import DetallesLista from './Screens/DetallesLista/DetallesLista.js';
 
 function App() { 
   return (
@@ -29,6 +31,8 @@ function App() {
             <Route path="/validar-codigo" component={ValidarCodigo}></Route>
             <Route path="/crear-nota" component={CrearNota}></Route>
             <Route path="/crear-lista" component={Crearlista}></Route>
+            <Route path="/listas" component={ListasScreen}></Route>
+            <Route path="/detalles-lista" component={DetallesLista}></Route>
             <Route
               path="/estudiante/:usuario"
               component={PerfilEstudiante}
