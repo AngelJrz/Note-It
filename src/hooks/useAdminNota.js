@@ -3,6 +3,13 @@ import { useCarreras } from "./useCarreras";
 import { useMaterias } from "./useMaterias";
 import useTemas from "./useTemas";
 import useCuerpoNota from "./useCuerpoNota";
+import { LARGO_INCORRECTO } from "../utilerias/constantes";
+
+const LARGO_MINIMO_TITULO = 5;
+const LARGO_MAXIMO_TITULO = 50;
+const LARGO_MINIMO_CUERPO = 20;
+const LARGO_MAXIMO_CUERPO = 3000;
+const LARGO_CUERPO_DEFUALT = 8;
 
 export default function useAdminNota(
   notaDefualt = {
@@ -41,6 +48,14 @@ export default function useAdminNota(
     }
   };
 
+  const onInformacionCargada = (nombre, valor) => {
+    if (nombre === "carrera") {
+      setCarrera(valor);
+    } else if (nombre === "materia") {
+      setMateria(valor);
+    }
+  };
+
   const cambioDeCuerpo = (val) => {
     nota.cuerpo = val;
   };
@@ -50,6 +65,62 @@ export default function useAdminNota(
       nota.imagen = imagen.current;
       setImagenPreview(URL.createObjectURL(e.target.files[0]));
     }
+  };
+
+  const esTituloIncorrecto = () => {
+    var esIncorrecto = false;
+
+    if (
+      nota.titulo.length < LARGO_MINIMO_TITULO ||
+      nota.titulo.length > LARGO_MAXIMO_TITULO
+    ) {
+      esIncorrecto = true;
+    }
+
+    return esIncorrecto;
+  };
+
+  const estaCarreraSeleccionada = () => {
+    var estaSeleccionada = true;
+
+    if (nota.carrera.length === LARGO_INCORRECTO) {
+      estaSeleccionada = false;
+    }
+
+    return estaSeleccionada;
+  }
+
+  const estaMateriaSeleccionada = () => {
+    var estaSeleccionada = true;
+
+    if (nota.materia.length === LARGO_INCORRECTO) {
+      estaSeleccionada = false;
+    }
+
+    return estaSeleccionada;
+  };
+
+  const estaTemaSeleccionado = () => {
+    var estaSeleccionado = true;
+
+    if (nota.tema.length === LARGO_INCORRECTO) {
+      estaSeleccionado = false;
+    }
+
+    return estaSeleccionado;
+  };
+
+  const estaCuerpoIncorrecto = () => {
+    var estaIncorrecto = false;
+
+    if (
+      nota.cuerpo.value.length < LARGO_MINIMO_CUERPO + LARGO_CUERPO_DEFUALT ||
+      nota.cuerpo.value.length > LARGO_MAXIMO_CUERPO + LARGO_CUERPO_DEFUALT
+    ) {
+      estaIncorrecto = true;
+    }
+
+    return estaIncorrecto;
   };
 
   const limpiarInfoNota = () => {
@@ -72,6 +143,12 @@ export default function useAdminNota(
     cambioDeEditorState,
     actualizarImagen,
     setImagenPreview,
-    limpiarInfoNota
+    limpiarInfoNota,
+    onInformacionCargada,
+    esTituloIncorrecto,
+    estaCarreraSeleccionada,
+    estaMateriaSeleccionada,
+    estaTemaSeleccionado,
+    estaCuerpoIncorrecto
   };
 }

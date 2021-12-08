@@ -7,3 +7,5 @@ export const MENSAJE_ERROR_SERVIDOR =
 
 export const OP_NOTAS_MAS_VISUALIZADAS = "2";
 export const OP_NOTAS_UTILES = "1";
+
+export const LARGO_INCORRECTO = 0;

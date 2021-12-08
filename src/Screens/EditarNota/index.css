@@ -1,0 +1,10 @@
+.container {
+    margin-top: 7em;
+    margin-bottom: 2em;
+    justify-content: center;
+}
+
+.formulario {
+    padding: 20px;
+    max-width: 900px;
+}

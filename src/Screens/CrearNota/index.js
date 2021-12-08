@@ -9,11 +9,11 @@ import contextoEstudiante from '../../context/UserContext';
 export default function CrearNota() {
   const history = useHistory();
   const {datosEstudiante} = useContext(contextoEstudiante);
-  useEffect(() => { 
+  useEffect(() => {
     if (datosEstudiante === null) {
-        history.push("/");
+      history.push("/");
     }
-}, [])
+  }, []);
 
   const styles = useStyles();
 

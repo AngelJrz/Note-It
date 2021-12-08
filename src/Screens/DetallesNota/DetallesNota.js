@@ -105,6 +105,12 @@ export default function DetallesNota(props){
         state: { detail: idNota }
       });
     }
+
+    function irAEditarNota() {
+      history.push({
+        pathname: `/nota/${idNota}/editar`
+      });
+    }
     
     return( 
       <div>
@@ -147,7 +153,7 @@ export default function DetallesNota(props){
                       </Box>
                     </Modal>
 
-                    <Button variant="outlined" color="secondary" startIcon={<EditIcon />} sx={{ marginLeft: 2}}>Editar</Button>
+                    <Button onClick={irAEditarNota} variant="outlined" color="secondary" startIcon={<EditIcon />} sx={{ marginLeft: 2}}>Editar</Button>
                     <Button onClick={AgregarALista} variant="outlined" color="success" startIcon={<PlaylistAddIcon />}>Añadir a lista</Button>
                   </Stack>
                   :

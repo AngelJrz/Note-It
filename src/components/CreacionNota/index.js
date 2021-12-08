@@ -86,7 +86,7 @@ export default function CreacionNota() {
           limpiarInfoNota();
 
           setNotificar({
-            ...notificar,
+            tipo: "success",
             abrir: true,
             mensaje: respuesta.mensaje,
           });

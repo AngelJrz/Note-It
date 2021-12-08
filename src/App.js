@@ -12,6 +12,7 @@ import ResultadoBusqueda from './Screens/ResultadoBusqueda/index.js';
 import Crearlista from './Screens/CrearLista/CrearLista.js';
 import ListasScreen from './Screens/Listas/ListasScreen.js';
 import DetallesLista from './Screens/DetallesLista/DetallesLista.js';
+import EditarNota from './Screens/EditarNota/index.js';
 
 function App() { 
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/crear-lista" component={Crearlista}></Route>
             <Route path="/listas" component={ListasScreen}></Route>
             <Route path="/detalles-lista" component={DetallesLista}></Route>
+            <Route path="/nota/:id/editar" component={EditarNota}></Route>
             <Route
               path="/estudiante/:usuario"
               component={PerfilEstudiante}

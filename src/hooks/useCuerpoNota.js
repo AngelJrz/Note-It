@@ -10,7 +10,7 @@ export default function useCuerpoNota(esCreacion = true, cuerpoAEditar = '') {
     if (esCreacion) {
         editorState = EditorState.createEmpty();
     }
-    else {
+    else if (cuerpoAEditar) {
         editorState = EditorState.createWithContent(
           ContentState.createFromBlockArray(convertFromHTML(cuerpoAEditar))
         );
