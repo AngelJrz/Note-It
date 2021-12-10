@@ -149,7 +149,6 @@ export async function buscarNotas(busqueda) {
 }
 
 export async function actualizarNotaServicio(nota, datosEstudiante) {
-
   const notaAActualizar = {
     ...nota,
     cuerpo: nota.cuerpo.value
@@ -165,12 +164,38 @@ export async function actualizarNotaServicio(nota, datosEstudiante) {
       },
       body: JSON.stringify(notaAActualizar),
     }
-  )
+  ).then((response) => {
+    return response.json();
+  })
+  .then((resultado) => {
+    return resultado;
+  })
+  .catch((error) => {
+    console.log('error', error)
+  });
+}
+
+export async function ComentarNota(idNota, comentario, token) {
+    var myHeaders = new Headers();
+    myHeaders.append("authorization", token);
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify(comentario);
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw
+    };
+
+    return fetch(`${REACT_APP_API_URL}${REACT_APP_NOTAS_ENDPOINT}/${idNota}/comentarios`, requestOptions)
     .then((response) => {
       return response.json();
     })
     .then((resultado) => {
-      console.log(resultado);
       return resultado;
+    })
+    .catch((error) => {
+      console.log('error', error)
     });
 }

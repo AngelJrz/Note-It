@@ -1,24 +1,25 @@
-import React, {useContext, useState} from 'react';
 import './DetallesNota.css'
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Avatar from '@mui/material/Avatar';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import { Link } from 'react-router-dom';
+import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import Modal from '@mui/material/Modal';
-import { EliminarNota, ObtenerNota } from '../../hooks/Notas.js';
-import contextoEstudiante from '../../context/UserContext';
+import { Link } from 'react-router-dom';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import Boton from '../../components/Boton';
+import Divider from '@mui/material/Divider';
 import { useHistory } from "react-router-dom";
-import Notificacion from "../../components/Notificacion/index";
+import EditIcon from '@mui/icons-material/Edit';
 import Progreso from "../../components/Progreso";
+import React, {useContext, useState} from 'react';
+import Typography from '@mui/material/Typography';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { ComentarNota } from '../../services/notas';
+import contextoEstudiante from '../../context/UserContext';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import Notificacion from "../../components/Notificacion/index";
+import { EliminarNota, ObtenerNota } from '../../hooks/Notas.js';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -112,6 +113,37 @@ export default function DetallesNota(props){
       });
     }
     
+    function enviarComentario(e) {
+      e.preventDefault();
+      setAbrirProgreso(true);
+      const comentario = document.getElementById('comentarioDeNota');
+      const nuevoComentario = {
+        usuario: datosEstudiante.estudiante.usuario,
+        contenido: comentario.value
+      }
+
+      ComentarNota(idNota, nuevoComentario, datosEstudiante.token)
+      .then(respuesta => {
+        setAbrirProgreso(false);
+        if (respuesta.exitoso) {
+          handleClose();
+          setNotificar({
+            ...notificar,
+            abrir: true,
+            mensaje: respuesta.mensaje,
+          });
+          history.go(0)
+        } else {
+          setAbrirProgreso(false);
+          setNotificar({
+            abrir: true,
+            mensaje: respuesta.mensaje,
+            tipo: "error",
+          });
+        }
+      });
+    }
+    
     return( 
       <div>
       {
@@ -188,21 +220,46 @@ export default function DetallesNota(props){
                     <Typography variant="h6" gutterBottom component="div">
                         Comentarios
                     </Typography>
-                    <Box
-                      component="form"
-                      sx={{
-                        '& > :not(style)': { m: 1, width: '25ch' },
-                      }}
-                      noValidate
-                      autoComplete="off"
-                    >
-                              <TextField
-                          id="outlined-textarea"
-                          label="Comentario"
-                          placeholder="Comentario"
-                          multiline
-                        />
-                    </Box>
+                    {
+                      datosEstudiante !== null  ?
+                      <form className='' onSubmit={enviarComentario}> 
+                          <input  type='text'
+                                      id='comentarioDeNota'  
+                                      placeholder='Comentario'
+                                      name="comentario"
+                                      required>
+                          </input>
+                          <Boton texto="Enviar" tipo="boton principal"/>
+                      </form>
+                    :
+                      <p></p>
+                    }
+
+                    {
+                      n.comentarios.length > 0 ?  
+                        n.comentarios.map(comentario => (
+                          <Paper sx={{ padding: 2.5, marginTop: 2 }} justifyContent="left" style={{textAlign: "left"}}>
+                            <Typography variant="body1" gutterBottom component="div" sx={{marginTop: 1 }}>
+                              <Link to={`/estudiante/${comentario.usuario}`}>
+                                <span>{comentario.usuario}:</span>
+                              </Link>
+                            </Typography>
+      
+                            <Typography variant="body1" gutterBottom component="div" sx={{marginTop: 1 }}>
+                              {comentario.contenido}
+                            </Typography>
+                            <Typography variant="body2" gutterBottom component="div" sx={{marginTop: 1 }}>
+                              {comentario.fecha.substring(0,10)}
+                            </Typography>
+                          </Paper>
+                        )) 
+                        :
+                        <Paper sx={{ padding: 2.5 }} justifyContent="left" style={{textAlign: "center"}}>
+                          <Typography variant="h5" gutterBottom component="div" sx={{marginTop: 1 }}>
+                            No cuenta con comentarios
+                          </Typography>
+                        </Paper>
+                    }
                 </Paper>
             </Grid>
           </Grid>

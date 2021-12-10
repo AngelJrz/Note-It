@@ -42,7 +42,7 @@ export default function PerfilEstudiante(props){
     
     return( 
       <div>
-        <Grid container spacing={2} justifyContent="center" style={{textAlign: "center"}}>
+        <Grid container spacing={2} justifyContent="center" sx={{ padding: 2.5, marginTop: 7  }} style={{textAlign: "center"}}>
           <Grid item xs={8}>
             <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }} >
                 <Avatar {...stringAvatar(`${estudiante.nombres} ${estudiante.apellidos}`)} sx={{ width: 100, height: 100, margin: "0 auto"}}/>

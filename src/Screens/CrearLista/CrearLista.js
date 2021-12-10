@@ -75,13 +75,13 @@ export default function Crearlista(){
             </div>
             <div>
                 <label htmlFor='nombre'>Nombre de lista</label>
-                <input type='text' id='nombre' placeholder='Ingresa tu usuario' onChange={CambioDeDatos} name="nombre" required>
+                <input type='text' id='nombre' placeholder='Nombre de la lista' onChange={CambioDeDatos} name="nombre" required>
                 </input>
             </div>
 
             <div className="areaPassword">
                 <label htmlFor='descripcion'>Descripción</label>
-                <input type='text' id='descripcion' placeholder='Ingresa tu contraseña' onChange={CambioDeDatos} name="descripcion" required>
+                <input type='text' id='descripcion' placeholder='Ingresa una descripión' onChange={CambioDeDatos} name="descripcion" required>
                 </input>
             </div>
 
