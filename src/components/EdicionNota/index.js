@@ -1,13 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import Boton from "../../components/Boton/index.js";
-import ImageUpload from "../../components/ImageUpload";
 import Progreso from "../../components/Progreso";
 import Notificacion from "../../components/Notificacion";
 import EditorContenido from "../EditorContenido";
 import useAdminNota from "../../hooks/useAdminNota";
+import { MENSAEJE_ERROR_CUERPO_NOTA, MENSAEJE_ERROR_MATERIA_NO_SELECCIONADA, MENSAEJE_ERROR_TEMA_NO_SELECCIONADO, MENSAJE_ERROR_CARRERA_NO_SELECCIONADA, MENSAJE_ERROR_SERVIDOR, MENSAJE_ERROR_TITULO_NOTA } from '../../utilerias/constantes.js';
+import { actualizarNotaServicio } from '../../services/notas.js';
 
 export default function EdicionNota(props) {
     const { notaAEditar, creador } = props;
+
+    const history = useHistory();
+
+    const [abrirProgreso, setAbrirProgreso] = useState(false);
+    const [notificar, setNotificar] = useState({
+      abrir: false,
+      mensaje: "",
+      tipo: "success",
+    });
 
     const {
       nota,
@@ -18,9 +29,12 @@ export default function EdicionNota(props) {
       cambioDeInfoNota,
       cambioDeCuerpo,
       cambioDeEditorState,
-      limpiarInfoNota,
       onInformacionCargada,
-      esTituloIncorrecto
+      esTituloIncorrecto,
+      estaCarreraSeleccionada,
+      estaMateriaSeleccionada,
+      estaTemaSeleccionado,
+      estaCuerpoIncorrecto
     } = useAdminNota(
       {
         titulo: notaAEditar.titulo,
@@ -48,14 +62,104 @@ export default function EdicionNota(props) {
         e.preventDefault();
 
         if (esTituloIncorrecto()) {
-            console.log("TITULO INCORRECTO!");
+            setNotificar({
+              tipo: "error",
+              abrir: true,
+              mensaje: MENSAJE_ERROR_TITULO_NOTA
+            })
+
+            return;
         }
 
-        console.log("NOTA A ACT: ", nota);
+        if (!estaCarreraSeleccionada()) {
+          setNotificar({
+            tipo: "error",
+            abrir: true,
+            mensaje: MENSAJE_ERROR_CARRERA_NO_SELECCIONADA,
+          });
+
+          return;
+        }
+
+        if (!estaMateriaSeleccionada()) {
+          setNotificar({
+            tipo: "error",
+            abrir: true,
+            mensaje: MENSAEJE_ERROR_MATERIA_NO_SELECCIONADA,
+          });
+
+          return;
+        }
+
+        if (!estaTemaSeleccionado()) {
+          setNotificar({
+            tipo: "error",
+            abrir: true,
+            mensaje: MENSAEJE_ERROR_TEMA_NO_SELECCIONADO,
+          });
+
+          return;
+        }
+
+        if (estaCuerpoIncorrecto()) {
+          setNotificar({
+            tipo: "error",
+            abrir: true,
+            mensaje: MENSAEJE_ERROR_CUERPO_NOTA,
+          });
+
+          return;
+        }
+
+        setAbrirProgreso(true);
+        nota.id = notaAEditar.id;
+        actualizarNotaServicio(nota, creador)
+        .then((respuesta) => {
+          if (respuesta && respuesta.exitoso) {
+            setNotificar({
+              tipo: "success",
+              abrir: true,
+              mensaje: respuesta.mensaje,
+            });
+
+            setTimeout(() => {
+              setAbrirProgreso(false);
+              history.push({
+                pathname: `/Nota/${nota.id}`
+              });
+            }, 2000);
+          }
+          else {
+            setAbrirProgreso(false);
+            setNotificar({
+              tipo: "error",
+              abrir: true,
+              mensaje: respuesta.mensaje,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+
+          setAbrirProgreso(false);
+          setNotificar({
+            tipo:"error",
+            abrir: true,
+            mensaje: MENSAJE_ERROR_SERVIDOR
+          })
+        })
     }
 
     return (
       <form onSubmit={actualizarNota}>
+        <div className="previewImagen">
+          <img
+            src={notaAEditar.imagen}
+            alt={`Imagen para la nota ${notaAEditar.titulo}`}
+            title={`Imagen para la nota ${notaAEditar.titulo}`}
+          />
+        </div>
+
         <fieldset>
           <label htmlFor="titulo">
             Título (<span className="danger">*</span>)
@@ -145,14 +249,12 @@ export default function EdicionNota(props) {
           />
         </fieldset>
 
-        {/* {errorCreacion && <span className="danger">{errorCreacion}</span>} */}
-
         <span className="danger">* Campos obligatorios</span>
         <Boton texto="Actualizar nota" tipo="boton principal" />
         <Boton texto="Cancelar" tipo="boton secundario" />
 
-        {/* <Progreso abrir={abrirProgreso} /> */}
-        {/* <Notificacion notificar={notificar} setNotificar={setNotificar} /> */}
+        <Progreso abrir={abrirProgreso} />
+        <Notificacion notificar={notificar} setNotificar={setNotificar} />
       </form>
     );
 }

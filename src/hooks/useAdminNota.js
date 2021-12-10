@@ -13,6 +13,7 @@ const LARGO_CUERPO_DEFUALT = 8;
 
 export default function useAdminNota(
   notaDefualt = {
+    id: "",
     titulo: "",
     cuerpo: "",
     carrera: "",
@@ -123,6 +124,10 @@ export default function useAdminNota(
     return estaIncorrecto;
   };
 
+  function obtenerLargoCuerpoNota() {
+    return nota.cuerpo.value.length - LARGO_CUERPO_DEFUALT;
+  }
+
   const limpiarInfoNota = () => {
     setNota(notaDefualt);
     cambioDeEditorState(null);
@@ -149,6 +154,7 @@ export default function useAdminNota(
     estaCarreraSeleccionada,
     estaMateriaSeleccionada,
     estaTemaSeleccionado,
-    estaCuerpoIncorrecto
+    estaCuerpoIncorrecto,
+    obtenerLargoCuerpoNota,
   };
 }

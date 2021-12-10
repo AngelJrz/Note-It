@@ -8,6 +8,7 @@ import Notificacion from "../../components/Notificacion";
 import EditorContenido from "../EditorContenido";
 import useAdminNota from "../../hooks/useAdminNota";
 import contextoEstudiante from "../../context/UserContext";
+import { MENSAEJE_ERROR_CUERPO_NOTA, MENSAEJE_ERROR_MATERIA_NO_SELECCIONADA, MENSAEJE_ERROR_TEMA_NO_SELECCIONADO, MENSAJE_ERROR_CARRERA_NO_SELECCIONADA, MENSAJE_ERROR_SERVIDOR, MENSAJE_ERROR_TITULO_NOTA } from "../../utilerias/constantes";
 
 export default function CreacionNota() {
   const {datosEstudiante} = useContext(contextoEstudiante);
@@ -25,6 +26,12 @@ export default function CreacionNota() {
       actualizarImagen,
       setImagenPreview,
       limpiarInfoNota,
+      esTituloIncorrecto,
+      estaCarreraSeleccionada,
+      estaMateriaSeleccionada,
+      estaTemaSeleccionado,
+      estaCuerpoIncorrecto,
+      obtenerLargoCuerpoNota
     } = useAdminNota();
 
   const [abrirProgreso, setAbrirProgreso] = useState(false);
@@ -33,52 +40,63 @@ export default function CreacionNota() {
     mensaje: "",
     tipo: "success",
   });
-  const [errorCreacion, setErrorCreacion] = useState("");
 
   const crearNota = (e) => {
     e.preventDefault();
-    const largoMinimoTitulo = 5;
-    const largoMaximoTitulo = 50;
-    const largoMinimoCuerpo = 20;
-    const largoMaximoCuerpo = 3000;
-    const largoPorDefectoCuerpo = 8;
 
-    if (
-      nota.titulo.length < largoMinimoTitulo ||
-      nota.titulo.length > largoMaximoTitulo
-    ) {
-      setErrorCreacion(
-        `El título de la nota debe tener al menos 5 caracteres y máximo 50 caracteres. Actualmente tiene ${nota.titulo.length} caracteres.`
-      );
+    if (esTituloIncorrecto()) {
+
+      setNotificar({
+        tipo: "error",
+        abrir: true,
+        mensaje: `${MENSAJE_ERROR_TITULO_NOTA} Actualmente tiene ${nota.titulo.length} caracteres.`,
+      });
 
       return;
-    } else if (nota.carrera.length === 0) {
-      setErrorCreacion("La carrera es obligatoria, por favor selecciona una.");
+    } 
+    
+    if (!estaCarreraSeleccionada()) {
+      setNotificar({
+        tipo: "error",
+        abrir: true,
+        mensaje: MENSAJE_ERROR_CARRERA_NO_SELECCIONADA,
+      });
 
       return;
-    } else if (nota.materia.length === 0) {
-      setErrorCreacion("La materia es obligatoria, por favor selecciona una.");
+    } 
+    
+    if (!estaMateriaSeleccionada()) {
+      setNotificar({
+        tipo: "error",
+        abrir: true,
+        mensaje: MENSAEJE_ERROR_MATERIA_NO_SELECCIONADA,
+      });
 
       return;
-    } else if (nota.tema.length === 0) {
-      setErrorCreacion("El tema es obligatorio, por favor selecciona una.");
+    } 
+    
+    if (!estaTemaSeleccionado()) {
+      setNotificar({
+        tipo: "error",
+        abrir: true,
+        mensaje: MENSAEJE_ERROR_TEMA_NO_SELECCIONADO,
+      });
 
       return;
-    } else if (
-      nota.cuerpo.value.length < largoMinimoCuerpo + largoPorDefectoCuerpo ||
-      nota.cuerpo.value.length > largoMaximoCuerpo + largoPorDefectoCuerpo
-    ) {
-      setErrorCreacion(
-        `El cuerpo de la nota debe tener al menos 20 caracteres y máximo 3000. Actualmente tiene ${
-          nota.cuerpo.value.length - largoPorDefectoCuerpo
-        } caracteres.`
-      );
+    } 
+    
+    if (estaCuerpoIncorrecto()) {
+      setNotificar({
+        tipo: "error",
+        abrir: true,
+        mensaje: `${MENSAEJE_ERROR_CUERPO_NOTA} Actualmente tiene ${obtenerLargoCuerpoNota()} caracteres.`,
+      });
 
       return;
     }
 
     setAbrirProgreso(true);
-
+    
     crearNuevaNota(nota, datosEstudiante)
       .then((respuesta) => {
         setAbrirProgreso(false);
@@ -101,7 +119,7 @@ export default function CreacionNota() {
       .catch(() => {
         setNotificar({
           abrir: true,
-          mensaje: "Ocurrió un error en el servidor. Intente más tarde.",
+          mensaje: MENSAJE_ERROR_SERVIDOR,
           tipo: "error",
         });
         setAbrirProgreso(false);
@@ -205,8 +223,6 @@ export default function CreacionNota() {
           setImagenPreview={setImagenPreview}
         />
       </fieldset>
-
-      {errorCreacion && <span className="danger">{errorCreacion}</span>}
 
       <span className="danger">* Campos obligatorios</span>
       <Boton texto="Crear nota" tipo="boton principal" />

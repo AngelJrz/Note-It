@@ -18,7 +18,7 @@ export default function ImageUpload(props) {
         <input
           type="file"
           onChange={onChange}
-          accept="image/png, image/jpeg"
+          accept="image/png, image/jpg, image/jpeg"
           ref={imagen}
         />
         {imagenPreview && (

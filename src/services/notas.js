@@ -55,7 +55,6 @@ export async function crearNuevaNota(nota, datosEstudiante) {
         return response.json();
       })
       .then((resultado) => {
-        console.log(resultado);
         return resultado;
       })
       .catch((err) => {
@@ -147,4 +146,31 @@ export async function buscarNotas(busqueda) {
       .then((data) => {
         return data.data;
       }); 
+}
+
+export async function actualizarNotaServicio(nota, datosEstudiante) {
+
+  const notaAActualizar = {
+    ...nota,
+    cuerpo: nota.cuerpo.value
+  }
+
+  return fetch(
+    `${REACT_APP_API_URL}${REACT_APP_NOTAS_ENDPOINT}/${notaAActualizar.id}`,
+    {
+      method: "PUT",
+      headers: {
+        authorization: datosEstudiante.token,
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(notaAActualizar),
+    }
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((resultado) => {
+      console.log(resultado);
+      return resultado;
+    });
 }
