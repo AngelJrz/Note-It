@@ -1,17 +1,18 @@
+import './avatar.css'
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import Logout from '@mui/icons-material/Logout';
-import ListAltIcon from '@mui/icons-material/ListAlt';
 import { Link } from 'react-router-dom';
+import Avatar from '@mui/material/Avatar';
 import useUser from '../../hooks/useUser';
+import Tooltip from '@mui/material/Tooltip';
+import Divider from '@mui/material/Divider';
+import MenuItem from '@mui/material/MenuItem';
+import Logout from '@mui/icons-material/Logout';
+import IconButton from '@mui/material/IconButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 export default function AvatarPerfil(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -31,10 +32,10 @@ export default function AvatarPerfil(props) {
 
   return (
     <React.Fragment>
-      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+      <Box>
         <Tooltip title="Mi perfil">
-          <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
-            <Avatar sx={{ width: 50, height: 50 }}>{usuario.estudiante.nombres.substring(0, 2).charAt(0).toUpperCase() + usuario.estudiante.nombres.substring(0, 2).charAt(1)}</Avatar>
+          <IconButton onClick={handleClick} size="small">
+            <Avatar id="avatarImagen">{usuario.estudiante.nombres.substring(0, 2).charAt(0).toUpperCase() + usuario.estudiante.nombres.substring(0, 2).charAt(1)}</Avatar>
           </IconButton>
         </Tooltip>
       </Box>

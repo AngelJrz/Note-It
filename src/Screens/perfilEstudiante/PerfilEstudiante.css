@@ -1,0 +1,32 @@
+#gridPerfilEstudiante{
+    padding: 25px;
+    margin-top: 65px;
+    text-align: center;
+}
+
+#paperPerfilEstudiante{
+    padding: 25px;
+    margin-top: 25px;
+}
+
+#avatarPerfilAutor{
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+#usuarioAutor{
+    margin-top: 15px;
+}
+
+#nombreAutor{
+    margin-top: 35px;
+}
+
+#biografiaAutor{
+    margin-top: 15px;
+}
+
+#correoAutor{
+    margin-top: 15px;
+}

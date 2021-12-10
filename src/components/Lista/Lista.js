@@ -1,11 +1,12 @@
+import "./Lista.css"
 import * as React from 'react';
 import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import { useHistory } from "react-router-dom";
+import Typography from '@mui/material/Typography';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import { useHistory } from "react-router-dom";
 
 
 export default function Lista(props){
@@ -21,12 +22,12 @@ export default function Lista(props){
     
     return( 
         <Grid item xs={8} md={5}>
-            <Card sx={{ maxWidth: 650, minHeight: 150, marginTop:2, marginLeft: 'auto', marginRight: 'auto', boxShadow: 3, }}>
+            <Card id="cardLista">
                 <CardContent>
-                    <Typography sx={{ fontSize: 16, fontWeight: 600 }}  gutterBottom>
+                    <Typography id="nombreLista"  gutterBottom>
                         {lista.nombre}
                     </Typography>
-                    <Typography sx={{ fontSize: 14 }} component="div">
+                    <Typography id="descripcionLista" component="div">
                         {lista.descripcion}
                     </Typography>
                 </CardContent>

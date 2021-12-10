@@ -1,14 +1,15 @@
-import React, {useContext, useState} from 'react';
+import "./ListaDestino.css"
+import Progreso from '../Progreso';
 import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Notificacion from '../Notificacion';
+import Typography from '@mui/material/Typography';
+import React, {useContext, useState} from 'react';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
 import contextoEstudiante from '../../context/UserContext';
 import { ServicioAgregarNotaALista } from '../../services/listas';
-import Progreso from '../Progreso';
-import Notificacion from '../Notificacion';
 
 
 export default function ListaDestino(props){
@@ -52,12 +53,12 @@ export default function ListaDestino(props){
     
     return( 
         <Grid item xs={8} md={5}>
-            <Card sx={{ maxWidth: 650, minHeight: 150, marginTop:2, marginLeft: 'auto', marginRight: 'auto', boxShadow: 3, }}>
+            <Card id="cardListaDestino">
                 <CardContent>
-                    <Typography sx={{ fontSize: 16, fontWeight: 600 }}  gutterBottom>
+                    <Typography id="nombreListaDestino" gutterBottom>
                         {lista.nombre}
                     </Typography>
-                    <Typography sx={{ fontSize: 14 }} component="div">
+                    <Typography id="descripcionListaDestino" component="div">
                         {lista.descripcion}
                     </Typography>
                 </CardContent>

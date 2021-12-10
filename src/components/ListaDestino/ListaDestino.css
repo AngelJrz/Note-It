@@ -1,15 +1,15 @@
-#cardLista{
+#cardListaDestino{
     max-width: 650px;
     min-height: 150px;
     margin: 10px auto;
     box-shadow: 3;
 }
 
-#nombreLista{
+#nombreListaDestino{
     font-size: 16px;
     font-weight: 600;
 }
 
-#descripcionLista{
+#descripcionListaDestino{
     font-size: 14px;
 }

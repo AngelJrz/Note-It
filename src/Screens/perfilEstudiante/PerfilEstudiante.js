@@ -42,21 +42,21 @@ export default function PerfilEstudiante(props){
     
     return( 
       <div>
-        <Grid container spacing={2} justifyContent="center" sx={{ padding: 2.5, marginTop: 7  }} style={{textAlign: "center"}}>
+        <Grid container spacing={2} justifyContent="center" id="gridPerfilEstudiante">
           <Grid item xs={8}>
-            <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }} >
-                <Avatar {...stringAvatar(`${estudiante.nombres} ${estudiante.apellidos}`)} sx={{ width: 100, height: 100, margin: "0 auto"}}/>
-                <Typography variant="body1" gutterBottom component="div" sx={{ marginTop: 1 }}>
-                  {estudiante.usuario}
+            <Paper elevation={3} id="paperPerfilEstudiante" >
+                <Avatar {...stringAvatar(`${estudiante.nombres} ${estudiante.apellidos}`)} id="avatarPerfilAutor"/>
+                <Typography variant="body1" gutterBottom component="div" id="usuarioAutor">
+                  @{estudiante.usuario}
                 </Typography>
-                <Typography variant="h5" gutterBottom component="div" sx={{ marginTop: 4 }}>
+                <Typography variant="h5" gutterBottom component="div" id="nombreAutor">
                   {estudiante.nombres} {estudiante.apellidos}
                 </Typography>
                 <Divider />
-                <Typography  variant="body1" gutterBottom component="div" sx={{ marginTop: 1 }}>
+                <Typography  variant="body1" gutterBottom component="div" id="biografiaAutor">
                   {estudiante.biografia}
                 </Typography>
-                <Typography  variant="body2" gutterBottom component="div" sx={{ marginTop: 1 }}>
+                <Typography  variant="body2" gutterBottom component="div" id="correoAutor">
                   {estudiante.correo}
                 </Typography>
             </Paper>

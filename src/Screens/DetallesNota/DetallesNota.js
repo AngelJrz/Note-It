@@ -126,7 +126,7 @@ export default function DetallesNota(props){
           nota.map((n) => (
             <Grid container spacing={2}>
               <Grid item xs={8}>
-                <Paper elevation={3} sx={{ padding: 2.5, marginTop: 7 }}>
+                <Paper elevation={3} className='paperNota'>
                   <div className="previewImagen">
                     <img
                       src={n.imagen}
@@ -159,7 +159,7 @@ export default function DetallesNota(props){
                     variant="h5"
                     gutterBottom
                     component="div"
-                    sx={{ marginTop: 1 }}
+                    id='autorDeNota'
                   >
                     {`${n.autor.nombres} ${n.autor.apellidos}`}
                   </Typography>
@@ -174,14 +174,14 @@ export default function DetallesNota(props){
                     <Stack
                       direction="row"
                       spacing={2}
-                      sx={{ marginTop: 4, flexDirection: "row-reverse" }}
+                      id='contenedorDeBotones'
                     >
                       <Button
                         onClick={handleOpen}
                         variant="outlined"
                         color="error"
                         startIcon={<DeleteIcon />}
-                        sx={{ marginLeft: 2 }}
+                        id='botonEliminar'
                       >
                         Eliminar
                       </Button>
@@ -201,7 +201,7 @@ export default function DetallesNota(props){
                           </Typography>
                           <Typography
                             id="modal-modal-description"
-                            sx={{ mt: 2 }}
+                            id='infoModal'
                           >
                             Esta acción desaparecerá la información de nuestro
                             sistema.
@@ -209,13 +209,13 @@ export default function DetallesNota(props){
                           <Stack
                             direction="row"
                             spacing={2}
-                            sx={{ marginTop: 3, flexDirection: "row-reverse" }}
+                            id="contenedorDeBotonesModal"
                           >
                             <Button
                               onClick={handleClose}
                               variant="contained"
                               color="error"
-                              sx={{ marginLeft: 2 }}
+                              id="botonEliminarModal"
                             >
                               Cancelar
                             </Button>
@@ -235,7 +235,6 @@ export default function DetallesNota(props){
                         variant="outlined"
                         color="secondary"
                         startIcon={<EditIcon />}
-                        sx={{ marginLeft: 2 }}
                       >
                         Editar
                       </Button>
@@ -252,7 +251,7 @@ export default function DetallesNota(props){
                     <Stack
                       direction="row"
                       spacing={2}
-                      sx={{ marginTop: 4, flexDirection: "row-reverse" }}
+                      id="contenedorBasico"
                     >
                       <Button
                         onClick={AgregarALista}
@@ -269,10 +268,10 @@ export default function DetallesNota(props){
                 </Paper>
               </Grid>
 
-              <Grid item xs={4} sx={{ marginTop: 7 }}>
+              <Grid item xs={4} id='perfilAutor'>
                 <Paper
                   elevation={3}
-                  sx={{ padding: 2.5 }}
+                  id="paperAutor"
                   justifyContent="center"
                   style={{ textAlign: "center" }}
                 >
@@ -280,13 +279,13 @@ export default function DetallesNota(props){
                     {...generarLetrasAvatar(
                       `${n.autor.nombres} ${n.autor.apellidos}`
                     )}
-                    sx={{ width: 80, height: 80, margin: "0 auto" }}
+                    id="avatarAutor"
                   />
                   <Typography
                     variant="h6"
                     gutterBottom
                     component="div"
-                    sx={{ marginTop: 1 }}
+                    id="nombreAutor"
                   >
                     <Link to={`/estudiante/${n.autor.usuario}`}>
                       <span>{n.autor.nombres}</span>
@@ -297,7 +296,7 @@ export default function DetallesNota(props){
                     variant="body2"
                     gutterBottom
                     component="div"
-                    sx={{ marginTop: 1 }}
+                    id="biografiaAutor"
                   >
                     {n.autor.biografia}
                   </Typography>
@@ -305,7 +304,7 @@ export default function DetallesNota(props){
               </Grid>
 
               <Grid item xs={8}>
-                <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }}>
+                <Paper elevation={3} id="paperAreaComentarios">
                   <Typography variant="h6" gutterBottom component="div">
                     Comentarios
                   </Typography>
@@ -330,7 +329,7 @@ export default function DetallesNota(props){
                     ))
                   ) : (
                     <Paper
-                      sx={{ padding: 2.5 }}
+                      id="paperComentario"
                       justifyContent="left"
                       style={{ textAlign: "center" }}
                     >
@@ -338,7 +337,7 @@ export default function DetallesNota(props){
                         variant="h5"
                         gutterBottom
                         component="div"
-                        sx={{ marginTop: 1 }}
+                        id='errorComentarios'
                       >
                         No cuenta con comentarios
                       </Typography>
