@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Boton from '../../components/Boton';
 import Divider from '@mui/material/Divider';
 import { useHistory } from "react-router-dom";
@@ -20,6 +22,9 @@ import contextoEstudiante from '../../context/UserContext';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import Notificacion from "../../components/Notificacion/index";
 import { EliminarNota, ObtenerNota } from '../../hooks/Notas.js';
+import { generarLetrasAvatar } from '../../utilerias/generarAvatar';
+import { formatearFecha } from '../../utilerias/administrarFechas';
+import Comentario from '../../components/Comentario';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -46,35 +51,6 @@ export default function DetallesNota(props){
       mensaje: "",
       tipo: "success",
     });
-
-    function stringToColor(string) {
-        let hash = 0;
-        let i;
-      
-        /* eslint-disable no-bitwise */
-        for (i = 0; i < string.length; i += 1) {
-          hash = string.charCodeAt(i) + ((hash << 5) - hash);
-        }
-      
-        let color = '#';
-      
-        for (i = 0; i < 3; i += 1) {
-          const value = (hash >> (i * 8)) & 0xff;
-          color += `00${value.toString(16)}`.substr(-2);
-        }
-        /* eslint-enable no-bitwise */
-      
-        return color;
-      }
-
-    function stringAvatar(name) {
-        return {
-          sx: {
-            bgcolor: stringToColor(name),
-          },
-          children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-        };
-      }
 
     function eliminaNota() {
       setAbrirProgreso(true);
@@ -144,127 +120,234 @@ export default function DetallesNota(props){
       });
     }
     
-    return( 
+    return (
       <div>
-      {
-        nota && nota.map(n => (
-          <Grid container spacing={2}>
-            <Grid item xs={8}>
-              <Paper elevation={3} sx={{ padding: 2.5, marginTop: 7  }}>
+        {nota &&
+          nota.map((n) => (
+            <Grid container spacing={2}>
+              <Grid item xs={8}>
+                <Paper elevation={3} sx={{ padding: 2.5, marginTop: 7 }}>
+                  <div className="previewImagen">
+                    <img
+                      src={n.imagen}
+                      alt={`Imagen para la nota ${n.titulo}`}
+                      title={`Imagen para la nota ${n.titulo}`}
+                    />
+                  </div>
                   <Typography variant="h4" gutterBottom component="div">
-                      <h1>{n.titulo}</h1>
+                    <h1>{n.titulo}</h1>
                   </Typography>
+
+                  <section className='seccion-info-basica'>
+                    <Typography variant="span" gutterBottom component="div">
+                      {formatearFecha(n.fechaCreacion)}
+                    </Typography>
+
+                    <div className="seccion-bottom-visualizaciones">
+                      <VisibilityOutlinedIcon />
+                      <span>{n.visualizaciones}</span>
+                    </div>
+
+                    <div className="seccion-bottom-esUtil">
+                      <ThumbUpIcon />
+                      <span>{n.esUtil}</span>
+                    </div>
+                  </section>
+
                   <Divider />
-                  <Typography variant="h5" gutterBottom component="div" sx={{ marginTop: 1 }}>
-                      {n.autor.nombres}
+                  <Typography
+                    variant="h5"
+                    gutterBottom
+                    component="div"
+                    sx={{ marginTop: 1 }}
+                  >
+                    {`${n.autor.nombres} ${n.autor.apellidos}`}
                   </Typography>
                   <Typography variant="body1" gutterBottom>
-                      <div className="post__description" dangerouslySetInnerHTML={{ __html: n.cuerpo}}  />
+                    <div
+                      className="post__description"
+                      dangerouslySetInnerHTML={{ __html: n.cuerpo }}
+                    />
                   </Typography>
-                  {
-                    datosEstudiante !== null && datosEstudiante.estudiante.usuario === n.autor.usuario ?
-                  <Stack direction="row" spacing={2} sx={{ marginTop: 4, flexDirection: "row-reverse" }}>
-                    <Button onClick={handleOpen} variant="outlined" color="error" startIcon={<DeleteIcon />} sx={{ marginLeft: 2}}>Eliminar</Button>
-                    <Modal
-                      open={open}
-                      onClose={handleClose}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description"
+                  {datosEstudiante !== null &&
+                  datosEstudiante.estudiante.usuario === n.autor.usuario ? (
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      sx={{ marginTop: 4, flexDirection: "row-reverse" }}
                     >
-                      <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                          ¿Está seguro que desea eliminar la nota?
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                          Esta acción desaparecerá la información de nuestro sistema.
-                        </Typography>
-                        <Stack direction="row" spacing={2} sx={{ marginTop: 3, flexDirection: "row-reverse" }}>
-                          <Button onClick={handleClose} variant="contained" color="error" sx={{ marginLeft: 2}}>Cancelar</Button>
-                          <Button onClick={eliminaNota} variant="contained" color="success">Sí</Button>
-                        </Stack>
-                      </Box>
-                    </Modal>
+                      <Button
+                        onClick={handleOpen}
+                        variant="outlined"
+                        color="error"
+                        startIcon={<DeleteIcon />}
+                        sx={{ marginLeft: 2 }}
+                      >
+                        Eliminar
+                      </Button>
+                      <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box sx={style}>
+                          <Typography
+                            id="modal-modal-title"
+                            variant="h6"
+                            component="h2"
+                          >
+                            ¿Está seguro que desea eliminar la nota?
+                          </Typography>
+                          <Typography
+                            id="modal-modal-description"
+                            sx={{ mt: 2 }}
+                          >
+                            Esta acción desaparecerá la información de nuestro
+                            sistema.
+                          </Typography>
+                          <Stack
+                            direction="row"
+                            spacing={2}
+                            sx={{ marginTop: 3, flexDirection: "row-reverse" }}
+                          >
+                            <Button
+                              onClick={handleClose}
+                              variant="contained"
+                              color="error"
+                              sx={{ marginLeft: 2 }}
+                            >
+                              Cancelar
+                            </Button>
+                            <Button
+                              onClick={eliminaNota}
+                              variant="contained"
+                              color="success"
+                            >
+                              Sí
+                            </Button>
+                          </Stack>
+                        </Box>
+                      </Modal>
 
-                    <Button onClick={irAEditarNota} variant="outlined" color="secondary" startIcon={<EditIcon />} sx={{ marginLeft: 2}}>Editar</Button>
-                    <Button onClick={AgregarALista} variant="outlined" color="success" startIcon={<PlaylistAddIcon />}>Añadir a lista</Button>
-                  </Stack>
-                  :
-                  datosEstudiante !== null ?
-                  <Stack direction="row" spacing={2} sx={{ marginTop: 4, flexDirection: "row-reverse" }}>
-                    <Button onClick={AgregarALista} variant="outlined" color="success" startIcon={<PlaylistAddIcon />}>Añadir a lista</Button>
-                  </Stack>
-                  :
-                  <p></p>
-                  }
-              </Paper>
-            </Grid>
+                      <Button
+                        onClick={irAEditarNota}
+                        variant="outlined"
+                        color="secondary"
+                        startIcon={<EditIcon />}
+                        sx={{ marginLeft: 2 }}
+                      >
+                        Editar
+                      </Button>
+                      <Button
+                        onClick={AgregarALista}
+                        variant="outlined"
+                        color="success"
+                        startIcon={<PlaylistAddIcon />}
+                      >
+                        Añadir a lista
+                      </Button>
+                    </Stack>
+                  ) : datosEstudiante !== null ? (
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      sx={{ marginTop: 4, flexDirection: "row-reverse" }}
+                    >
+                      <Button
+                        onClick={AgregarALista}
+                        variant="outlined"
+                        color="success"
+                        startIcon={<PlaylistAddIcon />}
+                      >
+                        Añadir a lista
+                      </Button>
+                    </Stack>
+                  ) : (
+                    <p></p>
+                  )}
+                </Paper>
+              </Grid>
 
-            <Grid item xs={4} sx={{ marginTop: 7  }}>
-               <Paper elevation={3} sx={{ padding: 2.5 }} justifyContent="center" style={{textAlign: "center"}}>
-                    <Avatar {...stringAvatar(`${n.autor.nombres} ${n.autor.apellidos}`)} sx={{ width: 80, height: 80, margin: "0 auto"}}/>
-                    <Typography variant="h6" gutterBottom component="div" sx={{marginTop: 1 }}>
+              <Grid item xs={4} sx={{ marginTop: 7 }}>
+                <Paper
+                  elevation={3}
+                  sx={{ padding: 2.5 }}
+                  justifyContent="center"
+                  style={{ textAlign: "center" }}
+                >
+                  <Avatar
+                    {...generarLetrasAvatar(
+                      `${n.autor.nombres} ${n.autor.apellidos}`
+                    )}
+                    sx={{ width: 80, height: 80, margin: "0 auto" }}
+                  />
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    component="div"
+                    sx={{ marginTop: 1 }}
+                  >
                     <Link to={`/estudiante/${n.autor.usuario}`}>
                       <span>{n.autor.nombres}</span>
                     </Link>
-                    
-                    </Typography>
-                    <Divider />
-                    <Typography variant="body2" gutterBottom component="div" sx={{marginTop: 1 }}>
+                  </Typography>
+                  <Divider />
+                  <Typography
+                    variant="body2"
+                    gutterBottom
+                    component="div"
+                    sx={{ marginTop: 1 }}
+                  >
                     {n.autor.biografia}
-                    </Typography>
+                  </Typography>
                 </Paper>
-            </Grid>
+              </Grid>
 
-            <Grid item xs={8}>
+              <Grid item xs={8}>
                 <Paper elevation={3} sx={{ padding: 2.5, marginTop: 4 }}>
-                    <Typography variant="h6" gutterBottom component="div">
-                        Comentarios
-                    </Typography>
-                    {
-                      datosEstudiante !== null  ?
-                      <form className='' onSubmit={enviarComentario}> 
-                          <input  type='text'
-                                      id='comentarioDeNota'  
-                                      placeholder='Comentario'
-                                      name="comentario"
-                                      required>
-                          </input>
-                          <Boton texto="Enviar" tipo="boton principal"/>
-                      </form>
-                    :
-                      <p></p>
-                    }
+                  <Typography variant="h6" gutterBottom component="div">
+                    Comentarios
+                  </Typography>
+                  {datosEstudiante !== null ? (
+                    <form className="" onSubmit={enviarComentario}>
+                      <input
+                        type="text"
+                        id="comentarioDeNota"
+                        placeholder="Comentario"
+                        name="comentario"
+                        required
+                      ></input>
+                      <Boton texto="Enviar" tipo="boton principal" />
+                    </form>
+                  ) : (
+                    <p></p>
+                  )}
 
-                    {
-                      n.comentarios.length > 0 ?  
-                        n.comentarios.map(comentario => (
-                          <Paper sx={{ padding: 2.5, marginTop: 2 }} justifyContent="left" style={{textAlign: "left"}}>
-                            <Typography variant="body1" gutterBottom component="div" sx={{marginTop: 1 }}>
-                              <Link to={`/estudiante/${comentario.usuario}`}>
-                                <span>{comentario.usuario}:</span>
-                              </Link>
-                            </Typography>
-      
-                            <Typography variant="body1" gutterBottom component="div" sx={{marginTop: 1 }}>
-                              {comentario.contenido}
-                            </Typography>
-                            <Typography variant="body2" gutterBottom component="div" sx={{marginTop: 1 }}>
-                              {comentario.fecha.substring(0,10)}
-                            </Typography>
-                          </Paper>
-                        )) 
-                        :
-                        <Paper sx={{ padding: 2.5 }} justifyContent="left" style={{textAlign: "center"}}>
-                          <Typography variant="h5" gutterBottom component="div" sx={{marginTop: 1 }}>
-                            No cuenta con comentarios
-                          </Typography>
-                        </Paper>
-                    }
+                  {n.comentarios.length > 0 ? (
+                    n.comentarios.map((comentario) => (
+                      <Comentario comentario={comentario}/>
+                    ))
+                  ) : (
+                    <Paper
+                      sx={{ padding: 2.5 }}
+                      justifyContent="left"
+                      style={{ textAlign: "center" }}
+                    >
+                      <Typography
+                        variant="h5"
+                        gutterBottom
+                        component="div"
+                        sx={{ marginTop: 1 }}
+                      >
+                        No cuenta con comentarios
+                      </Typography>
+                    </Paper>
+                  )}
                 </Paper>
+              </Grid>
             </Grid>
-          </Grid>
-        ))
-      }
+          ))}
         <Progreso abrir={abrirProgreso} />
         <Notificacion notificar={notificar} setNotificar={setNotificar} />
       </div>

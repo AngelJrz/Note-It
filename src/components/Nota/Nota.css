@@ -1,4 +1,4 @@
-.nota{
+/* .nota{
 	min-height: 300px;
 	max-height: 400px;
 	max-width: 250px;
@@ -12,4 +12,98 @@
 .nota h1{
 	font-size: 18px;
 	text-align: left;
+} */
+
+.nota{
+	min-height: 25em;
+	max-height: 25em;
+	min-width: 18em;
+	max-width: 18em;
+	margin: 1rem;
+}
+
+.nota > img {
+	width: 100%;
+	min-height: 10em;
+	max-height: 10em;
+}
+
+.imagen {
+	height: 140px;
+}
+
+.seccion-top {
+	display: flex;
+	align-items: center;
+	min-height: 5em;
+	max-height: 5em;
+}
+
+.seccion-top-info {
+	margin-left: 1em;
+}
+
+.seccion-top-info > h4 {
+	font-size: medium;
+	color: gray;
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+.seccion-top-info > p {
+	font-size: small;
+    color: gray;
+	padding-top: -2px;
+}
+
+.seccion-centro {
+	min-height: 2em;
+	max-height: 2em;
+}
+
+.seccion-centro > h4 {
+	margin-top: 0.5em;
+	margin-bottom: 0;
+}
+
+.seccion-bottom {
+	display: flex;
+	width: 100%;
+	margin-top: 1em;
+}
+
+.seccion-bottom-visualizaciones {
+	display: flex;
+	margin-top: 1em;
+	margin-right: 1em;
+}
+
+.seccion-bottom-visualizaciones > .MuiSvgIcon-root {
+	color: gray;
+	font-size: large;
+}
+
+.seccion-bottom-visualizaciones > span {
+	color: gray;
+	margin-left: 0.3em;
+}
+
+.seccion-bottom-esUtil {
+	display: flex;
+	margin-top: 1em;
+}
+
+.seccion-bottom-esUtil > .MuiSvgIcon-root {
+	color: gray;
+	font-size: large;
+}
+
+.seccion-bottom-esUtil > span {
+	color: gray;
+	margin-left: 0.3em;
+}
+
+.seccion-bottom-opcion {
+	margin-left: auto;
+	margin-top: 0.5em;
 }

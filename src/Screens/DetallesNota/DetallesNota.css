@@ -1,0 +1,8 @@
+.seccion-info-basica {
+    display: flex;
+}
+
+.seccion-info-basica > .MuiTypography-root {
+    margin-top: 1em;
+    margin-right: 1em;
+}

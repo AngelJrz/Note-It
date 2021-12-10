@@ -3,32 +3,68 @@ import './Nota.css'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { useHistory } from "react-router-dom";
+import { Avatar, CardMedia } from '@mui/material';
+import { generarLetrasAvatar } from '../../utilerias/generarAvatar';
+import { formatearFecha } from '../../utilerias/administrarFechas';
 
 
 
 export default function Nota(props){
     const { nota } = props;
     const history = useHistory();
+
+    const irANota = () => {
+        history.push(`/Nota/${nota.id}`);
+    }
     
-    return( 
-        <Card sx={{ maxWidth: 250, minHeight: 300, margin: 1 }}>
-            <CardContent>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    {nota.autor.usuario}
-                </Typography>
-                <Typography sx={{ fontSize: 16, fontWeight: 600 }} component="div">
-                    {nota.titulo}
-                </Typography>
-                <Typography variant="body2">
-                <div className="post__description" dangerouslySetInnerHTML={{ __html: nota.cuerpo}}  />
-                </Typography>
-            </CardContent>
-            <CardActions>
-                <Button variant="contained" size="small" onClick={() => history.push(`/Nota/${nota.id}`)}>Leer</Button>
-            </CardActions>
-        </Card>
+    return (
+      <Card className="nota">
+        <CardMedia component="img" image={nota.imagen} className="imagen" />
+        <CardContent>
+          <section className="seccion-top">
+            <Avatar
+              {...generarLetrasAvatar(
+                `${nota.autor.nombres} ${nota.autor.apellidos}`
+              )}
+            />
+
+            <div className="seccion-top-info">
+              <h4>{nota.autor.usuario}</h4>
+              <p>{formatearFecha(nota.fechaCreacion)}</p>
+            </div>
+          </section>
+
+          <section className="seccion-centro">
+            <h4>{nota.titulo}</h4>
+          </section>
+        </CardContent>
+        <CardActions>
+          <section className="seccion-bottom">
+            <div className="seccion-bottom-visualizaciones">
+              <VisibilityOutlinedIcon />
+              <span>{nota.visualizaciones}</span>
+            </div>
+
+            <div className="seccion-bottom-esUtil">
+              <ThumbUpIcon />
+              <span>{nota.esUtil}</span>
+            </div>
+
+            <div className="seccion-bottom-opcion">
+              <Button
+                variant="contained"
+                size="small"
+                onClick={irANota}
+              >
+                Leer
+              </Button>
+            </div>
+          </section>
+        </CardActions>
+      </Card>
     );
 } 

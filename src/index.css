@@ -57,9 +57,18 @@ span[class="danger"] {
     overflow: hidden;
     border-radius: 10px;
     max-height: 30em;
+	min-height: 30em;
 }
 
 .previewImagen > img {
     width: 100%;
-    height: 100%;
+	height: auto;
+}
+
+footer {
+	background-color: var(--first-color);
+	position: absolute;
+  	left: 0;
+ 	bottom: 0;
+  	width: 100%
 }

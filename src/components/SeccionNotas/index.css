@@ -1,3 +1,7 @@
+.seccion {
+    background-color: rgb(246, 249, 252);
+}
+
 .seccion > h2 {
     padding-top: 1em;
     padding-left: 1em;
