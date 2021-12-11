@@ -14,10 +14,10 @@ import Divider from '@mui/material/Divider';
 import { useHistory } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
 import Progreso from "../../components/Progreso";
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ComentarNota } from '../../services/notas';
+import { agregarVisualizacion, ComentarNota } from '../../services/notas';
 import contextoEstudiante from '../../context/UserContext';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import Notificacion from "../../components/Notificacion/index";
@@ -38,7 +38,8 @@ const style = {
 };
 
 export default function DetallesNota(props){
-    let idNota = props.match.params.id;
+    const idNota = props.match.params.id;
+
     const { nota } = ObtenerNota(idNota);
     const history = useHistory();
     const {datosEstudiante} = useContext(contextoEstudiante);
@@ -51,6 +52,17 @@ export default function DetallesNota(props){
       mensaje: "",
       tipo: "success",
     });
+
+
+    useEffect(() => {
+      if (idNota) {
+        agregarVisualizacion(idNota)
+          .then(() => {})
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    }, []);
 
     function eliminaNota() {
       setAbrirProgreso(true);

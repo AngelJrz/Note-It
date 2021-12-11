@@ -84,7 +84,7 @@ export async function servicioEliminarNota(idNota, token) {
 }
 
 export async function buscarNotas(busqueda) {
-    const { id, texto, carrera, materia, tema, op } = busqueda;
+    const { id, texto, carrera, materia, tema, op, limit } = busqueda;
 
     var query = '';
     var tieneParametros = false;
@@ -132,9 +132,17 @@ export async function buscarNotas(busqueda) {
           }
 
           query += `op=${op}`;
+          tieneParametros = true;
+        }
+
+        if (limit) {
+          if (tieneParametros) {
+            query += "&";
+          }
+
+          query += `limit=${limit}`;
         }
     }
-    
 
     return fetch(`${REACT_APP_API_URL}${REACT_APP_NOTAS_ENDPOINT}?${query}`, {
       method: "GET",
@@ -198,4 +206,19 @@ export async function ComentarNota(idNota, comentario, token) {
     .catch((error) => {
       console.log('error', error)
     });
+}
+
+export async function agregarVisualizacion(idNota) {
+  return fetch(
+    `${REACT_APP_API_URL}${REACT_APP_NOTAS_ENDPOINT}/${idNota}/visualizaciones`,
+    {
+      method: "POST"
+    }
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((resultado) => {
+      return resultado;
+    })
 }

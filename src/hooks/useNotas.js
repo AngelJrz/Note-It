@@ -45,7 +45,8 @@ export function useNotas(busqueda) {
       busqueda.carrera,
       busqueda.materia,
       busqueda.tema,
-      busqueda.op
+      busqueda.op,
+      busqueda.limit
     ]
   );
 

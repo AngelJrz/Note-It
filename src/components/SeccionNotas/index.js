@@ -11,7 +11,7 @@ export default function SeccionNotas(props) {
     const { titulo = "Notas", op, limit} = props;
     const history = useHistory();
 
-    const { notas, cargandoNotas, errorBusqueda } = useNotas({ op });
+    const { notas, cargandoNotas, errorBusqueda } = useNotas({ op, limit });
 
     const verTodas = () => {
       history.push({

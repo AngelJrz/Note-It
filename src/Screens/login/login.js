@@ -16,7 +16,7 @@ export default function LoginScreen() {
     });
 
     useEffect(() => {
-        if (datosEstudiante !== null) {
+        if (datosEstudiante) {
             history.push("/");
         }
     }, [datosEstudiante, history])
@@ -31,8 +31,8 @@ export default function LoginScreen() {
     function login(e) {
         e.preventDefault();
         loginContext(datos);
-        if (datosEstudiante !== null) {
-            history.push("/");
+        if (datosEstudiante || datosEstudiante !== null) {
+          history.push("/");
         }
     }
 

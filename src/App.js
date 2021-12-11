@@ -13,6 +13,7 @@ import Crearlista from './Screens/CrearLista/CrearLista.js';
 import ListasScreen from './Screens/Listas/ListasScreen.js';
 import DetallesLista from './Screens/DetallesLista/DetallesLista.js';
 import EditarNota from './Screens/EditarNota/index.js';
+import RutaProtegida from './components/RutaProtegida/index.js';
 
 function App() { 
   return (
@@ -30,15 +31,12 @@ function App() {
             <Route path="/registro" component={RegistroScreen}></Route>
             <Route path="/Nota/:id" component={DetallesNota} exact></Route>
             <Route path="/validar-codigo" component={ValidarCodigo}></Route>
-            <Route path="/crear-nota" component={CrearNota}></Route>
-            <Route path="/crear-lista" component={Crearlista}></Route>
-            <Route path="/listas" component={ListasScreen}></Route>
-            <Route path="/detalles-lista" component={DetallesLista}></Route>
-            <Route path="/nota/:id/editar" component={EditarNota}></Route>
-            <Route
-              path="/estudiante/:usuario"
-              component={PerfilEstudiante}
-            ></Route>
+            <RutaProtegida path="/crear-nota" component={CrearNota} />
+            <RutaProtegida path="/crear-lista" component={Crearlista} />
+            <RutaProtegida path="/listas" component={ListasScreen} />
+            <RutaProtegida path="/detalles-lista" component={DetallesLista} />
+            <RutaProtegida path="/nota/:id/editar" component={EditarNota} />
+            <Route path="/estudiante/:usuario" component={PerfilEstudiante} />
             <Route path="/busqueda" component={ResultadoBusqueda}></Route>
           </main>
         </div>

@@ -24,7 +24,7 @@ export default function Header(props){
         </div>
         <div>
           {
-            datosEstudiante != null && datosEstudiante.token ? 
+            datosEstudiante && datosEstudiante.token ? 
             <AvatarPerfil usuario={datosEstudiante}/> 
             :
             <div> 
