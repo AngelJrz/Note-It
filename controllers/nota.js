@@ -102,9 +102,6 @@ export async function obtenerNotas(busqueda) {
 
             return [];
           })
-          .finally(async () => {
-            await cerrarConexion();
-          });
     }
 
     var filtro = {};
@@ -205,9 +202,6 @@ export async function existeNota(id) {
 
       return existe;
     })
-    .finally(async () => {
-      await cerrarConexion();
-    });
 }
 
 export async function actualizarNota(notaAActualizar) {
@@ -297,7 +291,6 @@ export async function agregarComentario(id, comentario) {
     { new: true, useFindAndModify: true }
   )
     .then((resultado) => {
-      console.log(resultado);
 
       if (!resultado) {
         comentarioAgregado = false;
@@ -315,4 +308,31 @@ export async function agregarComentario(id, comentario) {
     .finally(async () => {
       await cerrarConexion();
     });
+}
+
+export async function agregarVisualizacion(id) {
+  await abrirConexion();
+
+  const INCREMENTO_VISUALIZACION = 1;
+  var visualizacionAgregada = true;
+
+  return Nota.findByIdAndUpdate(
+    id,
+    { $inc: { visualizaciones: INCREMENTO_VISUALIZACION } },
+    { new: true, useFindAndModify: true }
+  )
+    .then((resultado) => {
+      if (!resultado) {
+        visualizacionAgregada = false;
+      }
+
+      return visualizacionAgregada;
+    })
+    .catch((err) => {
+      console.error(err);
+
+      visualizacionAgregada = false;
+
+      return visualizacionAgregada;
+    })
 }

@@ -31,9 +31,18 @@ export const OP_NOTAS_UTILES = "1";
 export const OP_NOTAS_MAS_VISUALIZADAS = "2";
 export const OK_STATUS = 1;
 
+export const MENSAJE_ERROR_SERVIDOR =
+  "Ocurrió un error en el servidor. Por favor, intente más tade.";
+
 export const MENSAJE_ERROR_CADENA = "El dato esperado debe ser de tipo cadena.";
 export const MENSAJE_ERROR_NOMBRE_ESTUDIANTE =
   "El nombre debe ser de al menos 2 caracteres y máximo 80.";
 
 export const MENSAJE_ERROR_APELLIDOS_ESTUDIANTE =
   "El / Los appellido(s) debe(n) tener al menos 2 caracteres y máximo 100.";
+
+export const MENSAJE_EXITO_VISUALIZACION = "Visualización agregada exitosamente.";
+export const MENSAJE_ERROR_VALIDACION_VISUALIZACION =
+  "Se encontraron errores al validar los datos.";
+
+export const MENSAJE_ERROR_VISUALIZACION = "Ocurrió un error al intentar agregar la visualización.";

@@ -3,7 +3,13 @@ const router = express.Router();
 
 import { validationResult, checkSchema, query } from "express-validator";
 
-import { actualizarNota, agregarComentario, crearNuevaNota, eliminarNota, obtenerNotas } from '../controllers/nota.js';
+import { actualizarNota, agregarComentario, agregarVisualizacion, crearNuevaNota, eliminarNota, obtenerNotas } from '../controllers/nota.js';
+import {
+  MENSAJE_ERROR_VALIDACION_VISUALIZACION,
+  MENSAJE_ERROR_VISUALIZACION,
+  MENSAJE_EXITO_VISUALIZACION,
+  MENSAJE_ERROR_SERVIDOR,
+} from "../utilities/constantes.js";
 import { VerificarToken } from "../utilities/jsonWebToken.js";
 import { validarImagen } from "../utilities/validadorImagen.js";
 
@@ -256,5 +262,43 @@ router.post(
     })
   }
 );
+
+router.post('/:id/visualizaciones', checkSchema(checkSchemaId), async (req, res) => {
+  var resultado = {
+    exitoso: true,
+    mensaje: MENSAJE_EXITO_VISUALIZACION,
+    data: {},
+  };
+
+  const { errors } = validationResult(req);
+
+  if (errors.length > 0) {
+    resultado.exitoso = false;
+    resultado.mensaje = MENSAJE_ERROR_VALIDACION_VISUALIZACION;
+    resultado.data = errors;
+    return res.status(400).send(resultado).end();
+  }
+
+  const { id } = req.params;
+
+  agregarVisualizacion(id)
+  .then((agregada) => {
+    if (!agregada) {
+      resultado.exitoso = false;
+      resultado.mensaje = MENSAJE_ERROR_VISUALIZACION
+    }
+
+    return res.status(200).send(resultado);
+  })
+  .catch((error) => {
+    console.error(error);
+
+    resultado.exitoso = false;
+    resultado.mensaje = MENSAJE_ERROR_SERVIDOR;
+
+    return res.status(500).send(resultado);
+  })
+  
+})
 
 export default router;
