@@ -1,13 +1,14 @@
-import React, {useContext, useEffect} from 'react';
-import { useHistory } from "react-router-dom";
-import { ObtenerListasEstudiante } from '../../hooks/Listas';
-import contextoEstudiante from '../../context/UserContext';
-import Lista from '../../components/Lista/Lista'
-import ListaDestino from '../../components/ListaDestino/ListaDestino';
 import './ListasScreen.css'
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import { useHistory } from "react-router-dom";
+import Lista from '../../components/Lista/Lista'
+import React, {useContext, useEffect} from 'react';
+import contextoEstudiante from '../../context/UserContext';
+import { ObtenerListasEstudiante } from '../../hooks/Listas';
+import ListaDestino from '../../components/ListaDestino/ListaDestino';
 
 export default function ListasScreen(props){
     const history = useHistory();
@@ -24,6 +25,10 @@ export default function ListasScreen(props){
         seAgrega = true;
         idNota = props.location.state.detail
     }
+
+    function irACrearLista() {
+        history.push('/crear-lista');
+    }
     
     const { listas } = ObtenerListasEstudiante(datosEstudiante.estudiante.id, datosEstudiante.token);
 
@@ -36,7 +41,12 @@ export default function ListasScreen(props){
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container id='contenedorListas' spacing={2}>
                     {
-                        listas ? seAgrega ? listas.data.map(lista => <ListaDestino lista={lista} nota={idNota}></ListaDestino>) : listas.data.map(lista => <Lista lista={lista}></Lista>) : <p>No se obtuvieron listas de respuesta</p> 
+                        listas ? seAgrega ? listas.data.map(lista => <ListaDestino lista={lista} nota={idNota}></ListaDestino>) : listas.data.map(lista => <Lista lista={lista}></Lista>)
+                        : 
+                        <div id='errorDeLista'>
+                            <p>No se obtuvieron listas de respuesta</p>
+                            <Button variant="contained" color='success' size="small" onClick={irACrearLista}>Crear lista</Button>
+                        </div>
                     }
                 </Grid>
             </Box>

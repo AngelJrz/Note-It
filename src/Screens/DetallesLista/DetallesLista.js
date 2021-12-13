@@ -1,17 +1,17 @@
+import './DetallesLista.css'
 import React, {useContext} from 'react';
-import Nota from '../../components/Nota/Nota'
-import './DetallesLista.css'
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import contextoEstudiante from '../../context/UserContext';
-import './DetallesLista.css'
-// import { ObtenerLista } from '../../hooks/Listas';
+import Nota from '../../components/Nota/Nota'
+import { useHistory } from "react-router-dom";
 
 export default function DetallesLista(props){
-    // let idLista = props.match.params.id;
-    // console.log('llego a detalles ' + idLista);
-    // const {datosEstudiante} = useContext(contextoEstudiante);
-    // const { lista } = ObtenerLista(datosEstudiante.estudiante.id, idLista, datosEstudiante.token);
     const lista = props.location.state.detail;
+    const history = useHistory();
+
+    function irPrincipal() {
+        history.push('/');
+    }
 
     return( 
         <div>
@@ -20,7 +20,13 @@ export default function DetallesLista(props){
             <Divider />
             <div className="row center" id="coleccionDetallesLista">
                 {
-                   lista ? lista.notas.map(nota => <Nota nota={nota}></Nota>) : <p>No se obtuvieron notas de respuesta</p> 
+                   lista.notas.length > 0? 
+                   lista.notas.map(nota => <Nota nota={nota}></Nota>) 
+                   : 
+                   <div id='errorNotasDeLista'>
+                        <p>No se obtuvieron notas de respuesta</p>
+                        <Button variant="contained" color='success' size="small" onClick={irPrincipal}>Explorar notas</Button>
+                   </div>
                 }
             </div>
         </div>
