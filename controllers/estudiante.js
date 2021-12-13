@@ -4,7 +4,7 @@ import generarCodigoVerificacion from "../utilities/generadorDeCodigo.js";
 import { crearVerificacion } from "../controllers/verificacion.js";
 import { comparar, encriptar } from "../utilities/hashManager.js";
 import { obtenerToken } from '../utilities/jsonWebToken.js';
-import { RETURNED_ESTUDIANTE_LOGIN_INFO } from "../utilities/constantes.js";
+import { MENSAJE_LOGIN_CONTRASEÑA_INCORRECTA, MENSAJE_LOGIN_EXITOSO, MENSAJE_LOGIN_USUARIO_INEXISTENTE, RETURNED_ESTUDIANTE_LOGIN_INFO } from "../utilities/constantes.js";
 import { abrirConexion, cerrarConexion } from "../models/conexion.js";
 
 export async function existeUsuario(usuario) {
@@ -99,7 +99,7 @@ export async function loginEstudiante(datosUsuario) {
       if (estudiante == null) {
         return {
           resultado: false,
-          mensaje: "El usuario no existe",
+          mensaje: MENSAJE_LOGIN_USUARIO_INEXISTENTE,
           data: null,
         };
       }
@@ -109,14 +109,14 @@ export async function loginEstudiante(datosUsuario) {
           if (!sonIguales) {
             return {
               resultado: false,
-              mensaje: "Contraseña incorrecta",
+              mensaje: MENSAJE_LOGIN_CONTRASEÑA_INCORRECTA,
               data: null,
             };
           }
 
           return {
             resultado: true,
-            mensaje: "Login exitoso",
+            mensaje: MENSAJE_LOGIN_EXITOSO,
             data: {
               estudiante: estudiante,
               token: obtenerToken(estudiante),

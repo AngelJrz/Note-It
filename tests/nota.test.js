@@ -25,6 +25,8 @@ import {
   MENSAJE_COMENTARIO_AGREGADO,
   MENSAJE_COMENTARIO_ERROR_CONTENIDO,
   MENSAJE_COMENTARIO_ERRORES,
+  ID_MATERIA_EXTRA,
+  ID_TEMA_EXTRA,
 } from "./notaHelper.js";
 
 import {
@@ -42,6 +44,7 @@ import {
   MENSAJE_ERROR_MATERIA_INEXISTENTE,
   MENSAJE_ERROR_TEMA_INEXISTENTE,
 } from "./catalogoHelper.js";
+import { MENSAJE_ERROR_ACTUALIZAR_MATERIA_CARRERA, MENSAJE_ERROR_NOTA_ID, MENSAJE_ERROR_NOTA_INEXISTENTE, MENSAJE_ERROR_VALIDAR_NOTA, MENSAJE_EXITOSO_ACTUALIZAR_NOTA, MENSAJE_NOTA_ELIMINADA } from "../utilities/constantes.js";
 
 const api = supertest(app);
 
@@ -62,7 +65,7 @@ describe("registrar ", () => {
     );
   })
 
-  test("nota exitosamente", async () => {
+  test.skip("nota exitosamente", async () => {
     const { estudiante, token } = infoLogin.data;
     
     const respuesta = await api
@@ -85,7 +88,7 @@ describe("registrar ", () => {
     expect(body.mensaje).toBe(MENSAJE_REGISTRO);
   });
 
-  test("nota exitosamente sin imagen", async () => {
+  test.skip("nota exitosamente sin imagen", async () => {
     const { estudiante, token } = infoLogin.data;
 
     const respuesta = await api
@@ -107,12 +110,13 @@ describe("registrar ", () => {
     expect(body.mensaje).toBe(MENSAJE_REGISTRO);
   });
 
-  test("nota sin titulo", async () => {
+  test.skip("nota sin titulo", async () => {
     const { estudiante, token } = infoLogin.data;
 
     const respuesta = await api
       .post(ENDPOINT_NOTAS)
       .set("authorization", token)
+      .field("titulo", "")
       .field(
         "cuerpo",
         "En mi primera nota quiero comentar sobre lo que me ocurrió."
@@ -132,13 +136,14 @@ describe("registrar ", () => {
     expect(mensajes).toContain(MENSAJE_ERROR_TITULO);
   });
 
-  test("nota sin cuerpo", async () => {
+  test.skip("nota sin cuerpo", async () => {
     const { estudiante, token } = infoLogin.data;
 
     const respuesta = await api
       .post(ENDPOINT_NOTAS)
       .set("authorization", token)
       .field("titulo", "Mi primera nota sin cuerpo")
+      .field("cuerpo", "")
       .field("carrera", ID_CARRERA_DEFAULT)
       .field("materia", ID_MATERIA_DEFAULT)
       .field("tema", ID_TEMA_DEFUALT)
@@ -154,7 +159,7 @@ describe("registrar ", () => {
     expect(mensajes).toContain(MENSAJE_ERROR_CUERPO);
   });
 
-  test("nota con una carrera que no existe", async () => {
+  test.skip("nota con una carrera que no existe", async () => {
     const { estudiante, token } = infoLogin.data;
 
     const respuesta = await api
@@ -181,7 +186,7 @@ describe("registrar ", () => {
     expect(mensajes).toContain(MENSAJE_ERROR_CARRERA_INEXISTENTE);
   });
 
-  test("nota con una materia que no existe", async () => {
+  test.skip("nota con una materia que no existe", async () => {
     const { estudiante, token } = infoLogin.data;
 
     const respuesta = await api
@@ -208,7 +213,7 @@ describe("registrar ", () => {
     expect(mensajes).toContain(MENSAJE_ERROR_MATERIA_INEXISTENTE);
   });
 
-  test("nota con un tema que no existe", async () => {
+  test.skip("nota con un tema que no existe", async () => {
     const { estudiante, token } = infoLogin.data;
 
     const respuesta = await api
@@ -263,8 +268,155 @@ describe("registrar ", () => {
   });
 });
 
+describe("editar ", () => {
+  beforeAll(async () => {
+    infoLogin = await iniciarSesion(
+      USUARIO_ESTUDIANTE_1_DEFAULT,
+      CONTRASENIA_ESTUDIANTE_1_DEFAULT
+    );
+  });
+
+  test.skip("titulo de la nota", async () => {
+    const infoNota = {
+      titulo: "Nuevo titulo para prueba."
+    }
+
+    const { token } = infoLogin.data;
+    
+    const respuesta = await api
+      .put(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}`)
+      .set("authorization", token)
+      .send(infoNota);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_EXITOSO_ACTUALIZAR_NOTA)
+  })
+
+  test.skip("cuerpo de la nota", async () => {
+    const infoNota = {
+      cuerpo: "<h1>Nuevo cuerpo</h1> <p>Esto es un nuevo cuerpo.</p>",
+    };
+
+    const { token } = infoLogin.data;
+
+    const respuesta = await api
+      .put(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}`)
+      .set("authorization", token)
+      .send(infoNota);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_EXITOSO_ACTUALIZAR_NOTA);
+  })
+
+  test.skip("informacion academica de nota", async () => {
+    const infoNota = {
+      carrera: ID_CARRERA_DEFAULT,
+      materia: ID_MATERIA_EXTRA,
+      tema: ID_TEMA_EXTRA
+    };
+
+    const { token } = infoLogin.data;
+
+    const respuesta = await api
+      .put(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}`)
+      .set("authorization", token)
+      .send(infoNota);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_EXITOSO_ACTUALIZAR_NOTA);
+  })
+
+  test.skip("informacion academica sin carrera", async () => {
+    const infoNota = {
+      materia: ID_MATERIA_EXTRA,
+      tema: ID_TEMA_EXTRA,
+    };
+
+    const { token } = infoLogin.data;
+
+    const respuesta = await api
+      .put(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}`)
+      .set("authorization", token)
+      .send(infoNota);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+    expect(body.mensaje).toBe(MENSAJE_ERROR_VALIDAR_NOTA);
+
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_ACTUALIZAR_MATERIA_CARRERA);
+  })
+})
+
+describe("eliminar ", () => {
+  beforeAll(async () => {
+    infoLogin = await iniciarSesion(
+      USUARIO_ESTUDIANTE_1_DEFAULT,
+      CONTRASENIA_ESTUDIANTE_1_DEFAULT
+    );
+  });
+
+  test.skip("nota existente", async () => {
+    const { token } = infoLogin.data;
+
+    const respuesta = await api
+      .delete(`${ENDPOINT_NOTAS}/${ID_NOTA_1_DEFAULT}`)
+      .set("authorization", token)
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(true);
+    expect(body.mensaje).toBe(MENSAJE_NOTA_ELIMINADA);
+  })
+
+  test.skip("nota inexistente", async () => {
+    const { token } = infoLogin.data;
+
+    const respuesta = await api
+      .delete(`${ENDPOINT_NOTAS}/${ID_ERRONEO}`)
+      .set("authorization", token);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+
+    expect(body.mensaje).toBe(MENSAJE_ERROR_VALIDAR_NOTA);
+
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_NOTA_INEXISTENTE);
+  });
+
+  test("nota con formato de id incorrecto", async () => {
+    const { token } = infoLogin.data;
+
+    const respuesta = await api
+      .delete(`${ENDPOINT_NOTAS}/idFormatoIncorrecto`)
+      .set("authorization", token);
+
+    const { body } = respuesta;
+
+    expect(body.exitoso).toBe(false);
+
+    expect(body.mensaje).toBe(MENSAJE_ERROR_VALIDAR_NOTA);
+
+    const mensajes = body.data.map((error) => error.msg);
+
+    expect(mensajes).toContain(MENSAJE_ERROR_NOTA_ID);
+  });
+})
+
 describe("obtener ", () => {
-  test("todas las notas", async () => {
+
+  test.skip("todas las notas", async () => {
     const respuesta = await api.get(ENDPOINT_NOTAS);
 
     const { body } = respuesta;
@@ -274,8 +426,8 @@ describe("obtener ", () => {
     expect(body.data.length).toBe(notasDefault.length);
   });
 
-  test("notas por carrera", async () => {
-    const respuesta = await api.get(`/api/notas?carrera=${ID_CARRERA_DEFAULT}`);
+  test.skip("notas por carrera", async () => {
+    const respuesta = await api.get(`${ENDPOINT_NOTAS}?carrera=${ID_CARRERA_DEFAULT}`);
 
     const { body } = respuesta;
 
@@ -287,7 +439,7 @@ describe("obtener ", () => {
     expect(body.data.length).toBe(notasPorCarrera.length);
   });
 
-  test("obtener notas por materia", async () => {
+  test.skip("obtener notas por materia", async () => {
     const respuesta = await api.get(
       `/api/notas?carrera=${ID_CARRERA_DEFAULT}&materia=${ID_MATERIA_DEFAULT}`
     );
@@ -305,7 +457,7 @@ describe("obtener ", () => {
     expect(body.data.length).toBe(notaPorMateria.length);
   });
 
-  test("obtener notas por tema", async () => {
+  test.skip("obtener notas por tema", async () => {
     const respuesta = await api.get(
       `/api/notas?carrera=${ID_CARRERA_DEFAULT}&materia=${ID_MATERIA_DEFAULT}&tema=${ID_TEMA_DEFUALT}`
     );
@@ -324,7 +476,7 @@ describe("obtener ", () => {
     expect(body.data.length).toBe(notaPorMateria.length);
   });
 
-  test("obtener notas que contengan cierta palabra", async () => {
+  test.skip("notas que contengan cierta palabra", async () => {
     const respuesta = await api.get(`/api/notas?texto=${palabraBusqueda}`);
 
     const { body } = respuesta;
@@ -336,7 +488,7 @@ describe("obtener ", () => {
     expect(body.data.length).toBe(notasBuscadas.length);
   });
 
-  test("obtener notas mas utiles", async () => {
+  test.skip("notas mas utiles", async () => {
     const respuesta = await api.get(`/api/notas?op=${OP_NOTAS_UTILES}`);
 
     const { body } = respuesta;
@@ -348,7 +500,7 @@ describe("obtener ", () => {
     expect(body.data.length).toBe(notas.length);
   });
 
-  test("obtener notas mas visualizadas", async () => {
+  test.skip("notas mas visualizadas", async () => {
     const respuesta = await api.get(
       `/api/notas?op=${OP_NOTAS_MAS_VISUALIZADAS}`
     );
@@ -362,7 +514,7 @@ describe("obtener ", () => {
     expect(body.data.length).toBe(notas.length);
   });
 
-  test("obtener notas con id carrera incorrecto", async () => {
+  test.skip("notas con id carrera incorrecto", async () => {
     const respuesta = await api.get(`/api/notas?carrera=85665sasas`);
 
     const { body } = respuesta;
@@ -376,7 +528,7 @@ describe("obtener ", () => {
     );
   });
 
-  test("obtener notas con id materia incorrecto", async () => {
+  test.skip("notas con id materia incorrecto", async () => {
     const respuesta = await api.get(`/api/notas?materia=85665sasas`);
 
     const { body } = respuesta;
@@ -390,7 +542,7 @@ describe("obtener ", () => {
     );
   });
 
-  test("obtener notas con id tema incorrecto", async () => {
+  test.skip("notas con id tema incorrecto", async () => {
     const respuesta = await api.get(`/api/notas?tema=85665sasas`);
 
     const { body } = respuesta;
@@ -402,7 +554,7 @@ describe("obtener ", () => {
     expect(mensajes).toContain("El id del tema tiene un formato incorrecto.");
   });
 
-  test("obtener notas con opcion incorrecta", async () => {
+  test("notas con opcion incorrecta", async () => {
     const respuesta = await api.get(`/api/notas?op=85665sasas`);
 
     const { body } = respuesta;
@@ -411,7 +563,7 @@ describe("obtener ", () => {
     expect(body.mensaje).toBe(MENSAJE_ERROR_OBTENER_NOTAS);
     const mensajes = body.data.map((error) => error.msg);
 
-    expect(mensajes).toContain("La op no es un valor númerico.");
+    expect(mensajes).toContain("La op no es un valor numérico.");
   });
 })
 
@@ -423,7 +575,7 @@ describe("agregar comentario ", () => {
     );
   });
 
-  test("con informacion correcta", async () => {
+  test.skip("con informacion correcta", async () => {
     const { estudiante, token } = infoLogin.data;
 
     const nuevoComentario = {
@@ -442,11 +594,12 @@ describe("agregar comentario ", () => {
     expect(body.mensaje).toBe(MENSAJE_COMENTARIO_AGREGADO);
   })
 
-  test("sin contenido", async () => {
+  test.skip("sin contenido", async () => {
     const { estudiante, token } = infoLogin.data;
 
     const nuevoComentario = {
-      usuario: estudiante.usuario
+      usuario: estudiante.usuario,
+      contenido: ""
     };
 
     const respuesta = await api
@@ -463,7 +616,7 @@ describe("agregar comentario ", () => {
     expect(mensajes).toContain(MENSAJE_COMENTARIO_ERROR_CONTENIDO);
   })
 
-  test("con el tamaño del contenido menor al permitido", async () => {
+  test.skip("con el tamaño del contenido menor al permitido", async () => {
     const { estudiante, token } = infoLogin.data;
 
     const nuevoComentario = {
@@ -485,7 +638,7 @@ describe("agregar comentario ", () => {
     expect(mensajes).toContain(MENSAJE_COMENTARIO_ERROR_CONTENIDO);
   });
 
-  test("con el tamaño del contenido mayor al permitido", async () => {
+  test.skip("con el tamaño del contenido mayor al permitido", async () => {
     const { estudiante, token } = infoLogin.data;
 
     const nuevoComentario = {
@@ -508,7 +661,7 @@ describe("agregar comentario ", () => {
     expect(mensajes).toContain(MENSAJE_COMENTARIO_ERROR_CONTENIDO);
   });
 
-  test("sin usuario", async () => {
+  test.skip("sin usuario", async () => {
     const { token } = infoLogin.data;
 
     const nuevoComentario = {
@@ -530,7 +683,7 @@ describe("agregar comentario ", () => {
     expect(mensajes).toContain(MENSAJE_ERROR_USUARIO);
   });
 
-  test("con usuario inexistente", async () => {
+  test.skip("con usuario inexistente", async () => {
     const { token } = infoLogin.data;
 
     const nuevoComentario = {
@@ -567,7 +720,6 @@ describe("agregar comentario ", () => {
 
     const { body } = respuesta;
 
-    console.log("BODY: ", body)
     expect(body.exitoso).toBe(false);
     expect(body.mensaje).toBe(MENSAJE_ERROR_TOKEN);
   });

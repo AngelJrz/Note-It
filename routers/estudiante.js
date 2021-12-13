@@ -7,6 +7,7 @@ import { checkSchemaEstudiante } from '../utilities/validadorEstudiante.js';
 import { crearLista, obtenerListaPorEstudiante, obtenerListasPorEstudiante } from '../controllers/lista.js';
 import checkSchemaLista from '../utilities/validadorLista.js';
 import { VerificarToken } from '../utilities/jsonWebToken.js';
+import { MENSAJE_ERROR_INFORMACION_REGISTRO, MENSAJE_REGISTRO_DEFAULT } from '../utilities/constantes.js';
 
 router.post('/login', async (req, res) => {
     loginEstudiante(req.body)
@@ -46,7 +47,7 @@ async (req, res) => {
 
   var resultado = {
     exitoso: true,
-    mensaje: "",
+    mensaje: MENSAJE_REGISTRO_DEFAULT,
     data: null,
   };
 
@@ -54,7 +55,7 @@ async (req, res) => {
 
   if (errors.length > 0) {
     resultado.exitoso = false;
-    resultado.mensaje = "Se encontaron errores al validar el estudiante.";
+    resultado.mensaje = MENSAJE_ERROR_INFORMACION_REGISTRO;
     resultado.data = errors;
     return res.status(400).send(resultado).end();
   }
@@ -68,17 +69,14 @@ async (req, res) => {
       } else {
         registrarEstudiante(estudianteRecibido)
           .then(registrado => {
-            if(registrado){
-              resultado.mensaje = "El usuario fue registrado exitosamente."
-
-              return res.status(200).send(resultado);
-            }
-            else {
-              resultado.exitoso = false
-              resultado.mensaje = "Ocurrió un error al registrar el usuario."
+            if (!registrado) {
+              resultado.exitoso = false;
+              resultado.mensaje = "Ocurrió un error al registrar el usuario.";
 
               return res.status(400).send(resultado);
             }
+
+            return res.status(200).send(resultado);
           })
         
       }

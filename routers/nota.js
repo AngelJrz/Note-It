@@ -9,6 +9,9 @@ import {
   MENSAJE_ERROR_VISUALIZACION,
   MENSAJE_EXITO_VISUALIZACION,
   MENSAJE_ERROR_SERVIDOR,
+  MENSAJE_EXITOSO_ACTUALIZAR_NOTA,
+  MENSAJE_ERROR_VALIDAR_NOTA,
+  MENSAJE_NOTA_ELIMINADA,
 } from "../utilities/constantes.js";
 import { VerificarToken } from "../utilities/jsonWebToken.js";
 import { validarImagen } from "../utilities/validadorImagen.js";
@@ -92,7 +95,7 @@ router.get(
     query("op")
       .optional()
       .isNumeric()
-      .withMessage("La op no es un valor númerico."),
+      .withMessage("La op no es un valor numérico."),
   ],
   async (req, res) => {
     const busqueda = req.query;
@@ -143,14 +146,14 @@ router.put(
   async (req, res) => {
     var resultado = {
       exitoso: true,
-      mensaje: "La nota fue actualizada exitosamente.",
+      mensaje: MENSAJE_EXITOSO_ACTUALIZAR_NOTA,
       data: {},
     };
 
     const { errors } = validationResult(req);
     if (errors.length > 0) {
       resultado.exitoso = false;
-      resultado.mensaje = "Se encontaron errores al validar la nota.";
+      resultado.mensaje = MENSAJE_ERROR_VALIDAR_NOTA;
       resultado.data = errors;
       return res.status(400).send(resultado).end();
     }
@@ -187,14 +190,14 @@ router.delete("/:id",
   async (req, res) => {
   var resultado = {
     exitoso: true,
-    mensaje: "La nota fue eliminada exitosamente.",
+    mensaje: MENSAJE_NOTA_ELIMINADA,
     data: {},
   };
 
   const { errors } = validationResult(req);
   if (errors.length > 0) {
     resultado.exitoso = false;
-    resultado.mensaje = "Se encontaron errores al validar la nota.";
+    resultado.mensaje = MENSAJE_ERROR_VALIDAR_NOTA;
     resultado.data = errors;
     return res.status(400).send(resultado).end();
   }

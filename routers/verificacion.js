@@ -1,11 +1,14 @@
 import express from "express";
+import { validationResult, checkSchema } from "express-validator";
 
 import { verificarCodigo, eliminarVerificacion } from "../controllers/verificacion.js";
 import { activarEstudiante } from "../controllers/estudiante.js";
+import { MENSAJE_CODIGO_VERIFICACION_ERROR_INFO } from "../utilities/constantes.js";
+import { checkSchemaVerificacion } from "../utilities/validadorEstudiante.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", checkSchema(checkSchemaVerificacion), async (req, res) => {
   const { usuario, codigoVerificacion } = req.body;
 
   var respuesta = {
@@ -13,6 +16,15 @@ router.post("/", async (req, res, next) => {
     mensaje: "",
     data: null,
   };
+
+  const { errors } = validationResult(req);
+
+  if (errors.length > 0) {
+    respuesta.exitoso = false;
+    respuesta.mensaje = MENSAJE_CODIGO_VERIFICACION_ERROR_INFO;
+    respuesta.data = errors;
+    return res.status(400).send(respuesta).end();
+  }
 
   verificarCodigo(usuario, codigoVerificacion)
     .then((resultado) => {

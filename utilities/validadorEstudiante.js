@@ -1,6 +1,15 @@
 import { existeCarrera } from "../controllers/carrera.js";
 import { existeEstudiante, existeUsuario } from "../controllers/estudiante.js";
-import { MENSAJE_ERROR_APELLIDOS_ESTUDIANTE, MENSAJE_ERROR_NOMBRE_ESTUDIANTE } from "./constantes.js";
+import {
+  MENSAJE_ERROR_APELLIDOS_ESTUDIANTE,
+  MENSAJE_ERROR_CARRERA_INEXISTENTE,
+  MENSAJE_ERROR_CORREO,
+  MENSAJE_ERROR_FORMATO_CARRERA,
+  MENSAJE_ERROR_NOMBRE_ESTUDIANTE,
+  MENSAJE_CODIGO_VERIFICACION_FORMATO_INCORRECTO,
+  MENSAJE_CODIGO_VERIFICACION_LARGO_INCORRECTO,
+  MENSAJE_ERROR_FORMATO_USUARIO,
+} from "./constantes.js";
 import { checkSchemaCadena } from "./validadorCadena.js";
 
 function esEmailCorrecto(email) {
@@ -10,11 +19,23 @@ function esEmailCorrecto(email) {
 
   if (!esValido) {
     throw new Error(
-      "El correo recibido no se encuentra en el formato esperado."
+     MENSAJE_ERROR_CORREO
     );
   } else {
     return true;
   }
+}
+
+function esFormatoUsuarioCorrecto(usuario) {
+  const pattern = /^\S+$/;
+
+  const esCorrecto = pattern.test(usuario);
+
+  if (!esCorrecto) {
+    throw new Error(MENSAJE_ERROR_FORMATO_USUARIO)
+  }
+
+  return esCorrecto;
 }
 
 export const checkSchemaEstudiante = {
@@ -40,6 +61,13 @@ export const checkSchemaEstudiante = {
       },
     },
   },
+  usuario: {
+    custom: {
+      options: (value) => {
+        return esFormatoUsuarioCorrecto(value);
+      }
+    }
+  },
   contrasenia: {
     isLength: {
       errorMessage: "La contraseña debe tener al menos ocho caracteres.",
@@ -48,7 +76,7 @@ export const checkSchemaEstudiante = {
   },
   carrera: {
     isMongoId: {
-      errorMessage: "El id de la carrera no cuenta con un formato correcto.",
+      errorMessage: MENSAJE_ERROR_FORMATO_CARRERA,
       bail: true,
     },
     custom: {
@@ -56,7 +84,7 @@ export const checkSchemaEstudiante = {
         return existeCarrera(value).then((existe) => {
           if (!existe) {
             return Promise.reject(
-              "La carrera especificada no existe. Por favor verifique la información."
+              MENSAJE_ERROR_CARRERA_INEXISTENTE
             );
           }
 
@@ -102,6 +130,24 @@ export const checkSchemaUsuarioEstudiante = {
 
           return existe;
         });
+      },
+    },
+  },
+};
+
+export const checkSchemaVerificacion = {
+  codigoVerificacion: {
+    isNumeric: {
+      errorMessage: MENSAJE_CODIGO_VERIFICACION_FORMATO_INCORRECTO,
+      bail: true,
+    },
+    isLength: {
+      options: { min: 5, max: 5 },
+      errorMessage: MENSAJE_CODIGO_VERIFICACION_LARGO_INCORRECTO,
+    },
+    customSanitizer: {
+      options: (value) => {
+        return parseInt(value);
       },
     },
   },

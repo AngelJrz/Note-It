@@ -3,6 +3,7 @@ import { existeEstudiante, existeUsuario } from "../controllers/estudiante.js";
 import { existeMateria } from "../controllers/materia.js";
 import { existeNota } from "../controllers/nota.js";
 import { existeTema } from "../controllers/tema.js";
+import { MENSAJE_ERROR_ACTUALIZAR_CARRERA_MATERIA, MENSAJE_ERROR_ACTUALIZAR_MATERIA_CARRERA, MENSAJE_ERROR_NOTA_ID, MENSAJE_ERROR_NOTA_INEXISTENTE } from "./constantes.js";
 import { checkSchemaCadena } from "./validadorCadena.js";
 import { checkSchemaEstudianteId, checkSchemaUsuarioEstudiante } from "./validadorEstudiante.js";
 
@@ -105,7 +106,7 @@ export const checkSchemaId = {
     in: "params",
     isMongoId: {
       errorMessage:
-        "El id de la nota no tiene el formato correcto. Verifique la información.",
+        MENSAJE_ERROR_NOTA_ID,
       bail: true,
     },
     custom: {
@@ -113,7 +114,7 @@ export const checkSchemaId = {
         return existeNota(value).then((existe) => {
           if (!existe) {
             return Promise.reject(
-              "La nota especificada no existe. Por favor verifique la información."
+              MENSAJE_ERROR_NOTA_INEXISTENTE
             );
           }
 
@@ -141,6 +142,15 @@ export const checkSchemaActualizarNota = {
 
   carrera: {
     ...checkSchemaNota.carrera,
+    custom: {
+      options: async (_, { req }) => {
+        if (!req.body.materia) {
+          return Promise.reject(
+            MENSAJE_ERROR_ACTUALIZAR_CARRERA_MATERIA
+          );
+        }
+      }
+    },
     optional: true,
   },
 
@@ -150,7 +160,13 @@ export const checkSchemaActualizarNota = {
       options: async (_, { req }) => {
         if (!req.body.carrera) {
           return Promise.reject(
-            "La carrera es requerida cuando se desea actualizar la materia."
+            MENSAJE_ERROR_ACTUALIZAR_MATERIA_CARRERA
+          );
+        }
+
+        if (!req.body.tema) {
+          return Promise.reject(
+            "El tema es requerido cuando se desea actualizar la materia."
           );
         }
       },
@@ -162,6 +178,12 @@ export const checkSchemaActualizarNota = {
     ...checkSchemaNota.tema,
     custom: {
       options: async (_, { req }) => {
+        if (!req.body.carrera) {
+          return Promise.reject(
+            "La carrera es requerida cuando se desea actualizar el tema."
+          );
+        }
+
         if (!req.body.materia) {
           return Promise.reject(
             "La materia es requerida cuando se desea actualizar el tema."

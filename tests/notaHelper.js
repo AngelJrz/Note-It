@@ -9,6 +9,10 @@ export const ID_CARRERA_DEFAULT = "61787209f57911dc05a94ea1";
 export const ID_MATERIA_DEFAULT = "6178d9388c9c391890f678aa";
 export const ID_TEMA_DEFUALT = "6178dae2b465244de051804c";
 
+export const ID_CARRERA_EXTRA = "61787590512d6b78b60ebc24";
+export const ID_MATERIA_EXTRA = "6178d98ac42c26109e227277";
+export const ID_TEMA_EXTRA = "618c4d2bda986d69cf2e2168";
+
 export const notasDefault = [
   {
     _id: new mongoose.Types.ObjectId(ID_NOTA_1_DEFAULT),

@@ -13,7 +13,7 @@ import {
   USUARIO_ESTUDIANTE_1_DEFAULT,
 } from "./estudianteHelper.js";
 import {
-  crearListasDefualt,
+  crearListasDefault,
   ENDPOINT_LISTAS,
   ID_LISTA_1_DEFAULT,
   listasIniciales,
@@ -41,29 +41,32 @@ var infoLogin;
 
 beforeAll(async () => {
   await registrarEstudiantesDefault();
-  await crearListasDefualt();
+  await crearListasDefault();
 
   infoLogin = await iniciarSesion(USUARIO_ESTUDIANTE_1_DEFAULT, CONTRASENIA_ESTUDIANTE_1_DEFAULT);
 });
 
 describe("crear lista ", () => {
-    test("con información correcta", async () => {
-        const infoListaNueva = {
-            nombre: "Lista para probar",
-            descripcion: "Lista para probar primer test"
-        }
+    test.skip("con información correcta", async () => {
+      const infoListaNueva = {
+        nombre: "Lista para probar",
+        descripcion: "Lista para probar primer test",
+      };
 
-        const { estudiante, token } = infoLogin.data;
-        
-        const respuesta = await api.post(`${ENDPOINT_ESTUDIANTE}${estudiante._id}/listas`).set('authorization', token).send(infoListaNueva);
+      const { estudiante, token } = infoLogin.data;
 
-        const { body } = respuesta;
+      const respuesta = await api
+        .post(`${ENDPOINT_ESTUDIANTE}${estudiante._id}/listas`)
+        .set("authorization", token)
+        .send(infoListaNueva);
 
-        expect(body.exitoso).toBe(true);
-        expect(body.mensaje).toBe(MENSAJE_REGISTRO_DEFAULT);
-    })
+      const { body } = respuesta;
 
-    test("sin descripcion", async () => {
+      expect(body.exitoso).toBe(true);
+      expect(body.mensaje).toBe(MENSAJE_REGISTRO_DEFAULT);
+    });
+
+    test.skip("sin descripcion", async () => {
       const infoListaNueva = {
         nombre: "Lista para probar sin descripción",
         descripcion: "",
@@ -82,7 +85,7 @@ describe("crear lista ", () => {
       expect(body.mensaje).toBe(MENSAJE_REGISTRO_DEFAULT);
     })
 
-    test("sin nombre", async () => {
+    test.skip("sin nombre", async () => {
       const infoListaNueva = {
         nombre: "",
         descripcion: "Lista sin nombre",
@@ -105,7 +108,7 @@ describe("crear lista ", () => {
       expect(mensajes).toContain(MENSAJE_ERROR_NOMBRE);
     });
 
-    test("con nombre mayor al permitido", async () => {
+    test.skip("con nombre mayor al permitido", async () => {
       const infoListaNueva = {
         nombre: NOMBRE_LARGO,
         descripcion: "Lista con nombre largo",
@@ -128,7 +131,7 @@ describe("crear lista ", () => {
       expect(mensajes).toContain(MENSAJE_ERROR_NOMBRE);
     });
 
-    test("sin nombre y descripcion", async () => {
+    test.skip("sin nombre y descripcion", async () => {
       const infoListaNueva = {};
 
       const { estudiante, token } = infoLogin.data;
@@ -146,9 +149,9 @@ describe("crear lista ", () => {
       const mensajes = body.data.map((error) => error.msg);
 
       expect(mensajes).toContain(MENSAJE_ERROR_NOMBRE);
-    })
+    });
 
-    test("con creador no activo o inexistente", async () => {
+    test.skip("con creador no activo o inexistente", async () => {
       const infoListaNueva = {
         nombre: "Lista con crador no activo",
         descripcion: "",
@@ -188,7 +191,7 @@ describe("crear lista ", () => {
 
       expect(body.exitoso).toBe(false);
       expect(body.mensaje).toBe(MENSAJE_ERROR_TOKEN);
-    })
+    });
 })
 
 describe("obtener ", () => {
@@ -287,7 +290,7 @@ describe("agregar ", () => {
       await crearNotasDefault();
     })
 
-    test("nota existente a lista existente", async () => {
+    test.skip("nota existente a lista existente", async () => {
       const peticion = {
         nota: ID_NOTA_1_DEFAULT
       }
@@ -305,7 +308,7 @@ describe("agregar ", () => {
       expect(body.mensaje).toBe(MENSAJE_NOTA_AGREGADA);
     })
 
-    test("nota inexistente a lista existente", async () => {
+    test.skip("nota inexistente a lista existente", async () => {
       const peticion = {
         nota: "7092e08309a76056780537dc",
       };
@@ -323,7 +326,7 @@ describe("agregar ", () => {
       expect(body.mensaje).toBe("La nota que se intenta agregar no existe.");
     })
 
-    test("nota existente a lista inexistente", async () => {
+    test.skip("nota existente a lista inexistente", async () => {
       const peticion = {
         nota: ID_NOTA_1_DEFAULT,
       };
@@ -339,9 +342,9 @@ describe("agregar ", () => {
 
       expect(body.exitoso).toBe(false);
       expect(body.mensaje).toBe(MENSAJE_LISTA_INEXISTENTE);
-    })
+    });
 
-    test("nota con id erroneo a lista existente", async () => {
+    test.skip("nota con id erroneo a lista existente", async () => {
       const peticion = {
         nota: "EstoNoEsUnID",
       };
@@ -361,9 +364,9 @@ describe("agregar ", () => {
       const mensajes = body.data.map((error) => error.msg);
 
       expect(mensajes).toContain(MENSAJE_ERROR_ID_NOTA);
-    })
+    });
 
-    test("nota existente a lista con id erroneo", async () => {
+    test.skip("nota existente a lista con id erroneo", async () => {
       const peticion = {
         nota: ID_NOTA_1_DEFAULT,
       };
@@ -383,9 +386,9 @@ describe("agregar ", () => {
       const mensajes = body.data.map((error) => error.msg);
 
       expect(mensajes).toContain(MENSAJE_ERROR_ID_LISTA);
-    })
+    });
 
-    test("nota previamente agregada en la lista", async () => {
+    test.skip("nota previamente agregada en la lista", async () => {
       const peticion = {
         nota: ID_NOTA_1_DEFAULT,
       };
@@ -405,8 +408,8 @@ describe("agregar ", () => {
       const { body } = respuesta;
 
       expect(body.exitoso).toBe(false);
-      expect(body.mensaje).toBe(MENSAJE_ERROR_NOTA_EXISTENTE)
-    })
+      expect(body.mensaje).toBe(MENSAJE_ERROR_NOTA_EXISTENTE);
+    });
 
     test("nota a lista con token inactivo", async () => {
       const peticion = {
@@ -422,7 +425,7 @@ describe("agregar ", () => {
 
       expect(body.exitoso).toBe(false);
       expect(body.mensaje).toBe(MENSAJE_ERROR_TOKEN);
-    })
+    });
 })
 
 afterAll(async () => {

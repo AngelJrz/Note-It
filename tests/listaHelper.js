@@ -44,7 +44,7 @@ export const MENSAJE_ERROR_OBTENER_LISTA =
 export const MENSAJE_NOTA_AGREGADA = "La nota fue agregada a la lista.";
 export const MENSAJE_LISTA_INEXISTENTE = "La lista especificada no existe.";
 export const MENSAJE_ERROR_AGREGAR_NOTA =
-  "Se encontaron errores al validar la nota a agregar.";
+  "Se encontraron errores al validar la nota a agregar.";
 
 export const MENSAJE_ERROR_ID_NOTA =
   "El id de la nota no tiene el formato correcto. Verifique la información.";
@@ -54,7 +54,7 @@ export const MENSAJE_ERROR_ID_LISTA =
 
 export const MENSAJE_ERROR_NOTA_EXISTENTE = "La nota ya se encuentra agregada a la lista.";
 
-export async function crearListasDefualt() {
+export async function crearListasDefault() {
   await abrirConexion();
 
   try {

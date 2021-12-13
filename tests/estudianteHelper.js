@@ -15,14 +15,7 @@ export const TOKEN_ERRONEO =
 
 export const ID_ERRONEO = "6178db2ca64a62f62989cf55"; 
 export const ID_CARRERA_DEFAULT = "61787209f57911dc05a94ea1";
-export const MENSAJE_REGISTRO_DEFAULT = "El usuario fue registrado exitosamente.";
-export const MENSAJE_ERROR_INFORMACION_REGISTRO =
-  "Se encontaron errores al validar el estudiante.";
 
-export const MENSAJE_ERROR_CORREO =
-  "El correo recibido no se encuentra en el formato esperado.";
-
-export const MENSAJE_ERROR_NOMBRE = "El nombre debe tener al menos dos caracteres.";
 export const MENSAJE_ERROR_APELLIDOS =
   "El / Los appellido(s) debe(n) tener al menos dos caracteres.";
 
