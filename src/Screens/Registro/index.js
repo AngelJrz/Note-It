@@ -9,15 +9,7 @@ import Progreso from "../../components/Progreso/index.js";
 import { useRegistro } from "../../hooks/useRegistro.js";
 
 export default function RegistroScreen({ history }) {
-  const estudianteInicial = {
-    nombres: "",
-    apellidos: "",
-    correo: "",
-    usuario: "",
-    contrasenia: "",
-    carrera: "",
-  };
-  const [nuevoEstudiante, setNuevoEstudiante] = useState(estudianteInicial);
+  
   const [notificar, setNotificar] = useState({
     abrir: false,
     mensaje: "",
@@ -31,7 +23,13 @@ export default function RegistroScreen({ history }) {
 
   const { carreras } = useCarreras();
 
-  const { registrar, cargando } = useRegistro();
+  const {
+    nuevoEstudiante,
+    setNuevoEstudiante,
+    registrar,
+    cargando,
+    reestablecerInfoEstudiante,
+  } = useRegistro();
 
   const actualizarInfo = (e) => {
     setNuevoEstudiante({
@@ -45,7 +43,7 @@ export default function RegistroScreen({ history }) {
   };
 
   const limpiarCampos = () => {
-    setNuevoEstudiante(estudianteInicial);
+    reestablecerInfoEstudiante();
     setConfirmacionContrasenia("");
   }
 
@@ -99,7 +97,7 @@ export default function RegistroScreen({ history }) {
 
       <fieldset>
         <label htmlFor="nombres">
-          Nombres (<span>*</span>)
+          Nombres (<span className="danger">*</span>)
         </label>
         <input
           value={nuevoEstudiante.nombres}
@@ -114,7 +112,7 @@ export default function RegistroScreen({ history }) {
         ></input>
 
         <label htmlFor="apellidos">
-          Apellidos (<span>*</span>)
+          Apellidos (<span className="danger">*</span>)
         </label>
         <input
           value={nuevoEstudiante.apellidos}
@@ -129,7 +127,7 @@ export default function RegistroScreen({ history }) {
         ></input>
 
         <label htmlFor="correo">
-          Correo electrónico (<span>*</span>)
+          Correo electrónico (<span className="danger">*</span>)
         </label>
         <input
           value={nuevoEstudiante.correo}
@@ -146,7 +144,7 @@ export default function RegistroScreen({ history }) {
         ></input>
 
         <label htmlFor="usuario">
-          Usuario (<span>*</span>)
+          Usuario (<span className="danger">*</span>)
         </label>
         <input
           value={nuevoEstudiante.usuario}
@@ -163,7 +161,7 @@ export default function RegistroScreen({ history }) {
         ></input>
 
         <label htmlFor="contrasenia">
-          Contraseña (<span>*</span>)
+          Contraseña (<span className="danger">*</span>)
         </label>
         <input
           value={nuevoEstudiante.contrasenia}
@@ -176,7 +174,7 @@ export default function RegistroScreen({ history }) {
         ></input>
 
         <label htmlFor="confirmaContrasenia">
-          Confirmar contraseña (<span>*</span>)
+          Confirmar contraseña (<span className="danger">*</span>)
         </label>
         <input
           value={confirmacionContrasenia}
@@ -188,10 +186,10 @@ export default function RegistroScreen({ history }) {
           onChange={validarConfirmacionContrasenia}
         ></input>
 
-        <span>{errorConfirmacionContrasenia}</span>
+        <span className="danger">{errorConfirmacionContrasenia}</span>
 
         <label htmlFor="carreras">
-          Carrera en la que estudias (<span>*</span>)
+          Carrera en la que estudias (<span className="danger">*</span>)
         </label>
         <select
           value={nuevoEstudiante.carrera}
@@ -203,15 +201,16 @@ export default function RegistroScreen({ history }) {
           <option value="" selected disabled>
             Selecciona una carrera
           </option>
-          {carreras && carreras.map((carrera) => (
-            <option key={carrera.id} value={carrera.id}>
-              {carrera.nombre}
-            </option>
-          ))}
+          {carreras &&
+            carreras.map((carrera) => (
+              <option key={carrera.id} value={carrera.id}>
+                {carrera.nombre}
+              </option>
+            ))}
         </select>
       </fieldset>
 
-      <span>* Campos obligatorios</span>
+      <span className="danger">* Campos obligatorios</span>
 
       <Boton texto="Registrar cuenta" tipo="boton principal" />
       <Boton

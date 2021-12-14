@@ -4,6 +4,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import IconButton from "@mui/material/IconButton";
 import { useHistory } from "react-router-dom";
 import './index.css'
+import { obtenerCadenaSinEspacios } from '../../utilerias/administrarCadenas';
+import { LARGO_INCORRECTO } from '../../utilerias/constantes';
 
 export default function BarraBusqueda() {
     const [textoBusqueda, setTextoBusqueda] = useState("");
@@ -11,6 +13,10 @@ export default function BarraBusqueda() {
 
     const realizarBusqueda = (e) => {
       e.preventDefault();
+
+      setTextoBusqueda(obtenerCadenaSinEspacios(textoBusqueda))
+
+      if (textoBusqueda.trim().length === LARGO_INCORRECTO) return;
 
       window.localStorage.setItem("texto", textoBusqueda);
 

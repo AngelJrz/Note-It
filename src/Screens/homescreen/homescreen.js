@@ -1,5 +1,4 @@
 import React from 'react';
-import { ObtenerNotas } from '../../hooks/Notas.js';
 import './homeScreen.css'
 import SeccionNotas from '../../components/SeccionNotas/index.js';
 import { OP_NOTAS_MAS_VISUALIZADAS, LIMITE_SECCION_NOTAS } from '../../utilerias/constantes.js';

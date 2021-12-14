@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import "./index.css";
 import Boton from "../../components/Boton/index.js";
 import ImageUpload from "../../components/ImageUpload";
@@ -8,7 +9,14 @@ import Notificacion from "../../components/Notificacion";
 import EditorContenido from "../EditorContenido";
 import useAdminNota from "../../hooks/useAdminNota";
 import contextoEstudiante from "../../context/UserContext";
-import { MENSAEJE_ERROR_CUERPO_NOTA, MENSAEJE_ERROR_MATERIA_NO_SELECCIONADA, MENSAEJE_ERROR_TEMA_NO_SELECCIONADO, MENSAJE_ERROR_CARRERA_NO_SELECCIONADA, MENSAJE_ERROR_SERVIDOR, MENSAJE_ERROR_TITULO_NOTA } from "../../utilerias/constantes";
+import {
+  MENSAEJE_ERROR_CUERPO_NOTA,
+  MENSAEJE_ERROR_MATERIA_NO_SELECCIONADA,
+  MENSAEJE_ERROR_TEMA_NO_SELECCIONADO,
+  MENSAJE_ERROR_CARRERA_NO_SELECCIONADA,
+  MENSAJE_ERROR_SERVIDOR,
+  MENSAJE_ERROR_TITULO_NOTA,
+} from "../../utilerias/constantes";
 
 export default function CreacionNota() {
   const {datosEstudiante} = useContext(contextoEstudiante);
@@ -34,6 +42,7 @@ export default function CreacionNota() {
       obtenerLargoCuerpoNota
     } = useAdminNota();
 
+    const history = useHistory();
   const [abrirProgreso, setAbrirProgreso] = useState(false);
   const [notificar, setNotificar] = useState({
     abrir: false,
@@ -108,6 +117,12 @@ export default function CreacionNota() {
             abrir: true,
             mensaje: respuesta.mensaje,
           });
+
+          setTimeout(() => {
+            history.push({
+              pathname: `Nota/${respuesta.data.id}`,
+            });
+          }, 1500);
         } else {
           setNotificar({
             abrir: true,
