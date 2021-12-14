@@ -62,6 +62,10 @@ export const checkSchemaEstudiante = {
     },
   },
   usuario: {
+    isLength: {
+      errorMessage: "El usuario debe tener al menos 8 letras y máximo 30.",
+      options: { min: 8, max: 30 }
+    },
     custom: {
       options: (value) => {
         return esFormatoUsuarioCorrecto(value);

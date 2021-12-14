@@ -1,5 +1,7 @@
 import { abrirConexion, cerrarConexion } from "../models/conexion.js";
 import Verificacion from "../models/Verificacion.js";
+import { MENSAJE_CODIGO_VERIFICACION_INCORRECTO } from "../tests/estudianteHelper.js";
+import { MENSAJE_CODIGO_VERIFICACION_CORRECTO, MENSAJE_CODIGO_VERIFICACION_EXPIRADO } from "../utilities/constantes.js";
 
 export async function crearVerificacion(usuario, codigoVerificacion) {
   await abrirConexion();
@@ -32,16 +34,16 @@ export async function verificarCodigo(usuario, codigoVerificacion) {
     .then((verificacion) => {
       var resultado = {
         correcto: true,
-        mensaje: "Código de verificación correcto.",
+        mensaje: MENSAJE_CODIGO_VERIFICACION_CORRECTO,
       };
 
       if (!verificacion) {
         resultado.correcto = false;
         resultado.mensaje =
-          "No se encontró un usuario para la verificación o el código de verificación ha expirado.";
+          MENSAJE_CODIGO_VERIFICACION_EXPIRADO;
       } else if (verificacion.codigo !== codigoVerificacion) {
         resultado.correcto = false;
-        resultado.mensaje = "El código de verificación es incorrecto.";
+        resultado.mensaje = MENSAJE_CODIGO_VERIFICACION_INCORRECTO;
       }
 
       return resultado;
