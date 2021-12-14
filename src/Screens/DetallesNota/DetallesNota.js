@@ -25,6 +25,7 @@ import { EliminarNota, ObtenerNota } from '../../hooks/Notas.js';
 import { generarLetrasAvatar } from '../../utilerias/generarAvatar';
 import { formatearFecha } from '../../utilerias/administrarFechas';
 import Comentario from '../../components/Comentario';
+import InformacionAcademica from '../../components/InformacionAcademica';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -137,8 +138,8 @@ export default function DetallesNota(props){
         {nota &&
           nota.map((n) => (
             <Grid container spacing={2}>
-              <Grid item xs={8}>
-                <Paper elevation={3} className='paperNota'>
+              <Grid item xs={9}>
+                <Paper elevation={3} className="paperNota">
                   <div className="previewImagen">
                     <img
                       src={n.imagen}
@@ -146,11 +147,11 @@ export default function DetallesNota(props){
                       title={`Imagen para la nota ${n.titulo}`}
                     />
                   </div>
-                  <Typography variant="h4" gutterBottom component="div">
-                    <h1>{n.titulo}</h1>
+                  <Typography variant="h4" gutterBottom component="h1">
+                    {n.titulo}
                   </Typography>
 
-                  <section className='seccion-info-basica'>
+                  <section className="seccion-info-basica">
                     <Typography variant="span" gutterBottom component="div">
                       {formatearFecha(n.fechaCreacion)}
                     </Typography>
@@ -171,29 +172,25 @@ export default function DetallesNota(props){
                     variant="h5"
                     gutterBottom
                     component="div"
-                    id='autorDeNota'
+                    id="autorDeNota"
                   >
                     {`${n.autor.nombres} ${n.autor.apellidos}`}
                   </Typography>
-                  <Typography variant="body1" gutterBottom>
-                    <div
-                      className="post__description"
-                      dangerouslySetInnerHTML={{ __html: n.cuerpo }}
-                    />
-                  </Typography>
+                  <Typography variant="body1" gutterBottom></Typography>
+
+                  <div
+                    className="post__description"
+                    dangerouslySetInnerHTML={{ __html: n.cuerpo }}
+                  />
                   {datosEstudiante !== null &&
                   datosEstudiante.estudiante.usuario === n.autor.usuario ? (
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      id='contenedorDeBotones'
-                    >
+                    <Stack direction="row" spacing={2} id="contenedorDeBotones">
                       <Button
                         onClick={handleOpen}
                         variant="outlined"
                         color="error"
                         startIcon={<DeleteIcon />}
-                        id='botonEliminar'
+                        id="botonEliminar"
                       >
                         Eliminar
                       </Button>
@@ -213,7 +210,7 @@ export default function DetallesNota(props){
                           </Typography>
                           <Typography
                             id="modal-modal-description"
-                            id='infoModal'
+                            id="infoModal"
                           >
                             Esta acción desaparecerá la información de nuestro
                             sistema.
@@ -260,11 +257,7 @@ export default function DetallesNota(props){
                       </Button>
                     </Stack>
                   ) : datosEstudiante !== null ? (
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      id="contenedorBasico"
-                    >
+                    <Stack direction="row" spacing={2} id="contenedorBasico">
                       <Button
                         onClick={AgregarALista}
                         variant="outlined"
@@ -280,7 +273,8 @@ export default function DetallesNota(props){
                 </Paper>
               </Grid>
 
-              <Grid item xs={4} id='perfilAutor'>
+              <Grid item xs={3} id="perfilAutor">
+                <InformacionAcademica informacionAcademica={n.informacionAcademica}/>
                 <Paper
                   elevation={3}
                   id="paperAutor"
@@ -307,7 +301,7 @@ export default function DetallesNota(props){
                   <Typography
                     variant="body2"
                     gutterBottom
-                    component="div"
+                    component="p"
                     id="biografiaAutor"
                   >
                     {n.autor.biografia}
@@ -315,9 +309,9 @@ export default function DetallesNota(props){
                 </Paper>
               </Grid>
 
-              <Grid item xs={8}>
+              <Grid item xs={9} style={{ paddingBottom: 50 }}>
                 <Paper elevation={3} id="paperAreaComentarios">
-                  <Typography variant="h6" gutterBottom component="div">
+                  <Typography variant="h4" gutterBottom component="h4">
                     Comentarios
                   </Typography>
                   {datosEstudiante !== null ? (
@@ -337,19 +331,19 @@ export default function DetallesNota(props){
 
                   {n.comentarios.length > 0 ? (
                     n.comentarios.map((comentario) => (
-                      <Comentario comentario={comentario}/>
+                      <Comentario comentario={comentario} />
                     ))
                   ) : (
                     <Paper
                       id="paperComentario"
                       justifyContent="left"
-                      style={{ textAlign: "center" }}
+                      style={{ textAlign: "center", marginTop: 20 }}
                     >
                       <Typography
-                        variant="h5"
+                        variant="span"
                         gutterBottom
-                        component="div"
-                        id='errorComentarios'
+                        component="span"
+                        id="errorComentarios"
                       >
                         No cuenta con comentarios
                       </Typography>

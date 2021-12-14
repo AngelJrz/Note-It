@@ -13,6 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import { generarLetrasAvatar } from '../../utilerias/generarAvatar';
 
 export default function AvatarPerfil(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,7 +36,7 @@ export default function AvatarPerfil(props) {
       <Box>
         <Tooltip title="Mi perfil">
           <IconButton onClick={handleClick} size="small">
-            <Avatar id="avatarImagen">{usuario.estudiante.nombres.substring(0, 2).charAt(0).toUpperCase() + usuario.estudiante.nombres.substring(0, 2).charAt(1)}</Avatar>
+            <Avatar id="avatarImagen" {...generarLetrasAvatar(`${usuario.estudiante.nombres}${usuario.estudiante.apellidos}`)}></Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -74,7 +75,8 @@ export default function AvatarPerfil(props) {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem>
-          <Avatar /><Link to={`/estudiante/${usuario.estudiante.usuario}`}>Mi Perfil</Link>
+          <Avatar />
+          <Link to={`/estudiante/${usuario.estudiante.usuario}`}>Mi Perfil</Link>
         </MenuItem>
         <Divider />
         <MenuItem>

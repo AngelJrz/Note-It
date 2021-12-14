@@ -108,6 +108,7 @@ export default function RegistroScreen({ history }) {
           placeholder="Ingresa tu(s) nombre(s)"
           name="nombres"
           minLength="2"
+          maxLength="80"
           required
           onChange={actualizarInfo}
         ></input>
@@ -120,6 +121,7 @@ export default function RegistroScreen({ history }) {
           id="apellidos"
           type="text"
           minLength="2"
+          maxLength="80"
           placeholder="Ingresa tu(s) apellidos(s)"
           name="apellidos"
           required
@@ -135,6 +137,8 @@ export default function RegistroScreen({ history }) {
           type="email"
           placeholder="zsXXXXXXXX@estudiantes.uv.mx"
           name="correo"
+          minLength="28"
+          maxLength="28"
           pattern="zs([0-9]{8})+@estudiantes\.uv\.mx"
           title="Por favor ingresa un correo en el formato zsXXXXXXXX@estudiantes.uv.mx"
           required
@@ -150,9 +154,10 @@ export default function RegistroScreen({ history }) {
           type="text"
           placeholder="Ingresa tu usuario. Por ejemplo nuevoUsuario1."
           name="usuario"
-          minLength="5"
+          minLength="8"
+          maxLength="30"
           pattern="^\S+$"
-          title="El usuario no debe contener espacios y debe tener al menos 5 caracteres."
+          title="El usuario no debe contener espacios y debe tener al menos 8 caracteres."
           required
           onChange={actualizarInfo}
         ></input>

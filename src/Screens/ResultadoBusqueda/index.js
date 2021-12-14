@@ -34,7 +34,7 @@ function ResultadoBusqueda() {
 
     return (
       <Grid container spacing={2} className="container">
-        <Grid item xs={4}>
+        <Grid item xs={3.5}>
           <Paper elevation={3} className="paper">
             <h1>Filtros</h1>
             <Filtros

@@ -1,13 +1,8 @@
-import React, { useState } from 'react'
-import Boton from "../Boton";
+import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import SearchIcon from '@mui/icons-material/Search';
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { useHistory } from "react-router-dom";
-
-
-
 import './index.css'
 
 export default function BarraBusqueda() {
@@ -15,17 +10,17 @@ export default function BarraBusqueda() {
     const history = useHistory();
 
     const realizarBusqueda = (e) => {
-        e.preventDefault();
+      e.preventDefault();
 
-        window.localStorage.setItem("texto", textoBusqueda);
+      window.localStorage.setItem("texto", textoBusqueda);
 
-        history.push({
-          pathname: "/busqueda",
-          search: `?q=${textoBusqueda}`,
-        });
+      history.push({
+        pathname: "/busqueda",
+        search: `?q=${textoBusqueda}`,
+      });
 
-        setTextoBusqueda("")
-    }
+      setTextoBusqueda("");
+    };
 
     const actualizarTextoBusqueda = (e) => {
         setTextoBusqueda(e.target.value);
@@ -35,13 +30,10 @@ export default function BarraBusqueda() {
       <form onSubmit={realizarBusqueda}>
         <Grid
           container
-          spacing={1}
-          justifyContent="center"
-          alignItems="center"
-          direction="row"
+          spacing={3}
+          className='barra-busqueda'
         >
-          <Grid item>
-            <fieldset>
+          <Grid item xs={8}>
               <input
                 type="text"
                 required
@@ -49,13 +41,12 @@ export default function BarraBusqueda() {
                 value={textoBusqueda}
                 onChange={actualizarTextoBusqueda}
                 className="busqueda"
+                title='Ingresa una cadena de búsqueda'
               />
-            </fieldset>
           </Grid>
           <Grid item>
-            {/* <Boton texto="Buscar" tipo="boton principal" /> */}
-            <IconButton aria-label="Buscar">
-              <SearchIcon />
+            <IconButton aria-label="Buscar" type='submit'>
+              <SearchIcon/>
             </IconButton>
           </Grid>
         </Grid>

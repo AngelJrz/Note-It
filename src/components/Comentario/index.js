@@ -3,7 +3,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import { formatearFecha } from '../../utilerias/administrarFechas';
-import { Avatar } from '@mui/material';
+import { Avatar, Divider } from '@mui/material';
 import { generarLetrasAvatar } from '../../utilerias/generarAvatar';
 import './index.css';
 
@@ -19,13 +19,15 @@ export default function Comentario(props) {
           <Typography
             variant="h6"
             gutterBottom
-            component="div"
+            component="h6"
           >
             <Link to={`/estudiante/${comentario.usuario}`}>
               <span>{comentario.usuario}</span>
             </Link>
           </Typography>
         </section>
+
+        <Divider />
 
         <Typography
           variant="body1"

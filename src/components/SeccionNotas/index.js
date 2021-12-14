@@ -14,10 +14,17 @@ export default function SeccionNotas(props) {
     const { notas, cargandoNotas, errorBusqueda } = useNotas({ op, limit });
 
     const verTodas = () => {
-      history.push({
-        pathname: "/busqueda",
-        search: `?op=${op}`,
-      });
+      if (op) {
+        history.push({
+          pathname: "/busqueda",
+          search: `?op=${op}`,
+        });
+      }
+      else {
+        history.push({
+          pathname: "/busqueda",
+        });
+      }
     };
 
     return (

@@ -26,7 +26,9 @@ function Filtros(props) {
 
     useEffect(() => {
       setFiltros({ texto, carrera, materia, tema, op });
-    }, [texto, carrera, materia, tema, op]);
+      setCarrera(carrera);
+      setMateria(materia);
+    }, []);
 
     const cambioDeFiltro = (e) => {
 
@@ -58,7 +60,7 @@ function Filtros(props) {
         }
 
         if (filtros.materia) {
-          query += `&mareria=${filtros.materia}`;
+          query += `&materia=${filtros.materia}`;
         }
 
         if (filtros.tema) {
