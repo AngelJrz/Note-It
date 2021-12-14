@@ -41,7 +41,7 @@ export default function ListasScreen(props){
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container id='contenedorListas' spacing={2}>
                     {
-                        listas ? seAgrega ? listas.data.map(lista => <ListaDestino lista={lista} nota={idNota}></ListaDestino>) : listas.data.map(lista => <Lista lista={lista}></Lista>)
+                        listas.data.length > 0 ? seAgrega ? listas.data.map(lista => <ListaDestino lista={lista} nota={idNota}></ListaDestino>) : listas.data.map(lista => <Lista lista={lista}></Lista>)
                         : 
                         <div id='errorDeLista'>
                             <p>No se obtuvieron listas de respuesta</p>
