@@ -19,7 +19,8 @@ export async function crearNuevaNota(nuevaNota) {
 
     var resultadoCreacion = {
         seCreo: true,
-        mensaje: "La nota fue creada exitosamente."
+        mensaje: "La nota fue creada exitosamente.",
+        notaCreada: null
     }
 
     if (imagen) {
@@ -67,6 +68,8 @@ export async function crearNuevaNota(nuevaNota) {
 
           return resultadoCreacion;
         }
+        
+        resultadoCreacion.notaCreada = notaGuardada;
 
         return resultadoCreacion;
       })

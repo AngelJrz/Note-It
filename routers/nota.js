@@ -54,6 +54,7 @@ async (req, res) => {
     .then(resultadoCreacion => {
         if (resultadoCreacion.seCreo) {
           resultado.mensaje = resultadoCreacion.mensaje;
+          resultado.data = resultadoCreacion.notaCreada;
           return res.status(200).send(resultado);
         } else {
           resultado.exitoso = false;
