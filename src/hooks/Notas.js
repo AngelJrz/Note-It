@@ -21,8 +21,12 @@ export function ObtenerNota(idNota) {
   const [nota, setNota] = useState([]); 
 
   useEffect(function () {
-    servicioObtenerNota(idNota).then(nota => {
-      setNota(nota);
+    servicioObtenerNota(idNota).then(respuesta => {
+      if (respuesta.exitoso) {
+        setNota(respuesta.data);
+      } else {
+        setNota([]);
+      }
     })
     .catch(error => {
       console.error(error);

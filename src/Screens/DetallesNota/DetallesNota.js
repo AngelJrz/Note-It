@@ -135,7 +135,7 @@ export default function DetallesNota(props){
     
     return (
       <div>
-        {nota &&
+        { nota.length > 0 ? 
           nota.map((n) => (
             <Grid container spacing={2}>
               <Grid item xs={9}>
@@ -352,7 +352,37 @@ export default function DetallesNota(props){
                 </Paper>
               </Grid>
             </Grid>
-          ))}
+          ))
+
+          :
+
+          <Grid item xs={4} id="errorNoHayNota">
+          <Paper
+            elevation={3}
+            id="paperAutor"
+            justifyContent="center"
+            style={{ textAlign: "center" }}
+          >
+            <Typography
+              variant="h6"
+              gutterBottom
+              component="div"
+              id="nombreAutor"
+            >
+                Error 404
+            </Typography>
+            <Divider />
+            <Typography
+              variant="body2"
+              gutterBottom
+              component="div"
+              id="biografiaAutor"
+            >
+              Lo sentimos pero no se encontró la nota
+            </Typography>
+          </Paper>
+        </Grid>   
+        }
         <Progreso abrir={abrirProgreso} />
         <Notificacion notificar={notificar} setNotificar={setNotificar} />
       </div>

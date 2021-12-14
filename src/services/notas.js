@@ -26,7 +26,7 @@ export async function servicioObtenerNota(idNota) {
     )
       .then((response) => response.json())
       .then((data) => {
-        return data.data;
+        return data;
       });    
 }
 
