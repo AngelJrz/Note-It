@@ -1,6 +1,6 @@
 import LoginScreen from './Screens/login/login.js';
 import HomeScreen from './Screens/homescreen/homescreen.js';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import RegistroScreen from './Screens/Registro/index.js';
 import ValidarCodigo from './Screens/ValidarCodigo/index.js';
 import Header from './components/header/header.js';
@@ -14,6 +14,7 @@ import ListasScreen from './Screens/Listas/ListasScreen.js';
 import DetallesLista from './Screens/DetallesLista/DetallesLista.js';
 import EditarNota from './Screens/EditarNota/index.js';
 import RutaProtegida from './components/RutaProtegida/index.js';
+import NotFound from './Screens/NotFound/index.js';
 
 function App() { 
   return (
@@ -26,18 +27,34 @@ function App() {
         <div className="grid-container">
           <Header />
           <main>
-            <Route path="/" component={HomeScreen} exact></Route>
-            <Route path="/login" component={LoginScreen}></Route>
-            <Route path="/registro" component={RegistroScreen}></Route>
-            <Route path="/Nota/:id" component={DetallesNota} exact></Route>
-            <Route path="/validar-codigo" component={ValidarCodigo}></Route>
-            <RutaProtegida path="/crear-nota" component={CrearNota} />
-            <RutaProtegida path="/crear-lista" component={Crearlista} />
-            <RutaProtegida path="/listas" component={ListasScreen} />
-            <RutaProtegida path="/detalles-lista" component={DetallesLista} />
-            <RutaProtegida path="/nota/:id/editar" component={EditarNota} />
-            <Route path="/estudiante/:usuario" component={PerfilEstudiante} />
-            <Route path="/busqueda" component={ResultadoBusqueda}></Route>
+            <Route>
+              <Switch>
+                <Route exact path="/" component={HomeScreen} exact></Route>
+                <Route path="/login" component={LoginScreen}></Route>
+                <Route path="/registro" component={RegistroScreen}></Route>
+                <Route
+                  exact
+                  path="/Nota/:id"
+                  component={DetallesNota}
+                  exact
+                ></Route>
+                <Route path="/validar-codigo" component={ValidarCodigo}></Route>
+                <RutaProtegida path="/crear-nota" component={CrearNota} />
+                <RutaProtegida path="/crear-lista" component={Crearlista} />
+                <RutaProtegida path="/listas" component={ListasScreen} />
+                <RutaProtegida
+                  path="/detalles-lista"
+                  component={DetallesLista}
+                />
+                <RutaProtegida path="/nota/:id/editar" component={EditarNota} />
+                <Route
+                  path="/estudiante/:usuario"
+                  component={PerfilEstudiante}
+                />
+                <Route path="/busqueda" component={ResultadoBusqueda}></Route>
+                <Route path="*" component={NotFound} />
+              </Switch>
+            </Route>
           </main>
         </div>
       </BrowserRouter>
