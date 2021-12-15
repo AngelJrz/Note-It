@@ -2,6 +2,7 @@ import cors from 'cors';
 import 'dotenv/config.js';
 import express from 'express';
 import fileUpload from 'express-fileupload';
+import rateLimit from 'express-rate-limit';
 
 import estudianteRouter from './routers/estudiante.js';
 import verificacionRouter from './routers/verificacion.js';
@@ -9,6 +10,7 @@ import carreraRouter from './routers/carrera.js';
 import notaRouter from './routers/nota.js';
 import materiaRouter from './routers/materia.js';
 import listaRouter from './routers/lista.js';
+import { MENSAJE_ERROR_REQUESTS } from './utilities/constantes.js';
 
 const app = express();
 const PORT = process.env.PORT || 4200;
@@ -30,10 +32,26 @@ var corsOptionsDelegate = function (req, callback) {
     callback(null, corsOptions)
 }
 
+const WINDOW_MS = process.env.WINDOW_MS;
+const MAX_REQUESTS = process.env.MAX_REQUESTS;
+
+const limitadorRequests = rateLimit({
+  windowMs: WINDOW_MS,
+  max: MAX_REQUESTS,
+  handler: (req, res) => {
+    return res.status(429).send({
+      exitoso: false,
+      mensaje: MENSAJE_ERROR_REQUESTS,
+      data: null,
+    });
+  },
+});
+
 app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(fileUpload());
 app.use(express.json());
+app.use(limitadorRequests);
 app.use('/api/notas/imagenes', express.static("images/notas"))
 
 app.use("/api/estudiantes", cors(corsOptionsDelegate), estudianteRouter);

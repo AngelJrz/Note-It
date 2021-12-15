@@ -89,3 +89,5 @@ export const MENSAJE_ERROR_VALIDACION_VISUALIZACION =
   "Se encontraron errores al validar los datos.";
 
 export const MENSAJE_ERROR_VISUALIZACION = "Ocurrió un error al intentar agregar la visualización.";
+
+export const MENSAJE_ERROR_REQUESTS = "Se han recibido muchas peticiones. Por favor intente más tarde."
