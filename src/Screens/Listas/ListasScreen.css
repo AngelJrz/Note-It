@@ -5,3 +5,7 @@
 #contenedorListas{
     justify-content: center;
 }
+
+#errorDeListaScreen{
+    text-align: center;
+}

@@ -152,7 +152,7 @@ export async function buscarNotas(busqueda) {
     })
       .then((response) => response.json())
       .then((data) => {
-        return data.data;
+        return data;
       }); 
 }
 

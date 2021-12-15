@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import "./index.css";
 import Boton from "../../components/Boton/index.js";
 import ImageUpload from "../../components/ImageUpload";
 import { crearNuevaNota } from "../../services/notas";

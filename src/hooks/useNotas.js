@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { buscarNotas } from "../services/notas";
+import { MENSAJE_ERROR_OBTENER_NOTAS } from "../utilerias/constantes";
 
 export function useNotas(busqueda) {
   const notasIniciales = [];
@@ -17,23 +18,34 @@ export function useNotas(busqueda) {
     function () {
       setCargandoNotas(true);
       buscarNotas(busqueda)
-        .then((notas) => {
-          setCargandoNotas(false);
-          if (notas && notas.length > 0) {
-            
-            setNotas(notas);
-          }
-          else {
+        .then((resultado) => {
+          if (resultado.exitoso) {
+            const { data } = resultado;
+            if (data && data.length > 0) {
+              setErrorBusqueda({
+                error: false,
+                mensaje: "",
+              });
+              setNotas(data);
+            } else {
+              setNotas(notasIniciales);
+            }
+          } else {
+            setErrorBusqueda({
+              error: true,
+              mensaje: resultado.mensaje
+            })
             setNotas(notasIniciales);
           }
           
+          setCargandoNotas(false);
         })
         .catch((err) => {
           console.error(err);
 
           setErrorBusqueda({
             error: true,
-            mensaje: "Ocurrió un error al intentar obtener las notas. Intente más tarde."
+            mensaje: MENSAJE_ERROR_OBTENER_NOTAS
           })
           setCargandoNotas(false);
           setNotas(notasIniciales);

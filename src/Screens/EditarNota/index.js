@@ -13,18 +13,25 @@ const CANTIDAD_NOTA_ESPERADA = 1;
 const POSICION_NOTA_A_EDITAR = 0;
 
 export default function EditarNota(props) {
-    // const history = useHistory();
+    const history = useHistory();
     const { datosEstudiante } = useContext(contextoEstudiante);
-    // console.log("USER: ", datosEstudiante);
-    // console.log("ENTRE v':");
-    // useEffect(() => {
-    //   if (datosEstudiante === null) {
-    //     history.push("/");
-    //   }
-    // }, []);
 
     const { id } = props.match.params || "";
     const { notas, cargandoNotas, errorBusqueda } = useNotas({ id });
+
+    useEffect(() => {
+      if (
+        notas &&
+        notas.length === CANTIDAD_NOTA_ESPERADA &&
+        !errorBusqueda.error
+      ) {
+        const { autor } = notas[POSICION_NOTA_A_EDITAR];
+        const { estudiante } = datosEstudiante;
+        if (autor.usuario !== estudiante.usuario) {
+          history.push(`/nota/${id}`);
+        }
+      }
+    }, [notas]);
 
     return (
       <Grid container className="container">

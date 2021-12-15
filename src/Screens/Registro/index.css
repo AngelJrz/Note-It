@@ -6,10 +6,6 @@
     box-shadow: 2px 2px 15px rgb(156, 156, 156);
 }
 
-/* .form:hover{
-    box-shadow: 2px 2px 15px rgb(156, 156, 156);
-} */
-
 h1 {
   font-size: xx-large;
   text-align: center;
@@ -59,8 +55,6 @@ select {
   background-color: rgb(240, 240, 240);
 }
 
-
-
 input:focus:invalid, select:focus:invalid {
   border: 2px solid rgb(194, 2, 2);
 }
@@ -68,41 +62,3 @@ input:focus:invalid, select:focus:invalid {
 input:focus, select:focus {
   border: 2px solid #29b653;
 }
-
-/* button.cancelar {
-  padding: 19px 39px 18px 39px;
-  color: #3ac162;
-  background-color: #FFF;
-  font-size: 18px;
-  text-align: center;
-  font-style: normal;
-  border-radius: 5px;
-  width: 100%;
-  border: 1px solid #3ac162;
-  box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-button.cancelar:hover {
-  background-color: #c9f5d7;
-}
-
-button.registrar:hover {
-  background-color: #29b653;
-}
-
-button.registrar {
-  padding: 19px 39px 18px 39px;
-  color: #FFF;
-  background-color: #4bc970;
-  font-size: 18px;
-  text-align: center;
-  font-style: normal;
-  border-radius: 5px;
-  width: 100%;
-  border: 1px solid #3ac162;
-  box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
-  margin-bottom: 10px;
-  cursor: pointer;
-} */

@@ -32,25 +32,39 @@ export default function ListasScreen(props){
     
     const { listas } = ObtenerListasEstudiante(datosEstudiante.estudiante.id, datosEstudiante.token);
 
-    return( 
-        <div>
-            {
-                seAgrega ? <h1 id="tituloMisListas">¿A que lista deseas agregar la nota?</h1> : <h1 id="tituloMisListas">- Mis listas -</h1> 
-            }
-            <Divider />
-            <Box sx={{ flexGrow: 1 }}>
-                <Grid container id='contenedorListas' spacing={2}>
-                    {
-                        listas.data.length > 0 ? seAgrega ? listas.data.map(lista => <ListaDestino lista={lista} nota={idNota}></ListaDestino>) : listas.data.map(lista => <Lista lista={lista}></Lista>)
-                        : 
-                        <div id='errorDeLista'>
-                            <p>No se obtuvieron listas de respuesta</p>
-                            <Button variant="contained" color='success' size="small" onClick={irACrearLista}>Crear lista</Button>
-                        </div>
-                    }
-                </Grid>
-            </Box>
-        </div>
-
+    return (
+      <div>
+        {seAgrega ? (
+          <h1 id="tituloMisListas">¿A que lista deseas agregar la nota?</h1>
+        ) : (
+          <h1 id="tituloMisListas">- Mis listas -</h1>
+        )}
+        <Divider />
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container id="contenedorListas" spacing={2}>
+            {listas && listas.data.length > 0 ? (
+              seAgrega ? (
+                listas.data.map((lista) => (
+                  <ListaDestino lista={lista} nota={idNota}></ListaDestino>
+                ))
+              ) : (
+                listas.data.map((lista) => <Lista lista={lista}></Lista>)
+              )
+            ) : (
+              <div id="errorDeListaScreen">
+                <p>No se obtuvieron listas de respuesta</p>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  onClick={irACrearLista}
+                >
+                  Crear lista
+                </Button>
+              </div>
+            )}
+          </Grid>
+        </Box>
+      </div>
     );
 }
